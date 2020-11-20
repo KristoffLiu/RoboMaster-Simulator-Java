@@ -1,4 +1,4 @@
 package com.robomaster_libgdx.environment.actors.robomasters;
 
-public class prototype {
+public class Prototype {
 }
