@@ -3,7 +3,7 @@ package com.robomaster_libgdx.environment.actors.robomasters;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.robomaster_libgdx.environment.actors.MovingObject;
 
-public class RoboMaster extends MovingObject {
+public abstract class RoboMaster extends MovingObject {
     int PIN;
     //physical properties
     float physical_width;
@@ -23,7 +23,6 @@ public class RoboMaster extends MovingObject {
     public RoboMaster(TextureRegion textureRegion) {
         super(textureRegion);
     }
-
 
     //
 

@@ -9,6 +9,9 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.robomaster_libgdx.environment.Environment;
 import com.robomaster_libgdx.environment.actors.CustomActor;
+import com.robomaster_libgdx.environment.actors.robomasters.AlexanderMasterI;
+import com.robomaster_libgdx.environment.actors.robomasters.ProtoMaster;
+import com.robomaster_libgdx.environment.actors.robomasters.RoboMaster;
 import com.robomaster_libgdx.environment.simulatinglayers.baselayers.RenderedLayer;
 
 public class WorldLayer extends RenderedLayer {
@@ -25,9 +28,12 @@ public class WorldLayer extends RenderedLayer {
         loader      = new TmxMapLoader();
         map         = loader.load("Map/CompetitionMap/map.tmx");
         renderer    = new OrthogonalTiledMapRenderer(map);
-        Actor a = new CustomActor(new TextureRegion(new Texture("badlogic.jpg")));
+
+        AlexanderMasterI alexanderMasterI = new AlexanderMasterI();
+        alexanderMasterI.setPosition(500,500);
         //direction   = new Vector2();
-        //this.addActor(a);
+        this.addActor(alexanderMasterI);
+
         environment.view.getOrthographicCamera().position.x = 8490f / 2f;
         environment.view.getOrthographicCamera().position.y = 4890f / 2f;
         environment.view.getOrthographicCamera().zoom = 10f;

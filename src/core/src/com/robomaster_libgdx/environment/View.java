@@ -1,12 +1,10 @@
 package com.robomaster_libgdx.environment;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.*;
 
 public class View{
     private OrthographicCamera camera;
-    private final float cameraZoomVelocity = 50f;
 
     Viewport viewport;
 
@@ -35,7 +33,7 @@ public class View{
 
     public View(float width, float height){
         camera = new OrthographicCamera();
-        viewport = new ScreenViewport(camera);
+        viewport = new FitViewport(width,height,camera);
     }
 
     public Viewport getViewport(){
@@ -50,6 +48,19 @@ public class View{
         updateZoom(deltaTime);
         updatePositionX(deltaTime);
         updatePositionY(deltaTime);
+    }
+
+    public void updateSize(float width,float height){
+        getViewport().setScreenWidth((int)width - 300);
+        getViewport().setScreenHeight((int)height);
+
+
+        float x = camera.position.x;
+        float y = camera.position.y;
+        getOrthographicCamera().setToOrtho (
+                true, width, height);
+        camera.position.x = x;
+        camera.position.y = y;
     }
 
     private void updateZoom(float deltaTime){
@@ -141,10 +152,10 @@ public class View{
 
     public void setZoom(float zoomOffset){
         if(zoomOffset > 0){
-            this.zoomOffset = 0.2f;
+            this.zoomOffset = 0.3f;
         }
         else if(zoomOffset < 0){
-            this.zoomOffset = -0.2f;
+            this.zoomOffset = -0.3f;
         }
         isZooming = true;
     }

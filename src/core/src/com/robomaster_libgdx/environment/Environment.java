@@ -58,7 +58,7 @@ public class Environment implements Screen {
      */
     @Override
     public void resize(int width, int height) {
-
+        view.updateSize(width,height);
     }
 
     /**
