@@ -1,12 +1,54 @@
 package com.robomaster_libgdx.environment.simulatinglayers;
 
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.robomaster_libgdx.environment.Environment;
+import com.robomaster_libgdx.environment.actors.CustomActor;
+import com.robomaster_libgdx.environment.simulatinglayers.baselayers.RenderedLayer;
 
-public class WorldLayer extends Layer{
+public class WorldLayer extends RenderedLayer {
+    Environment environment;
 
-    public WorldLayer(StretchViewport stretchViewport) {
-        super(stretchViewport);
+    private TiledMap map;
+    private TmxMapLoader loader;
+    private OrthogonalTiledMapRenderer renderer;
+
+    public WorldLayer(Environment environment) {
+        super(environment);
+
+        this.environment = environment;
+        loader      = new TmxMapLoader();
+        map         = loader.load("Map/CompetitionMap/map.tmx");
+        renderer    = new OrthogonalTiledMapRenderer(map);
+        Actor a = new CustomActor(new TextureRegion(new Texture("badlogic.jpg")));
+        //direction   = new Vector2();
+        //this.addActor(a);
+        environment.view.getOrthographicCamera().position.x = 8490f / 2f;
+        environment.view.getOrthographicCamera().position.y = 4890f / 2f;
+        environment.view.getOrthographicCamera().zoom = 10f;
     }
 
+    public void resize(int width, int height) {
+        //viewport.update(width, height);
+    }
 
+    @Override
+    public void act(float delta){
+        super.act(delta);
+    }
+
+    @Override
+    public void draw () {
+        renderer.setView((OrthographicCamera) environment.view.getOrthographicCamera());
+        renderer.render();
+        super.draw();
+        //Gdx.app.log("MyTag", String.valueOf(camera.zoom));
+//        getViewport().getCamera().
+//        getViewport().getCamera().update();
+    }
 }
