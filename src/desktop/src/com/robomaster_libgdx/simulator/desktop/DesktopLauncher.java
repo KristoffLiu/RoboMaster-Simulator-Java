@@ -12,7 +12,7 @@ public class DesktopLauncher {
 		config.title = "RoboMaster Simulator - libGDX Java Platform";
 
 		float scaleFactor = 0.6f;
-		config.width = (int) (2320 * scaleFactor);
+		config.width = (int) (1920 * scaleFactor);
 		config.height = (int) (1080 * scaleFactor);
 
 		new LwjglApplication(new Simulator(), config);

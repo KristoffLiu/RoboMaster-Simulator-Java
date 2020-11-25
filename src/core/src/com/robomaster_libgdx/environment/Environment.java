@@ -4,25 +4,57 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.robomaster_libgdx.environment.simulatinglayers.WorldLayer;
+import com.badlogic.gdx.utils.Array;
+import com.robomaster_libgdx.environment.actors.robomasters.AlexanderMasterI;
+import com.robomaster_libgdx.environment.actors.robomasters.RoboMaster;
+import com.robomaster_libgdx.environment.maps.StandardCompetitionMap2020;
+import com.robomaster_libgdx.environment.simulatinglayers.FloorLayer;
 import com.robomaster_libgdx.Simulator;
+import com.robomaster_libgdx.environment.simulatinglayers.PhysicsLayer;
+import com.robomaster_libgdx.environment.simulatinglayers.RenderedLayer;
+
 
 public class Environment implements Screen {
     Simulator simulator;
 
-    WorldLayer worldLayer;
+    public final float width = 8.49f;
+    public final float height = 4.89f;
+
     public View view;
+    public StandardCompetitionMap2020 map;
+    FloorLayer floorLayer;
+    RenderedLayer renderedLayer;
+    PhysicsLayer physicsLayer;
+
+
+    public Array<RoboMaster> allRoboMasters = new Array<>();
+    public Array<RoboMaster> teamBlue = new Array<>();
+    public Array<RoboMaster> teamRed = new Array<>();
+
 
     public Environment(final Simulator simulator){
         this.simulator = simulator;
-        view = new View(simulator.VIEW_WIDTH, simulator.VIEW_HEIGHT);
-        worldLayer = new WorldLayer(this);
 
-        worldLayer.addListener(new GlobalInputEventHandler(view));
+        for(int i = 0; i <= 2; i++){
+            teamBlue.add(new AlexanderMasterI());
+        }
+        for(int i = 0; i <= 2; i++){
+            teamRed.add(new AlexanderMasterI());
+        }
+        allRoboMasters.addAll(teamBlue);
+        allRoboMasters.addAll(teamRed);
+
+        view = new View(width, height);
+        map = new StandardCompetitionMap2020(this);
+
+        floorLayer = new FloorLayer(this);
+        floorLayer.addListener(new GlobalInputEventHandler(view));
+        renderedLayer = new RenderedLayer(this);
+        physicsLayer = new PhysicsLayer(this);
+
+
         InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(worldLayer);
+        multiplexer.addProcessor(floorLayer);
         Gdx.input.setInputProcessor(multiplexer);
     }
 
@@ -47,8 +79,12 @@ public class Environment implements Screen {
 //        uiStage.act();
 //        uiStage.draw();
         view.update(delta);
-        worldLayer.act();
-        worldLayer.draw();
+        floorLayer.act();
+        floorLayer.draw();
+        renderedLayer.act();
+        renderedLayer.draw();
+        physicsLayer.step();
+        physicsLayer.render();
     }
 
     /**
