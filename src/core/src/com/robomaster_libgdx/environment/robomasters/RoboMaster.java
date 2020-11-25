@@ -1,10 +1,11 @@
-package com.robomaster_libgdx.environment.actors.robomasters;
+package com.robomaster_libgdx.environment.robomasters;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.robomaster_libgdx.environment.actors.MovingObject;
+import com.robomaster_libgdx.environment.libs.actors.MovingObject;
 
 public abstract class RoboMaster extends MovingObject {
     int PIN;
@@ -12,7 +13,7 @@ public abstract class RoboMaster extends MovingObject {
     Body body;
 
     //box2d properties
-    BodyDef roboMasterBodyDef;
+    BodyDef bodyDef;
 
     //mechanical properties;
     float acceleration;
@@ -27,13 +28,14 @@ public abstract class RoboMaster extends MovingObject {
 
     public RoboMaster(TextureRegion textureRegion) {
         super(textureRegion);
+        shapeRenderer = new ShapeRenderer();
     }
 
     public void createRoboMasterBody(float x, float y, World world){
         PolygonShape roboMasterShape = new PolygonShape();
         roboMasterShape.setAsBox(0.28f,0.215f);
 
-        BodyDef bodyDef = new BodyDef();
+        bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(new Vector2(x, y));
 
@@ -75,6 +77,18 @@ public abstract class RoboMaster extends MovingObject {
 //        roboMasterShape.dispose();
 //        return roboMasterBody;
 //    }
+
+    ShapeRenderer shapeRenderer;
+
+    public void act(){
+        float scale = 1f / 1000f;
+        this.setWidth(this.getTextureRegion().getRegionWidth() * scale);
+        this.setHeight(this.getTextureRegion().getRegionHeight() * scale);
+        if(this.bodyDef != null){
+            this.setX(this.bodyDef.position.x - this.getWidth() / 2f);
+            this.setY(this.bodyDef.position.y - this.getHeight() / 2f);
+        }
+    }
 
 
 

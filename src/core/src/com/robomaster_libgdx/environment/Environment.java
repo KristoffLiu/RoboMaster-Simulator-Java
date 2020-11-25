@@ -4,12 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.robomaster_libgdx.environment.actors.robomasters.AlexanderMasterI;
-import com.robomaster_libgdx.environment.actors.robomasters.RoboMaster;
+import com.robomaster_libgdx.environment.robomasters.AlexanderMasterI;
+import com.robomaster_libgdx.environment.robomasters.RoboMaster;
 import com.robomaster_libgdx.environment.maps.StandardCompetitionMap2020;
 import com.robomaster_libgdx.environment.simulatinglayers.FloorLayer;
 import com.robomaster_libgdx.Simulator;
+import com.robomaster_libgdx.environment.simulatinglayers.GlobalMatrixLayer;
 import com.robomaster_libgdx.environment.simulatinglayers.PhysicsLayer;
 import com.robomaster_libgdx.environment.simulatinglayers.RenderedLayer;
 
@@ -22,9 +24,13 @@ public class Environment implements Screen {
 
     public View view;
     public StandardCompetitionMap2020 map;
+
     FloorLayer floorLayer;
+    GlobalMatrixLayer globalMatrixLayer;
     RenderedLayer renderedLayer;
     PhysicsLayer physicsLayer;
+
+    public ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 
     public Array<RoboMaster> allRoboMasters = new Array<>();
@@ -35,10 +41,12 @@ public class Environment implements Screen {
     public Environment(final Simulator simulator){
         this.simulator = simulator;
 
-        for(int i = 0; i <= 2; i++){
+        shapeRenderer = new ShapeRenderer();
+
+        for(int i = 0; i <= 1; i++){
             teamBlue.add(new AlexanderMasterI());
         }
-        for(int i = 0; i <= 2; i++){
+        for(int i = 0; i <= 1; i++){
             teamRed.add(new AlexanderMasterI());
         }
         allRoboMasters.addAll(teamBlue);
@@ -51,6 +59,7 @@ public class Environment implements Screen {
         floorLayer.addListener(new GlobalInputEventHandler(view));
         renderedLayer = new RenderedLayer(this);
         physicsLayer = new PhysicsLayer(this);
+        globalMatrixLayer = new GlobalMatrixLayer(this);
 
 
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -79,12 +88,23 @@ public class Environment implements Screen {
 //        uiStage.act();
 //        uiStage.draw();
         view.update(delta);
+
+        shapeRenderer.setProjectionMatrix(view.getOrthographicCamera().combined);
+        shapeRenderer.setAutoShapeType(true);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         floorLayer.act();
         floorLayer.draw();
+        shapeRenderer.end();
+
         renderedLayer.act();
         renderedLayer.draw();
+
+
         physicsLayer.step();
         physicsLayer.render();
+
+        globalMatrixLayer.act();
+        globalMatrixLayer.draw();
     }
 
     /**

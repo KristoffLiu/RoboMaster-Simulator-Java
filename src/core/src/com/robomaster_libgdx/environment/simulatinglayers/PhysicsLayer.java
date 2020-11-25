@@ -1,8 +1,10 @@
 package com.robomaster_libgdx.environment.simulatinglayers;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.robomaster_libgdx.environment.Environment;
 
 public class PhysicsLayer {
@@ -133,9 +135,23 @@ public class PhysicsLayer {
 
     public void step(){
         physicalWorld.step(1/60f,6,2);
+
+
     }
 
     public void render(){
         box2DDebugRenderer.render(physicalWorld, environment.view.getOrthographicCamera().combined);
     }
+
+    public void updateMatrix(){
+        Matrix3 matrix3 = new Matrix3();
+        Array<Body> bodies = new Array<>();
+        for(Body body : bodies){
+            //body.
+        }
+
+
+    }
+
+
 }

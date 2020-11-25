@@ -1,8 +1,11 @@
 package com.robomaster_libgdx.environment.simulatinglayers;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.robomaster_libgdx.environment.Environment;
-import com.robomaster_libgdx.environment.actors.CustomActor;
+import com.robomaster_libgdx.environment.libs.actors.CustomActor;
+import com.robomaster_libgdx.environment.robomasters.RoboMaster;
 import com.robomaster_libgdx.environment.simulatinglayers.baselayers.VisualLayer;
 
 public class RenderedLayer extends VisualLayer {
@@ -12,6 +15,7 @@ public class RenderedLayer extends VisualLayer {
         renderBirthZone();
         renderBlocks();
         renderBuffZone();
+        renderRoboMasters();
     }
 
     public void renderBirthZone(){
@@ -48,5 +52,25 @@ public class RenderedLayer extends VisualLayer {
             actor.setHeight(textureMapObject.getTextureRegion().getRegionHeight() * scale);
             this.addActor(actor);
         }
+    }
+
+    public void renderRoboMasters() {
+        for (CustomActor actor : environment.allRoboMasters) {
+            this.addActor(actor);
+        }
+    }
+
+    @Override
+    public void act (float delta) {
+        float scale = 1f / 1000f;
+        super.act(delta);
+        for (RoboMaster roboMaster : environment.allRoboMasters) {
+            roboMaster.act();
+        }
+    }
+
+    @Override
+    public void draw(){
+        super.draw();
     }
 }

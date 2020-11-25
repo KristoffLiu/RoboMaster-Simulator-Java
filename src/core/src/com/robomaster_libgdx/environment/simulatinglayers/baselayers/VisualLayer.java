@@ -10,6 +10,11 @@ public class VisualLayer extends Layer {
     }
 
     @Override
+    public void act (float delta) {
+        super.act(delta);
+    }
+
+    @Override
     public void draw () {
         super.draw();
 

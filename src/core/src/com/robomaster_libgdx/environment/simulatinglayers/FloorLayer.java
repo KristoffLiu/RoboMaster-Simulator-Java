@@ -1,15 +1,11 @@
 package com.robomaster_libgdx.environment.simulatinglayers;
 
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.robomaster_libgdx.environment.Environment;
-import com.robomaster_libgdx.environment.actors.robomasters.AlexanderMasterI;
+import com.robomaster_libgdx.environment.robomasters.RoboMaster;
 import com.robomaster_libgdx.environment.simulatinglayers.baselayers.VisualLayer;
-import com.badlogic.gdx.maps.MapObjects;
 
 public class FloorLayer extends VisualLayer {
     Environment environment;
@@ -25,7 +21,7 @@ public class FloorLayer extends VisualLayer {
 
         environment.view.getOrthographicCamera().position.x = environment.width / 2f;
         environment.view.getOrthographicCamera().position.y = environment.height / 2f;
-        environment.view.getOrthographicCamera().zoom = 2.0f;
+        environment.view.getOrthographicCamera().zoom = 1.5f;
     }
 
     public void resize(int width, int height) {
@@ -41,6 +37,14 @@ public class FloorLayer extends VisualLayer {
     public void draw () {
         super.draw();
         environment.map.render();
+        for (RoboMaster roboMaster : environment.allRoboMasters) {
+            environment.shapeRenderer.setAutoShapeType(true);
+            environment.shapeRenderer.setColor(1f,0f,0.75f,0.1f);
+            environment.shapeRenderer.circle(
+                    roboMaster.getX() + roboMaster.getWidth() / 2f,
+                    roboMaster.getY() + roboMaster.getHeight() / 2f,
+                    3.0f, 100);
+        }
     }
 
 
