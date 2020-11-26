@@ -120,10 +120,10 @@ public class GlobalInputEventHandler extends InputListener {
         else{
             if(amountY != 0){
                 if(amountY > 0){
-                    view.setVerticalTranslation(true);
+                    view.setVerticalTranslation(false);
                 }
                 else{
-                    view.setVerticalTranslation(false);
+                    view.setVerticalTranslation(true);
                 }
             }
         }

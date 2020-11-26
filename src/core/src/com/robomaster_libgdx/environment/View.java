@@ -10,29 +10,29 @@ public class View{
 
     boolean isZooming                   = false;
     private final float zoomTimeLock    = 0.1f;
-    private final float zoomMax         = 14f;
-    private final float zoomMin         = 2f;
-    private       float zoomOffset = 0.2f;
+    private final float zoomMax         = 100f;
+    private final float zoomMin         = 1f;
+    private       float zoomOffset = 0.001f;
     private       float zoomTimeCount   = 0f;
 
     boolean isHorizontallyTranslating   = false;
     private final float horizontalTranslationLock       = 0.1f;
-    private final float horizontalTranslationMax        = 8490f;
-    private final float horizontalTranslationMin        = 0f;
-    private       float horizontalTranslationOffset     = 0.2f;
+    private final float horizontalTranslationMax        = 8.49f;
+    private final float horizontalTranslationMin        = -2f;
+    private       float horizontalTranslationOffset     = 0.001f;
     private       float horizontalTranslationTimeCount  = 0f;
 
     boolean isVerticallyTranslating   = false;
     private final float verticalTranslationLock       = 0.1f;
-    private final float verticalTranslationMax        = 4890f;
-    private final float verticalTranslationMin        = 0f;
-    private       float verticalTranslationOffset     = 0.2f;
+    private final float verticalTranslationMax        = 4.89f;
+    private final float verticalTranslationMin        = -2f;
+    private       float verticalTranslationOffset     = 0.001f;
     private       float verticalTranslationTimeCount  = 0f;
 
 
 
     public View(float width, float height){
-        camera = new OrthographicCamera();
+        camera = new OrthographicCamera(width,height);
         viewport = new FitViewport(width,height,camera);
     }
 
@@ -51,16 +51,16 @@ public class View{
     }
 
     public void updateSize(float width,float height){
-        getViewport().setScreenWidth((int)width - 300);
-        getViewport().setScreenHeight((int)height);
-
-
-        float x = camera.position.x;
-        float y = camera.position.y;
-        getOrthographicCamera().setToOrtho (
-                true, width, height);
-        camera.position.x = x;
-        camera.position.y = y;
+//        getViewport().setScreenWidth((int)width - 300);
+//        getViewport().setScreenHeight((int)height);
+//
+//
+//        float x = camera.position.x;
+//        float y = camera.position.y;
+//        getOrthographicCamera().setToOrtho (
+//                true, width, height);
+//        camera.position.x = x;
+//        camera.position.y = y;
     }
 
     private void updateZoom(float deltaTime){
@@ -127,7 +127,7 @@ public class View{
     }
 
     private float getZoomFactor(){
-        return camera.zoom * 6.0f;
+        return camera.zoom / 10.0f;
     }
 
     public void setHorizontalTranslation(boolean bool){
