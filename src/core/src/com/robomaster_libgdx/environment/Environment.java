@@ -101,12 +101,10 @@ public class Environment implements Screen {
         floorLayer.draw();
         shapeRenderer.end();
 
-        renderedLayer.act();
-        renderedLayer.draw();
-
-
         physicsLayer.step();
         physicsLayer.render();
+        renderedLayer.act();
+        renderedLayer.draw();
 
         pointCloudRenderer.setProjectionMatrix(view.getOrthographicCamera().combined);
         pointCloudRenderer.setAutoShapeType(true);
@@ -115,7 +113,7 @@ public class Environment implements Screen {
         globalMatrixLayer.draw();
         pointCloudRenderer.end();
 
-        matrixSenseSystem.update();
+        matrixSenseSystem.update(delta);
     }
 
     /**

@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.robomaster_libgdx.environment.Environment;
 import org.graalvm.compiler.loop.MathUtil;
 
+import java.util.Arrays;
+
 public class MatrixSenseSystem {
     Environment environment;
     ShapeRenderer shapeRenderer;
@@ -67,23 +69,31 @@ public class MatrixSenseSystem {
         }
     }
 
-    public void update(){
+    float timestate = 0;
+    public void update(float delta){
         //flushArea();
-        lidarPointCloudSimulate(demoMatrix,
-                environment.teamBlue.get(0).getLidarPosition().x,
-                environment.teamBlue.get(0).getLidarPosition().y);
+        if(timestate > 1/20f){
+            demoMatrix = lidarPointCloudSimulate(
+                    environment.teamBlue.get(0).getLidarPosition().x,
+                    environment.teamBlue.get(0).getLidarPosition().y);
+            timestate = 0f;
+        }
+        else{
+            timestate += delta;
+        }
     }
 
-    public boolean[][] lidarPointCloudSimulate(boolean[][] matrix,float c_x, float c_y){
+    public boolean[][] lidarPointCloudSimulate(float c_x, float c_y){
+        boolean[][] matrix = new boolean[8490][4890];
         int centre_x = (int) (c_x * 1000);
         int centre_y = (int) (c_y * 1000);
-        float precisionOfDegree = 5f;
+        float precisionOfDegree = 0.5f;
         int x = 0;
         int y = 0;
         for(float degree = 0;degree < 360; degree += precisionOfDegree){
             float radian = degree * MathUtils.degreesToRadians;
             if(degree == 0 || degree == 180){
-                for(y = 0;y <9000; y++){
+                for(y = 0;y <4800; y++){
                     if(degree == 0){
                         matrix[centre_x][centre_y + y] = isPointContained(centre_x, centre_y + y);
                         if(isPointContained(centre_x, centre_y + y)){
@@ -99,7 +109,7 @@ public class MatrixSenseSystem {
                 }
             }
             else if(degree == 90 || degree == 270){
-                for(x = 0;x <9000; x++){
+                for(x = 0;x <8400; x++){
                     if(degree == 90){
                         matrix[centre_x + x][centre_y] = isPointContained(centre_x + x, centre_y);
                         if(isPointContained(centre_x + x, centre_y)){
@@ -115,19 +125,19 @@ public class MatrixSenseSystem {
                 }
             }
             else if(degree > 315 || degree < 45 || (degree > 135 && degree < 225)){
-                for(y = 0;y <5000; y++){
-                    Gdx.app.log("degree",String.valueOf(degree) + "   " + String.valueOf(x) + "   " + String.valueOf(y));
-                    int offset_x = (int) Math.tan(radian) * y;
+                for(y = 0;y <4800; y++){
+                    int offset_x = (int) (Math.tan(radian) * y);
                     int offset_y = y;
-                    if(degree > 315){
-                        offset_x = - offset_x;
-                    }
-                    else if(degree > 135){
-                        offset_y = - offset_y;
-                    }
-                    else if(degree < 225){
+                    if(degree > 135 && degree < 180){
                         offset_x = - offset_x;
                         offset_y = - offset_y;
+                    }
+                    else if(degree > 180 && degree < 225){
+                        offset_x = - offset_x;
+                        offset_y = - offset_y;
+                    }
+                    else{
+                        offset_x = - offset_x;
                     }
                     matrix[centre_x + offset_x][centre_y + offset_y] = isPointContained(centre_x + offset_x, centre_y + offset_y);
                     if(isPointContained(centre_x + offset_x, centre_y + offset_y)){
@@ -135,26 +145,26 @@ public class MatrixSenseSystem {
                     }
                 }
             }
-//            else{
-//                for(x = 0;x <50; x++){
-//                    int offset_x = x;
-//                    int offset_y = (int) Math.tan(radian) * x;
-//                    if(degree <= 135){
-//                        offset_y = - offset_y;
-//                    }
-//                    else if(degree >= 225){
-//                        offset_x = - offset_x;
-//                        offset_y = - offset_y;
-//                    }
-//                    else if(degree <= 315){
-//                        offset_x = - offset_x;
-//                    }
-//                    matrix[centre_x + offset_x][centre_y + offset_y] = isPointContained(centre_x + offset_x, centre_y + offset_y);
-//                    if(isPointContained(centre_x + offset_x, centre_y + offset_y)){
-//                        break;
-//                    }
-//                }
-//            }
+            else{
+                for(x = 0;x <8400; x++){
+                    int offset_x = x;
+                    int offset_y = (int) (x / Math.tan(radian));
+                    if(degree <= 135){
+                        offset_y = - offset_y;
+                    }
+                    else if(degree >= 225){
+                        offset_x = - offset_x;
+                        offset_y = - offset_y;
+                    }
+                    else if(degree <= 315){
+                        offset_x = - offset_x;
+                    }
+                    matrix[centre_x + offset_x][centre_y + offset_y] = isPointContained(centre_x + offset_x, centre_y + offset_y);
+                    if(isPointContained(centre_x + offset_x, centre_y + offset_y)){
+                        break;
+                    }
+                }
+            }
             x = 0;
             y = 0;
         }
@@ -163,5 +173,9 @@ public class MatrixSenseSystem {
 
     public boolean isPointContained(int x, int y){
         return pointMatrix[x][y];
+    }
+
+    public boolean[][] getDemoMatrix(){
+        return demoMatrix;
     }
 }
