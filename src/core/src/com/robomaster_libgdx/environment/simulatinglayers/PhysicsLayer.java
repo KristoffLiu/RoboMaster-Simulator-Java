@@ -144,13 +144,16 @@ public class PhysicsLayer {
     }
 
     public void updateMatrix(){
-        Matrix3 matrix3 = new Matrix3();
+        boolean[][] PointMatrix = new boolean[8490][4890];
         Array<Body> bodies = new Array<>();
-        for(Body body : bodies){
-            //body.
-        }
-
-
+//        for(Body body : bodies){
+//            for(Fixture fixture : body.getFixtureList()){
+//                Shape shape = fixture.getShape();
+//                if (fixture.getShape() instanceof PolygonShape) {
+//                    ((PolygonShape)shape).
+//                }
+//            }
+//        }
     }
 
 

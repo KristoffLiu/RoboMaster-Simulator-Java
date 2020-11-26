@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.robomaster_libgdx.environment.libs.MatrixSenseSystem;
 import com.robomaster_libgdx.environment.robomasters.AlexanderMasterI;
 import com.robomaster_libgdx.environment.robomasters.RoboMaster;
 import com.robomaster_libgdx.environment.maps.StandardCompetitionMap2020;
@@ -31,17 +32,20 @@ public class Environment implements Screen {
     PhysicsLayer physicsLayer;
 
     public ShapeRenderer shapeRenderer = new ShapeRenderer();
+    public ShapeRenderer pointCloudRenderer = new ShapeRenderer();
 
 
     public Array<RoboMaster> allRoboMasters = new Array<>();
     public Array<RoboMaster> teamBlue = new Array<>();
     public Array<RoboMaster> teamRed = new Array<>();
 
+    public MatrixSenseSystem matrixSenseSystem;
 
     public Environment(final Simulator simulator){
         this.simulator = simulator;
 
         shapeRenderer = new ShapeRenderer();
+        pointCloudRenderer = new ShapeRenderer();
 
         for(int i = 0; i <= 1; i++){
             teamBlue.add(new AlexanderMasterI());
@@ -54,6 +58,7 @@ public class Environment implements Screen {
 
         view = new View(width, height);
         map = new StandardCompetitionMap2020(this);
+        matrixSenseSystem = new MatrixSenseSystem(this);
 
         floorLayer = new FloorLayer(this);
         floorLayer.addListener(new GlobalInputEventHandler(view));
@@ -103,8 +108,12 @@ public class Environment implements Screen {
         physicsLayer.step();
         physicsLayer.render();
 
+        pointCloudRenderer.setProjectionMatrix(view.getOrthographicCamera().combined);
+        pointCloudRenderer.setAutoShapeType(true);
+        pointCloudRenderer.begin(ShapeRenderer.ShapeType.Filled);
         globalMatrixLayer.act();
         globalMatrixLayer.draw();
+        pointCloudRenderer.end();
     }
 
     /**
