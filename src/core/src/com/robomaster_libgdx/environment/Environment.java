@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.robomaster_libgdx.environment.libs.MatrixSenseSystem;
 import com.robomaster_libgdx.environment.robomasters.AlexanderMasterI;
+import com.robomaster_libgdx.environment.robomasters.AlexandreMasterII;
 import com.robomaster_libgdx.environment.robomasters.RoboMaster;
 import com.robomaster_libgdx.environment.maps.StandardCompetitionMap2020;
 import com.robomaster_libgdx.environment.simulatinglayers.FloorLayer;
@@ -48,10 +49,10 @@ public class Environment implements Screen {
         pointCloudRenderer = new ShapeRenderer();
 
         for(int i = 0; i <= 1; i++){
-            teamBlue.add(new AlexanderMasterI());
+            teamBlue.add(new AlexandreMasterII());
         }
         for(int i = 0; i <= 1; i++){
-            teamRed.add(new AlexanderMasterI());
+            teamRed.add(new AlexandreMasterII());
         }
         allRoboMasters.addAll(teamBlue);
         allRoboMasters.addAll(teamRed);

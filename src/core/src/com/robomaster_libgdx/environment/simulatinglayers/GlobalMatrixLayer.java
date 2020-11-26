@@ -33,28 +33,32 @@ public class GlobalMatrixLayer extends VisualLayer {
                             (int)(environment.teamBlue.get(0).getLidarPosition().x * 1000),
                             (int)(environment.teamBlue.get(0).getLidarPosition().y * 1000));
                     float distance = (float) a.distance(b);
-                    if(distance <= 500f){
-                        environment.pointCloudRenderer.setColor(1.0f,0f,0f,1.0f);
+                    float red;
+                    float green;
+                    float blue;
+                    if(distance <= 7000){
+                        red = - 1f/7000f * distance + 1.0f;
                     }
-                    else if(distance <= 1000f){
-                        environment.pointCloudRenderer.setColor(0.8f,0.2f,0f,1.0f);
+                    else {
+                        red = 0f;
                     }
-                    else if(distance <= 2000f){
-                        environment.pointCloudRenderer.setColor(0.6f,0.4f,0f,1.0f);
+                    if (distance <= 6000){
+                        green = 1f/6000f * distance;
                     }
-                    else if(distance <= 3000f){
-                        environment.pointCloudRenderer.setColor(0.4f,0.6f,0f,1.0f);
+                    else {
+                        green = 1.0f;
                     }
-                    else if(distance <= 4000f){
-                        environment.pointCloudRenderer.setColor(0.2f,0.8f,0f,1.0f);
+                    if (distance <= 5000 && distance >= 2000){
+                        blue = -1f/3000f * distance + 5f/3f;
                     }
-                    else{
-                        environment.pointCloudRenderer.setColor(0.0f,1.0f,0f,1.0f);
+                    else {
+                        blue = 0f;
                     }
+                    environment.pointCloudRenderer.setColor(red,green,blue,1.0f);
                     environment.pointCloudRenderer.circle(
                             i / 1000f,
                             j / 1000f,
-                            0.05f,5);
+                            0.04f,10);
                 }
             }
         }

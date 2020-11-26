@@ -34,7 +34,8 @@ public abstract class RoboMaster extends MovingObject {
 
     public void createRoboMasterBody(float x, float y, World world){
         PolygonShape roboMasterShape = new PolygonShape();
-        roboMasterShape.setAsBox(0.28f,0.215f);
+        //roboMasterShape.setAsBox(0.28f,0.215f);
+        roboMasterShape.setAsBox(0.30f,0.225f);
 
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -85,8 +86,8 @@ public abstract class RoboMaster extends MovingObject {
 
     public void act(){
         float scale = 1f / 1000f;
-        this.setWidth(this.getTextureRegion().getRegionWidth() * scale);
-        this.setHeight(this.getTextureRegion().getRegionHeight() * scale);
+        this.setWidth(0.6f);
+        this.setHeight(0.45f);
         if(this.bodyDef != null){
             this.setX(this.body.getPosition().x - this.getWidth() / 2f);
             this.setY(this.body.getPosition().y - this.getHeight() / 2f);
