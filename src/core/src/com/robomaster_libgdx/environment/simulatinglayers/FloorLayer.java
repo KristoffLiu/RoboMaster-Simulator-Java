@@ -21,7 +21,7 @@ public class FloorLayer extends VisualLayer {
 
         environment.view.getOrthographicCamera().position.x = environment.width / 2f;
         environment.view.getOrthographicCamera().position.y = environment.height / 2f;
-        environment.view.getOrthographicCamera().zoom = 1.5f;
+        environment.view.getOrthographicCamera().zoom = 1.2f;
     }
 
     public void resize(int width, int height) {
@@ -37,14 +37,6 @@ public class FloorLayer extends VisualLayer {
     public void draw () {
         super.draw();
         environment.map.render();
-        for (RoboMaster roboMaster : environment.allRoboMasters) {
-            environment.shapeRenderer.setAutoShapeType(true);
-            environment.shapeRenderer.setColor(1f,0f,0.75f,0.1f);
-            environment.shapeRenderer.circle(
-                    roboMaster.getX() + roboMaster.getWidth() / 2f,
-                    roboMaster.getY() + roboMaster.getHeight() / 2f,
-                    3.0f, 100);
-        }
     }
 
 

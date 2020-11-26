@@ -3,6 +3,7 @@ package com.robomaster_libgdx.environment.robomasters;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.robomaster_libgdx.environment.libs.actors.MovingObject;
@@ -38,6 +39,7 @@ public abstract class RoboMaster extends MovingObject {
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(new Vector2(x, y));
+        bodyDef.linearVelocity.set(new Vector2(20f,10f));
 
         body = world.createBody(bodyDef);
 
@@ -45,6 +47,7 @@ public abstract class RoboMaster extends MovingObject {
         fixtureDef.friction = 1f;
         fixtureDef.density = 1f;
         fixtureDef.shape = roboMasterShape;
+        fixtureDef.restitution = 1.0f;
 
         body.createFixture(fixtureDef);
 
@@ -85,9 +88,16 @@ public abstract class RoboMaster extends MovingObject {
         this.setWidth(this.getTextureRegion().getRegionWidth() * scale);
         this.setHeight(this.getTextureRegion().getRegionHeight() * scale);
         if(this.bodyDef != null){
-            this.setX(this.bodyDef.position.x - this.getWidth() / 2f);
-            this.setY(this.bodyDef.position.y - this.getHeight() / 2f);
+            this.setX(this.body.getPosition().x - this.getWidth() / 2f);
+            this.setY(this.body.getPosition().y - this.getHeight() / 2f);
+            this.setOriginX(this.getWidth() / 2f);
+            this.setOriginY(this.getHeight() / 2f);
+            this.setRotation(MathUtils.radiansToDegrees * this.body.getAngle());
         }
+    }
+
+    public Vector2 getLidarPosition(){
+        return body.getPosition();
     }
 
 
