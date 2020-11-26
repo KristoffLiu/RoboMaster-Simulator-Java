@@ -32,6 +32,7 @@ public class PhysicsLayer {
     private void createBoundary(float width, float height){
         createBoundary(0f, 0f, width, height);
     }
+
     private void createBoundary(float x, float y, float width,float height){
         BodyDef boundary = new BodyDef();
         boundary.type = BodyDef.BodyType.StaticBody;
@@ -135,8 +136,6 @@ public class PhysicsLayer {
 
     public void step(){
         physicalWorld.step(1/60f,6,2);
-
-
     }
 
     public void render(){

@@ -38,6 +38,7 @@ public abstract class RoboMaster extends MovingObject {
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(new Vector2(x, y));
+        //bodyDef.linearVelocity.set(new Vector2(10f,0f));
 
         body = world.createBody(bodyDef);
 
@@ -88,6 +89,10 @@ public abstract class RoboMaster extends MovingObject {
             this.setX(this.bodyDef.position.x - this.getWidth() / 2f);
             this.setY(this.bodyDef.position.y - this.getHeight() / 2f);
         }
+    }
+
+    public Vector2 getLidarPosition(){
+        return new Vector2(bodyDef.position.x, bodyDef.position.y);
     }
 
 

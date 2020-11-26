@@ -114,6 +114,8 @@ public class Environment implements Screen {
         globalMatrixLayer.act();
         globalMatrixLayer.draw();
         pointCloudRenderer.end();
+
+        matrixSenseSystem.update();
     }
 
     /**
