@@ -10,8 +10,8 @@ public class View{
 
     boolean isZooming                   = false;
     private final float zoomTimeLock    = 0.1f;
-    private final float zoomMax         = 100f;
-    private final float zoomMin         = 1f;
+    private final float zoomMax         = 4f;
+    private final float zoomMin         = 0.5f;
     private       float zoomOffset = 0.001f;
     private       float zoomTimeCount   = 0f;
 
@@ -127,35 +127,35 @@ public class View{
     }
 
     private float getZoomFactor(){
-        return camera.zoom / 10.0f;
+        return camera.zoom / 7.5f;
     }
 
     public void setHorizontalTranslation(boolean bool){
         if(bool){
-            this.horizontalTranslationOffset = 2f;
+            this.horizontalTranslationOffset = 1f;
         }
         else{
-            this.horizontalTranslationOffset = -2f;
+            this.horizontalTranslationOffset = -1f;
         }
         isHorizontallyTranslating = true;
     }
 
     public void setVerticalTranslation(boolean bool){
         if(bool){
-            this.verticalTranslationOffset = 2f;
+            this.verticalTranslationOffset = 1f;
         }
         else{
-            this.verticalTranslationOffset = -2f;
+            this.verticalTranslationOffset = -1f;
         }
         isVerticallyTranslating = true;
     }
 
     public void setZoom(float zoomOffset){
         if(zoomOffset > 0){
-            this.zoomOffset = 0.3f;
+            this.zoomOffset = 0.1f;
         }
         else if(zoomOffset < 0){
-            this.zoomOffset = -0.3f;
+            this.zoomOffset = -0.1f;
         }
         isZooming = true;
     }

@@ -14,6 +14,7 @@ public class DesktopLauncher {
 		float scaleFactor = 0.6f;
 		config.width = (int) (1920 * scaleFactor);
 		config.height = (int) (1080 * scaleFactor);
+		config.useGL30 = true;
 
 		new LwjglApplication(new Simulator(), config);
 	}

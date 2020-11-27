@@ -11,22 +11,19 @@ public class PhysicsLayer {
     Environment environment;
 
     World physicalWorld;
-    Box2DDebugRenderer box2DDebugRenderer;
+    //Box2DDebugRenderer box2DDebugRenderer;
 
     public PhysicsLayer(Environment environment) {
         this.environment = environment;
-        box2DDebugRenderer = new Box2DDebugRenderer();
+        //box2DDebugRenderer = new Box2DDebugRenderer();
         physicalWorld = new World(new Vector2(), false);
 
         //create world boundary
-        this.createBoundary(environment.width, environment.height);
         this.createBoundary(0.205f, 0.205f,8.08f, 4.48f);
-
 
         createStaticBlocks();
         deployTeamBlue();
         deployTeamRed();
-
     }
 
     private void createBoundary(float width, float height){
@@ -139,7 +136,7 @@ public class PhysicsLayer {
     }
 
     public void render(){
-        box2DDebugRenderer.render(physicalWorld, environment.view.getOrthographicCamera().combined);
+        //box2DDebugRenderer.render(physicalWorld, environment.view.getOrthographicCamera().combined);
     }
 
     public void updateMatrix(){

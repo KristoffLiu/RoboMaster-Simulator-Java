@@ -6,16 +6,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.robomaster_libgdx.environment.libs.MatrixSenseSystem;
-import com.robomaster_libgdx.environment.robomasters.AlexanderMasterI;
 import com.robomaster_libgdx.environment.robomasters.AlexandreMasterII;
 import com.robomaster_libgdx.environment.robomasters.RoboMaster;
 import com.robomaster_libgdx.environment.maps.StandardCompetitionMap2020;
-import com.robomaster_libgdx.environment.simulatinglayers.FloorLayer;
+import com.robomaster_libgdx.environment.simulatinglayers.*;
 import com.robomaster_libgdx.Simulator;
-import com.robomaster_libgdx.environment.simulatinglayers.GlobalMatrixLayer;
-import com.robomaster_libgdx.environment.simulatinglayers.PhysicsLayer;
-import com.robomaster_libgdx.environment.simulatinglayers.RenderedLayer;
 
 
 public class Environment implements Screen {
@@ -27,10 +22,13 @@ public class Environment implements Screen {
     public View view;
     public StandardCompetitionMap2020 map;
 
-    FloorLayer floorLayer;
-    GlobalMatrixLayer globalMatrixLayer;
-    RenderedLayer renderedLayer;
-    PhysicsLayer physicsLayer;
+    public FloorLayer floorLayer;
+    public PhysicsLayer physicsLayer;
+    public MatrixLayer matrixLayer;
+    public RenderedLayer renderedLayer;
+    public LidarPointCloudLayer lidarPointCloudLayer;
+
+    public FrameRate frameRate;
 
     public ShapeRenderer shapeRenderer = new ShapeRenderer();
     public ShapeRenderer pointCloudRenderer = new ShapeRenderer();
@@ -39,8 +37,6 @@ public class Environment implements Screen {
     public Array<RoboMaster> allRoboMasters = new Array<>();
     public Array<RoboMaster> teamBlue = new Array<>();
     public Array<RoboMaster> teamRed = new Array<>();
-
-    public MatrixSenseSystem matrixSenseSystem;
 
     public Environment(final Simulator simulator){
         this.simulator = simulator;
@@ -59,13 +55,15 @@ public class Environment implements Screen {
 
         view = new View(width, height);
         map = new StandardCompetitionMap2020(this);
-        matrixSenseSystem = new MatrixSenseSystem(this);
 
         floorLayer = new FloorLayer(this);
         floorLayer.addListener(new GlobalInputEventHandler(view));
         renderedLayer = new RenderedLayer(this);
         physicsLayer = new PhysicsLayer(this);
-        globalMatrixLayer = new GlobalMatrixLayer(this);
+        matrixLayer = new MatrixLayer(this);
+        lidarPointCloudLayer = new LidarPointCloudLayer(this);
+        frameRate = new FrameRate();
+
 
 
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -88,33 +86,26 @@ public class Environment implements Screen {
      */
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
+        Gdx.gl.glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//        uiStage.act();
-//        uiStage.draw();
         view.update(delta);
-
-        shapeRenderer.setProjectionMatrix(view.getOrthographicCamera().combined);
-        shapeRenderer.setAutoShapeType(true);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         floorLayer.act();
         floorLayer.draw();
-        shapeRenderer.end();
 
         physicsLayer.step();
         physicsLayer.render();
+        matrixLayer.act();
+        matrixLayer.draw();
+
+        lidarPointCloudLayer.act(delta);
+        lidarPointCloudLayer.draw();
+
         renderedLayer.act();
         renderedLayer.draw();
 
-        pointCloudRenderer.setProjectionMatrix(view.getOrthographicCamera().combined);
-        pointCloudRenderer.setAutoShapeType(true);
-        pointCloudRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        globalMatrixLayer.act();
-        globalMatrixLayer.draw();
-        pointCloudRenderer.end();
-
-        matrixSenseSystem.update(delta);
+        frameRate.update();
+        frameRate.render();
     }
 
     /**
@@ -125,6 +116,7 @@ public class Environment implements Screen {
     @Override
     public void resize(int width, int height) {
         view.updateSize(width,height);
+        frameRate.resize(width,height);
     }
 
     /**
