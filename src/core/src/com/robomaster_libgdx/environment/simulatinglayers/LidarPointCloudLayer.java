@@ -12,10 +12,12 @@ import java.awt.*;
 
 public class LidarPointCloudLayer extends VisualLayer {
     ShapeRenderer shapeRenderer;
+    //ShapeRenderer circleRenderer;
     public Array<Vector2> lidarPointCloudPointsArray;
     public LidarPointCloudLayer(Environment environment) {
         super(environment);
         shapeRenderer = new ShapeRenderer();
+        //circleRenderer = new ShapeRenderer();
         lidarPointCloudPointsArray = new Array<>();
     }
 
@@ -24,7 +26,6 @@ public class LidarPointCloudLayer extends VisualLayer {
         float scale = 1f / 1000f;
         super.act(delta);
         update(delta);
-
     }
 
     @Override
@@ -69,13 +70,22 @@ public class LidarPointCloudLayer extends VisualLayer {
                     0.04f,10);
         }
         shapeRenderer.end();
+//        circleRenderer.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
+//        circleRenderer.setAutoShapeType(true);
+//        circleRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        circleRenderer.setColor(1.0f,0,0,1.0f);
+//        circleRenderer.circle(
+//                (environment.teamBlue.get(0).getLidarPosition().x),
+//                (environment.teamBlue.get(0).getLidarPosition().y),
+//                0.5f,50);
+//        circleRenderer.end();
     }
 
     float timestate = 0;
     public void update(float delta){
         //flushArea();
-        if(timestate > 1/60f){
-            lidarPointCloudPointsArray = lidarPointCloudSimulate2(
+        if(timestate > 1/30f){
+            lidarPointCloudPointsArray = lidarPointCloudSimulate(
                     environment.teamBlue.get(0).getLidarPosition().x,
                     environment.teamBlue.get(0).getLidarPosition().y);
             timestate = 0f;
@@ -89,7 +99,7 @@ public class LidarPointCloudLayer extends VisualLayer {
         Array<Vector2> pointsArray = new Array<>();
         int centre_x = (int) (c_x * 1000);
         int centre_y = (int) (c_y * 1000);
-        float precisionOfDegree = 0.05f;
+        float precisionOfDegree = 0.5f;
         int x = 0;
         int y = 0;
         for(float degree = 0;degree < 360; degree += precisionOfDegree){
@@ -173,31 +183,6 @@ public class LidarPointCloudLayer extends VisualLayer {
         return pointsArray;
     }
 
-    public Array<Vector2> lidarPointCloudSimulate2(float c_x, float c_y){
-        Array<Vector2> pointsArray = new Array<>();
-        int centre_x = (int) (c_x * 1000);
-        int centre_y = (int) (c_y * 1000);
-        float precisionOfDegree = 30f;
-        for(float degree = 0;degree < 360; degree += precisionOfDegree){
-            float radian = degree * MathUtils.degreesToRadians;
-            float minDistance = 0;
-            Vector2 closestVector = new Vector2();
-            Vector2 direction = new Vector2((float) Math.sin(radian),(float)Math.cos(radian));
-            for(int i = 0; i < getPointMatrixArray().size; i++){
-                Vector2 directionToThePoint = new Vector2(getPointMatrixArray().get(i).x - centre_x, getPointMatrixArray().get(i).y - centre_y);
-                if(direction.hasSameDirection(directionToThePoint)){
-                    if(minDistance == 0 || minDistance > directionToThePoint.len()){
-                        minDistance = directionToThePoint.len();
-                        closestVector = directionToThePoint;
-                    }
-                }
-            }
-            pointsArray.add(closestVector);
-        }
-        return pointsArray;
-    }
-
-
     public Array<Vector2> getLidarPointCloudPointsArray(){
         return lidarPointCloudPointsArray;
     }
@@ -205,9 +190,4 @@ public class LidarPointCloudLayer extends VisualLayer {
     public boolean isPointContained(int x, int y){
         return environment.matrixLayer.pointMatrix[x][y];
     }
-
-    public Array<Vector2> getPointMatrixArray(){
-        return environment.matrixLayer.pointMatrixArray;
-    }
-
 }

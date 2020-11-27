@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.robomaster_libgdx.environment.robomasters.AlexandreMasterII;
+import com.robomaster_libgdx.environment.libs.Assets;
+import com.robomaster_libgdx.environment.robomasters.AlexanderMasterII;
 import com.robomaster_libgdx.environment.robomasters.RoboMaster;
 import com.robomaster_libgdx.environment.maps.StandardCompetitionMap2020;
 import com.robomaster_libgdx.environment.simulatinglayers.*;
@@ -15,6 +15,7 @@ import com.robomaster_libgdx.Simulator;
 
 public class Environment implements Screen {
     Simulator simulator;
+    Assets assets = new Assets();
 
     public final float width = 8.49f;
     public final float height = 4.89f;
@@ -30,10 +31,6 @@ public class Environment implements Screen {
 
     public FrameRate frameRate;
 
-    public ShapeRenderer shapeRenderer = new ShapeRenderer();
-    public ShapeRenderer pointCloudRenderer = new ShapeRenderer();
-
-
     public Array<RoboMaster> allRoboMasters = new Array<>();
     public Array<RoboMaster> teamBlue = new Array<>();
     public Array<RoboMaster> teamRed = new Array<>();
@@ -41,14 +38,11 @@ public class Environment implements Screen {
     public Environment(final Simulator simulator){
         this.simulator = simulator;
 
-        shapeRenderer = new ShapeRenderer();
-        pointCloudRenderer = new ShapeRenderer();
-
         for(int i = 0; i <= 1; i++){
-            teamBlue.add(new AlexandreMasterII());
+            teamBlue.add(new AlexanderMasterII());
         }
         for(int i = 0; i <= 1; i++){
-            teamRed.add(new AlexandreMasterII());
+            teamRed.add(new AlexanderMasterII());
         }
         allRoboMasters.addAll(teamBlue);
         allRoboMasters.addAll(teamRed);
@@ -94,7 +88,7 @@ public class Environment implements Screen {
         floorLayer.draw();
 
         physicsLayer.step();
-        physicsLayer.render();
+
         matrixLayer.act();
         matrixLayer.draw();
 
@@ -103,7 +97,7 @@ public class Environment implements Screen {
 
         renderedLayer.act();
         renderedLayer.draw();
-
+        physicsLayer.render(delta);
         frameRate.update();
         frameRate.render();
     }

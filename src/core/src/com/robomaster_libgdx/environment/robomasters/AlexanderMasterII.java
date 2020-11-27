@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.robomaster_libgdx.environment.robomasters.RoboMaster;
 
-public class AlexandreMasterII extends RoboMaster {
-    public AlexandreMasterII(){
+public class AlexanderMasterII extends RoboMaster {
+    public AlexanderMasterII(){
         super(new TextureRegion(
                         new Texture("RoboMasters/AlexanderMaster.png")));
     }

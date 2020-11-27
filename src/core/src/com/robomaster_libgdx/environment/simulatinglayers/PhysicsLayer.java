@@ -6,16 +6,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.robomaster_libgdx.environment.Environment;
+import com.robomaster_libgdx.environment.robomasters.RoboMaster;
 
 public class PhysicsLayer {
     Environment environment;
 
     World physicalWorld;
-    //Box2DDebugRenderer box2DDebugRenderer;
+    Box2DDebugRenderer box2DDebugRenderer;
 
     public PhysicsLayer(Environment environment) {
         this.environment = environment;
-        //box2DDebugRenderer = new Box2DDebugRenderer();
+        box2DDebugRenderer = new Box2DDebugRenderer();
         physicalWorld = new World(new Vector2(), false);
 
         //create world boundary
@@ -135,8 +136,19 @@ public class PhysicsLayer {
         physicalWorld.step(1/60f,6,2);
     }
 
-    public void render(){
-        //box2DDebugRenderer.render(physicalWorld, environment.view.getOrthographicCamera().combined);
+    float timeState;
+    public void render(float delta){
+        box2DDebugRenderer.render(physicalWorld, environment.view.getOrthographicCamera().combined);
+        if(timeState > 1f){
+            timeState = 0f;
+//            environment.allRoboMasters.forEach(x -> x.shoot());
+            for(RoboMaster roboMaster : environment.allRoboMasters){
+                roboMaster.shoot();
+            }
+        }
+        else{
+            timeState += delta;
+        }
     }
 
     public void updateMatrix(){

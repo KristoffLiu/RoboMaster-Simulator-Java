@@ -15,6 +15,7 @@ public class DesktopLauncher {
 		config.width = (int) (1920 * scaleFactor);
 		config.height = (int) (1080 * scaleFactor);
 		config.useGL30 = true;
+		config.foregroundFPS = 60;
 
 		new LwjglApplication(new Simulator(), config);
 	}
