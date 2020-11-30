@@ -25,6 +25,9 @@ public abstract class RoboMaster extends MovingObject {
     Body cannon;
     BodyDef cannonDef;
 
+    Joint cannonJoint;
+    RevoluteJointDef cannonJointDef;
+
     //mechanical properties;
     float acceleration;
     float velocity;
@@ -69,17 +72,15 @@ public abstract class RoboMaster extends MovingObject {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.friction = 1f;
-        fixtureDef.density = 1000f;
+        fixtureDef.density = 10f;
         fixtureDef.shape = roboMasterShape;
         fixtureDef.restitution = 1.0f;
-        
+
 
         body.createFixture(fixtureDef);
 
         roboMasterShape.dispose();
         createGunStructure(x, y, world);
-
-        body.applyForce(new Vector2(5000000f,200f), new Vector2(x,y),false);
     }
 
     public void createGunStructure(float x, float y, World world){
@@ -104,14 +105,25 @@ public abstract class RoboMaster extends MovingObject {
     }
 
     public void connectComponentsWithJoint(float x, float y, World world){
-        RevoluteJointDef revoluteJointDef = new RevoluteJointDef();
-        revoluteJointDef.initialize(body,cannon,new Vector2(x, y));
-        revoluteJointDef.maxMotorTorque = 5f;
-        revoluteJointDef.motorSpeed = 5f;
-        revoluteJointDef.enableMotor = true;
-        revoluteJointDef.lowerAngle = 0;
-        revoluteJointDef.upperAngle = (float) (Math.PI / 2);
-        world.createJoint(revoluteJointDef);
+        cannonJointDef = new RevoluteJointDef();
+        cannonJointDef.initialize(body,cannon,new Vector2(x, y));
+        cannonJointDef.maxMotorTorque = 5f;
+        cannonJointDef.motorSpeed = 0f;
+        cannonJointDef.enableMotor = true;
+        cannonJointDef.lowerAngle = 0;
+        cannonJointDef.upperAngle = (float) (Math.PI / 2);
+        cannonJointDef.enableLimit = true;
+        cannonJoint = world.createJoint(cannonJointDef);
+    }
+
+    public void cannonRotateCW(){
+        cannon.applyForce();
+    }
+
+    public void cannonRotateCCW(){
+        cannonJointDef.maxMotorTorque = 5f;
+        cannonJointDef.motorSpeed = - 0.3f;
+
     }
 
     ShapeRenderer shapeRenderer;
@@ -159,6 +171,38 @@ public abstract class RoboMaster extends MovingObject {
         return 0f;
     }
 
+    public float getFacingAngle(){
+        return body.getAngle();
+    }
+
+    public Vector2 getPosition(){
+        return this.body.getPosition();
+    }
+
+    public void moveForward(){
+        float force = 250f;
+        float worldAngle = getFacingAngle();
+        float oppositeEdge = (float) (Math.sin(1/2 * Math.PI - worldAngle) * force);
+        float adjacentEdge = (float) (Math.cos(1/2 * Math.PI - worldAngle) * force);
+        body.applyForce(new Vector2(adjacentEdge,oppositeEdge), getPosition(),false);
+    }
 
 
+
+    public void moveLeft(){
+        float force = 250f;
+        float worldAngle = getFacingAngle();
+        float oppositeEdge = (float) - (Math.sin(1/2 * Math.PI - worldAngle) * force);
+        float adjacentEdge = (float) (Math.cos(1/2 * Math.PI - worldAngle) * force);
+        body.applyForce(new Vector2(adjacentEdge,oppositeEdge), getPosition(),false);
+
+    }
+
+    public void ForceToTheCentre(float magnitudeOfForce, float degreeOfAngle){
+        float force = 250f;
+        float worldAngle = getFacingAngle();
+        float oppositeEdge = (float) - (Math.sin(1/2 * Math.PI - degreeOfAngle) * magnitudeOfForce);
+        float adjacentEdge = (float) (Math.cos(1/2 * Math.PI - degreeOfAngle) * magnitudeOfForce);
+        body.applyForce(new Vector2(adjacentEdge,oppositeEdge), getPosition(),false);
+    }
 }

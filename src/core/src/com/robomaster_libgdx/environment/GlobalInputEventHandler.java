@@ -13,14 +13,16 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
  */
 public class GlobalInputEventHandler extends InputListener {
     float MouseMovingVelocityFactor = 20;
+    Environment environment;
     View view;
     final String TAG = "GlobalInputEventHandler";
 
     boolean isLeftControlKeyDown = false;
     boolean isLeftAltKeyDown = false;
 
-    public GlobalInputEventHandler(View view){
-        this.view = view;
+    public GlobalInputEventHandler(Environment environment){
+        this.environment = environment;
+        this.view = environment.view;
     }
 
 
@@ -35,6 +37,12 @@ public class GlobalInputEventHandler extends InputListener {
                 isLeftControlKeyDown = true;
             case Input.Keys.ALT_LEFT:
                 isLeftAltKeyDown = true;
+            case Input.Keys.Z:
+                environment.teamBlue.get(0).cannonRotateCCW();
+            case Input.Keys.C:
+                environment.teamBlue.get(0).cannonRotateCW();
+            case Input.Keys.Q:
+                environment.teamBlue.get(0).moveForward();
         }
         return false;
     }

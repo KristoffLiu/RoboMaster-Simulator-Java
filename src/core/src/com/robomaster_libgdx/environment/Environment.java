@@ -51,7 +51,7 @@ public class Environment implements Screen {
         map = new StandardCompetitionMap2020(this);
 
         floorLayer = new FloorLayer(this);
-        floorLayer.addListener(new GlobalInputEventHandler(view));
+        floorLayer.addListener(new GlobalInputEventHandler(this));
         renderedLayer = new RenderedLayer(this);
         physicsLayer = new PhysicsLayer(this);
         matrixLayer = new MatrixLayer(this);

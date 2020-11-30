@@ -139,16 +139,16 @@ public class PhysicsLayer {
     float timeState;
     public void render(float delta){
         box2DDebugRenderer.render(physicalWorld, environment.view.getOrthographicCamera().combined);
-        if(timeState > 1f){
-            timeState = 0f;
-//            environment.allRoboMasters.forEach(x -> x.shoot());
-            for(RoboMaster roboMaster : environment.allRoboMasters){
-                roboMaster.shoot();
-            }
-        }
-        else{
-            timeState += delta;
-        }
+//        if(timeState > 1f){
+//            timeState = 0f;
+////            environment.allRoboMasters.forEach(x -> x.shoot());
+//            for(RoboMaster roboMaster : environment.allRoboMasters){
+//                roboMaster.shoot();
+//            }
+//        }
+//        else{
+//            timeState += delta;
+//        }
     }
 
     public void updateMatrix(){
