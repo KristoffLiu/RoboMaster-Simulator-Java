@@ -37,12 +37,14 @@ public class GlobalInputEventHandler extends InputListener {
                 isLeftControlKeyDown = true;
             case Input.Keys.ALT_LEFT:
                 isLeftAltKeyDown = true;
+            case Input.Keys.W:
+                environment.teamBlue.get(0).moveForward();
             case Input.Keys.Z:
                 environment.teamBlue.get(0).cannonRotateCCW();
             case Input.Keys.C:
                 environment.teamBlue.get(0).cannonRotateCW();
-            case Input.Keys.Q:
-                environment.teamBlue.get(0).moveForward();
+            default:
+                break;
         }
         return false;
     }

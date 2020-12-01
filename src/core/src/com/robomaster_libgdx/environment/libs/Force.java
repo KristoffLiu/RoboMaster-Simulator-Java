@@ -17,21 +17,4 @@ public class Force {
         vector2.y = (float) (Math.sin(degree) * magnitude);
         return vector2;
     }
-
-    public Vector2 getForceInXYAxis(float magnitude, float degreeFromUpward){
-        if(degreeFromUpward){
-
-        }
-    }
-
-    public Vector2 getForceInXYAxis(float magnitude, float degreeFromUpward){
-        Vector2 vector2;
-        if(degreeFromUpward > 360){
-            degreeFromUpward = degreeFromUpward % 360;
-        }
-
-        if (degreeFromUpward < 90){
-            
-        }
-    }
 }

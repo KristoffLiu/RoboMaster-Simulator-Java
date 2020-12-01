@@ -117,7 +117,7 @@ public abstract class RoboMaster extends MovingObject {
     }
 
     public void cannonRotateCW(){
-        cannon.applyForce();
+
     }
 
     public void cannonRotateCCW(){
@@ -186,8 +186,6 @@ public abstract class RoboMaster extends MovingObject {
         float adjacentEdge = (float) (Math.cos(1/2 * Math.PI - worldAngle) * force);
         body.applyForce(new Vector2(adjacentEdge,oppositeEdge), getPosition(),false);
     }
-
-
 
     public void moveLeft(){
         float force = 250f;
