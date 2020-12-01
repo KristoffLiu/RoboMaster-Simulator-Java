@@ -1,22 +1,24 @@
 package com.robomaster_libgdx.environment.robomasters;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
-import com.badlogic.gdx.physics.box2d.joints.GearJointDef;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
-import com.badlogic.gdx.physics.box2d.joints.WheelJointDef;
+import com.badlogic.gdx.physics.box2d.joints.*;
+import com.robomaster_libgdx.environment.libs.VectorHelper;
 import com.robomaster_libgdx.environment.libs.actors.MovingObject;
 
 public abstract class RoboMaster extends MovingObject {
     int PIN;
-    //physical properties
-    float mass;
     World physicalWorld;
+
+    //physical properties
+    public final float mass = 17.1f; //unit: kg
+    public final float width = 0.60f; //unit: m
+    public final float height = 0.45f; //unit: m
+    public final float area = width * height; //unit: metre square
 
     //box2d properties
     Body body;
@@ -25,7 +27,7 @@ public abstract class RoboMaster extends MovingObject {
     Body cannon;
     BodyDef cannonDef;
 
-    Joint cannonJoint;
+    RevoluteJoint cannonJoint;
     RevoluteJointDef cannonJointDef;
 
     //mechanical properties;
@@ -42,11 +44,6 @@ public abstract class RoboMaster extends MovingObject {
     public RoboMaster(TextureRegion textureRegion) {
         super(textureRegion);
         shapeRenderer = new ShapeRenderer();
-        setMass(17.1f);
-    }
-
-    private void setMass(float mass){
-        this.mass = mass;
     }
 
 //    private double weight = 17.1;           //Kg
@@ -57,24 +54,27 @@ public abstract class RoboMaster extends MovingObject {
 //    private float bullet_speed = 25;        //m/s
 //    private int max_carrying_bullet = 300;  //m/s
 
+    //roboMasterShape.setAsBox(0.28f,0.215f); FOR ROBOMASTER 2019
     public void createRoboMasterBody(float x, float y, World world){
         physicalWorld = world;
         PolygonShape roboMasterShape = new PolygonShape();
-        //roboMasterShape.setAsBox(0.28f,0.215f);
-        roboMasterShape.setAsBox(0.30f,0.225f);
+
+        roboMasterShape.setAsBox(width / 2f, height / 2f);
 
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(new Vector2(x, y));
-        //bodyDef.linearVelocity.set(new Vector2(20f,10f));
+
+
 
         body = world.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.friction = 1f;
-        fixtureDef.density = 10f;
+        fixtureDef.density = mass / area;
         fixtureDef.shape = roboMasterShape;
         fixtureDef.restitution = 1.0f;
+
 
 
         body.createFixture(fixtureDef);
@@ -104,26 +104,27 @@ public abstract class RoboMaster extends MovingObject {
         connectComponentsWithJoint(x, y, world);
     }
 
+
+
     public void connectComponentsWithJoint(float x, float y, World world){
         cannonJointDef = new RevoluteJointDef();
         cannonJointDef.initialize(body,cannon,new Vector2(x, y));
-        cannonJointDef.maxMotorTorque = 5f;
-        cannonJointDef.motorSpeed = 0f;
+        cannonJointDef.maxMotorTorque = 50f;
         cannonJointDef.enableMotor = true;
-        cannonJointDef.lowerAngle = 0;
+        cannonJointDef.lowerAngle = (float) (- Math.PI / 2);
         cannonJointDef.upperAngle = (float) (Math.PI / 2);
         cannonJointDef.enableLimit = true;
-        cannonJoint = world.createJoint(cannonJointDef);
+        cannonJoint = (RevoluteJoint) world.createJoint(cannonJointDef);
     }
 
     public void cannonRotateCW(){
-        cannon.applyForce();
+        cannonJoint.setMotorSpeed(-4f);
+        //cannon.applyForce(Force.getForce(10f,cannon.getAngle()),cannon.getPosition(),false);
     }
 
     public void cannonRotateCCW(){
-        cannonJointDef.maxMotorTorque = 5f;
-        cannonJointDef.motorSpeed = - 0.3f;
-
+        cannonJoint.setMotorSpeed(4f);
+        //cannon.applyForce(Force.getForce(-10f,cannon.getAngle()),cannon.getPosition(),false);
     }
 
     ShapeRenderer shapeRenderer;
@@ -153,7 +154,8 @@ public abstract class RoboMaster extends MovingObject {
         FixtureDef fd = new FixtureDef();
         fd.shape = bulletShape;
         fd.density = 20.0f;
-        fd.restitution = 1.0f;
+        fd.restitution = 0.1f;
+        fd.friction = 0.8f;
 
         BodyDef bd = new BodyDef();
         bd.type = BodyDef.BodyType.DynamicBody;
@@ -167,42 +169,110 @@ public abstract class RoboMaster extends MovingObject {
         m_bullet.setLinearVelocity(new Vector2(10f, 10f));
     }
 
-    public float getCannonAngle(){
-        return 0f;
-    }
-
     public float getFacingAngle(){
-        return body.getAngle();
+        return (float) (- body.getAngle() - Math.PI / 2f);
     }
 
     public Vector2 getPosition(){
         return this.body.getPosition();
     }
 
+    public float getCannonAngle(){
+        return (float) (- cannon.getAngle() - Math.PI / 2f);
+    }
+
     public void moveForward(){
         float force = 250f;
         float worldAngle = getFacingAngle();
-        float oppositeEdge = (float) (Math.sin(1/2 * Math.PI - worldAngle) * force);
-        float adjacentEdge = (float) (Math.cos(1/2 * Math.PI - worldAngle) * force);
-        body.applyForce(new Vector2(adjacentEdge,oppositeEdge), getPosition(),false);
+        body.applyForce(VectorHelper.getForce(force,worldAngle), getPosition(),false);
     }
-
-
 
     public void moveLeft(){
         float force = 250f;
         float worldAngle = getFacingAngle();
-        float oppositeEdge = (float) - (Math.sin(1/2 * Math.PI - worldAngle) * force);
-        float adjacentEdge = (float) (Math.cos(1/2 * Math.PI - worldAngle) * force);
-        body.applyForce(new Vector2(adjacentEdge,oppositeEdge), getPosition(),false);
-
+        body.applyForce(VectorHelper.getForce(force,worldAngle - (float) (Math.PI / 2f)), getPosition(),false);
     }
 
-    public void ForceToTheCentre(float magnitudeOfForce, float degreeOfAngle){
+    public void moveRight(){
         float force = 250f;
         float worldAngle = getFacingAngle();
-        float oppositeEdge = (float) - (Math.sin(1/2 * Math.PI - degreeOfAngle) * magnitudeOfForce);
-        float adjacentEdge = (float) (Math.cos(1/2 * Math.PI - degreeOfAngle) * magnitudeOfForce);
-        body.applyForce(new Vector2(adjacentEdge,oppositeEdge), getPosition(),false);
+        body.applyForce(VectorHelper.getForce(force,worldAngle + (float) (Math.PI / 2f)), getPosition(),false);
+    }
+
+    public void moveBehind(){
+        float force = - 250f;
+        float worldAngle = getFacingAngle();
+        body.applyForce(VectorHelper.getForce(force,worldAngle), getPosition(),false);
+    }
+
+    public void move(){
+        float force = - 50f;
+        float worldAngle = getFacingAngle();
+        body.applyForce(VectorHelper.getForce(force,worldAngle), getPosition(),false);
+    }
+
+    public void rotate(){
+        float force = - 50f;
+        float worldAngle = getFacingAngle();
+        body.applyForce(VectorHelper.getForce(force,worldAngle), getPosition(),false);
+    }
+
+    public void drive(Vector2 force1){
+        drive(force1,
+              force1,
+              force1,
+              force1);
+    }
+
+    public void drive(Vector2 force1,
+                      Vector2 force2,
+                      Vector2 force3,
+                      Vector2 force4){
+        body.applyForce(force1, getPosition().add(width/2f,height/2f),false);
+        body.applyForce(force2, getPosition().add(-width/2f,height/2f),false);
+        body.applyForce(force3, getPosition().add(width/2f,-height/2f),false);
+        body.applyForce(force4, getPosition().add(-width/2f,-height/2f),false);
+    }
+
+    public void transformRotation(float degree){
+        body.setTransform(body.getPosition(),degree);
+        cannon.setTransform(cannon.getPosition(),degree);
+    }
+
+    public Vector2 getLinearVelocity(){
+        return this.body.getLinearVelocity();
+    }
+
+    public float getAngularVelocity(){
+        return this.body.getAngularVelocity();
+    }
+
+    public void simulate(){
+        simulateFriction();
+    }
+
+    public void simulateFriction(){
+        float μ = 0.2f;
+        float weight = mass * 9.81f;
+        float friction = - μ * weight / 4f / 10f;
+        if(!this.getLinearVelocity().isZero()){
+            float θ = this.getLinearVelocity().angleRad();
+            float directionAngle = (float) ((2f * Math.PI - θ) + Math.PI / 2f);
+            if(directionAngle > 2 * Math.PI){
+                directionAngle = (float) (directionAngle % (2 * Math.PI));
+            }
+            Gdx.app.log("", String.valueOf(directionAngle));
+            this.drive(VectorHelper.getForce(friction, directionAngle),
+                    VectorHelper.getForce(friction, directionAngle),
+                    VectorHelper.getForce(friction, directionAngle),
+                    VectorHelper.getForce(friction, directionAngle));
+        }
+        if(! (this.getAngularVelocity() == 0f)){
+            this.body.setAngularVelocity(this.getAngularVelocity() + (- this.getAngularVelocity() / 5));
+        }
+    }
+
+    public void move2(){
+        //this.body.setLinearVelocity(VectorHelper.getForce());
     }
 }

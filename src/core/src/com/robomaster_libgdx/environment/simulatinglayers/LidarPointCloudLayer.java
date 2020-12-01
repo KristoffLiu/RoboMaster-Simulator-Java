@@ -6,17 +6,21 @@ import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.robomaster_libgdx.environment.Environment;
+import com.robomaster_libgdx.environment.robomasters.RoboMaster;
 import com.robomaster_libgdx.environment.simulatinglayers.baselayers.VisualLayer;
 
 import java.awt.*;
 
 public class LidarPointCloudLayer extends VisualLayer {
     ShapeRenderer shapeRenderer;
+    ShapeRenderer shapeRenderer2;
+
     //ShapeRenderer circleRenderer;
     public Array<Vector2> lidarPointCloudPointsArray;
     public LidarPointCloudLayer(Environment environment) {
         super(environment);
         shapeRenderer = new ShapeRenderer();
+        shapeRenderer2 = new ShapeRenderer();
         //circleRenderer = new ShapeRenderer();
         lidarPointCloudPointsArray = new Array<>();
     }
@@ -70,6 +74,28 @@ public class LidarPointCloudLayer extends VisualLayer {
                     0.04f,10);
         }
         shapeRenderer.end();
+
+        shapeRenderer2.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
+        shapeRenderer2.setAutoShapeType(true);
+        shapeRenderer2.begin(ShapeRenderer.ShapeType.Line);
+        for(RoboMaster roboMaster : environment.allRoboMasters){
+            shapeRenderer2.setColor(1.0f,0,0,1.0f);
+            shapeRenderer2.line(
+                    roboMaster.getLidarPosition().x,
+                    roboMaster.getLidarPosition().y,
+                    roboMaster.getLidarPosition().x + (float) (2f * Math.sin(roboMaster.getFacingAngle())),
+                    roboMaster.getLidarPosition().y + (float) (2f * Math.cos(roboMaster.getFacingAngle())));
+
+            shapeRenderer2.setColor(0f,1.0f,0,1.0f);
+            shapeRenderer2.line(
+                    roboMaster.getLidarPosition().x,
+                    roboMaster.getLidarPosition().y,
+                    roboMaster.getLidarPosition().x + (float) (3f * Math.sin(roboMaster.getCannonAngle())),
+                    roboMaster.getLidarPosition().y + (float) (3f * Math.cos(roboMaster.getCannonAngle())));
+        }
+        shapeRenderer2.end();
+
+
 //        circleRenderer.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
 //        circleRenderer.setAutoShapeType(true);
 //        circleRenderer.begin(ShapeRenderer.ShapeType.Line);

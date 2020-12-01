@@ -134,6 +134,9 @@ public class PhysicsLayer {
 
     public void step(){
         physicalWorld.step(1/60f,6,2);
+        for(RoboMaster roboMaster : environment.allRoboMasters){
+            roboMaster.simulateFriction();
+        }
     }
 
     float timeState;
@@ -164,5 +167,9 @@ public class PhysicsLayer {
 //        }
     }
 
+
+    public void simulateFriction(){
+
+    }
 
 }

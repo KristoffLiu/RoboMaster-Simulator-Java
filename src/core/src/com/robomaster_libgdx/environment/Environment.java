@@ -39,7 +39,8 @@ public class Environment implements Screen {
         this.simulator = simulator;
 
         for(int i = 0; i <= 1; i++){
-            teamBlue.add(new AlexanderMasterII());
+            RoboMaster roboMaster = new AlexanderMasterII();
+            teamBlue.add(roboMaster);
         }
         for(int i = 0; i <= 1; i++){
             teamRed.add(new AlexanderMasterII());
@@ -58,7 +59,9 @@ public class Environment implements Screen {
         lidarPointCloudLayer = new LidarPointCloudLayer(this);
         frameRate = new FrameRate();
 
-
+        for(RoboMaster roboMaster : teamBlue){
+            roboMaster.transformRotation((float) (Math.PI));
+        }
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(floorLayer);

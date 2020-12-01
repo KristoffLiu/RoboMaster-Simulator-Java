@@ -15,7 +15,7 @@ public class RenderedLayer extends VisualLayer {
         renderBirthZone();
         renderBlocks();
         renderBuffZone();
-        //renderRoboMasters();
+        renderRoboMasters();
     }
 
     public void renderBirthZone(){

@@ -35,14 +35,28 @@ public class GlobalInputEventHandler extends InputListener {
         switch (keycode) {
             case Input.Keys.CONTROL_LEFT:
                 isLeftControlKeyDown = true;
+                break;
             case Input.Keys.ALT_LEFT:
                 isLeftAltKeyDown = true;
+                break;
             case Input.Keys.Z:
                 environment.teamBlue.get(0).cannonRotateCCW();
+                break;
             case Input.Keys.C:
                 environment.teamBlue.get(0).cannonRotateCW();
-            case Input.Keys.Q:
+                break;
+            case Input.Keys.W:
                 environment.teamBlue.get(0).moveForward();
+                break;
+            case Input.Keys.A:
+                environment.teamBlue.get(0).moveLeft();
+                break;
+            case Input.Keys.D:
+                environment.teamBlue.get(0).moveRight();
+                break;
+            case Input.Keys.S:
+                environment.teamBlue.get(0).moveBehind();
+                break;
         }
         return false;
     }
@@ -90,7 +104,7 @@ public class GlobalInputEventHandler extends InputListener {
      */
     @Override
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        Gdx.app.log(TAG, "touchDown: " + x + ", " + y + "; pointer: " + pointer);
+        //Gdx.app.log(TAG, "touchDown: " + x + ", " + y + "; pointer: " + pointer);
         return true;
     }
 
@@ -99,7 +113,7 @@ public class GlobalInputEventHandler extends InputListener {
      */
     @Override
     public void touchDragged(InputEvent event, float x, float y, int pointer) {
-        Gdx.app.log(TAG, "touchDragged: " + x + ", " + y + "; pointer: " + pointer);
+        //Gdx.app.log(TAG, "touchDragged: " + x + ", " + y + "; pointer: " + pointer);
     }
 
     /**
@@ -107,7 +121,7 @@ public class GlobalInputEventHandler extends InputListener {
      */
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        Gdx.app.log(TAG, "touchUp: " + x + ", " + y + "; pointer: " + pointer);
+        //Gdx.app.log(TAG, "touchUp: " + x + ", " + y + "; pointer: " + pointer);
     }
 
     @Override
