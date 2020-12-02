@@ -1,6 +1,5 @@
-package com.robomaster_libgdx.environment.libs;
+package com.robomaster_libgdx.helpers;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class VectorHelper {

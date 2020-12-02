@@ -6,10 +6,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Array;
 import com.robomaster_libgdx.environment.libs.Assets;
-import com.robomaster_libgdx.environment.robomasters.AlexanderMasterII;
-import com.robomaster_libgdx.environment.robomasters.RoboMaster;
+import com.robomaster_libgdx.robomasters.AlexanderMasterII;
+import com.robomaster_libgdx.robomasters.RoboMaster;
 import com.robomaster_libgdx.environment.maps.StandardCompetitionMap2020;
-import com.robomaster_libgdx.environment.simulatinglayers.*;
+import com.robomaster_libgdx.environment.layers.*;
 import com.robomaster_libgdx.Simulator;
 
 
@@ -83,6 +83,7 @@ public class Environment implements Screen {
      */
     @Override
     public void render(float delta) {
+        //Gdx.graphics.getDeltaTime();
         Gdx.gl.glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -90,7 +91,7 @@ public class Environment implements Screen {
         floorLayer.act();
         floorLayer.draw();
 
-        physicsLayer.step();
+        physicalSimulate(delta);
 
         matrixLayer.act();
         matrixLayer.draw();
@@ -103,6 +104,16 @@ public class Environment implements Screen {
         physicsLayer.render(delta);
         frameRate.update();
         frameRate.render();
+    }
+
+    float accum = 0f;
+
+    private void physicalSimulate(float delta){
+        accum += Gdx.graphics.getDeltaTime();
+        while (accum >= Configuration.physicalWorldStep) {
+            accum -= Configuration.physicalWorldStep;
+            physicsLayer.step();
+        }
     }
 
     /**

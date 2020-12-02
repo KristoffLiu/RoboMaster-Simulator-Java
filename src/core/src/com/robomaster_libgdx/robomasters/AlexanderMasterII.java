@@ -1,8 +1,7 @@
-package com.robomaster_libgdx.environment.robomasters;
+package com.robomaster_libgdx.robomasters;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.robomaster_libgdx.environment.robomasters.RoboMaster;
 
 public class AlexanderMasterII extends RoboMaster {
     public AlexanderMasterII(){

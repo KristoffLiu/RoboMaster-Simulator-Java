@@ -57,6 +57,12 @@ public class GlobalInputEventHandler extends InputListener {
             case Input.Keys.S:
                 environment.teamBlue.get(0).moveBehind();
                 break;
+            case Input.Keys.L:
+                environment.teamBlue.get(0).slowDown();
+                break;
+            case Input.Keys.J:
+                environment.teamBlue.get(0).shoot();
+                break;
         }
         return false;
     }

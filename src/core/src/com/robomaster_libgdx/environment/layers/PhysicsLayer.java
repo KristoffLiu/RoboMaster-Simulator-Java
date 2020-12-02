@@ -1,12 +1,11 @@
-package com.robomaster_libgdx.environment.simulatinglayers;
+package com.robomaster_libgdx.environment.layers;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.robomaster_libgdx.environment.Environment;
-import com.robomaster_libgdx.environment.robomasters.RoboMaster;
+import com.robomaster_libgdx.robomasters.RoboMaster;
 
 public class PhysicsLayer {
     Environment environment;
@@ -14,8 +13,10 @@ public class PhysicsLayer {
     World physicalWorld;
     Box2DDebugRenderer box2DDebugRenderer;
 
-    public PhysicsLayer(Environment environment) {
-        this.environment = environment;
+    Runnable runnable;
+
+    public PhysicsLayer(Environment env) {
+        this.environment = env;
         box2DDebugRenderer = new Box2DDebugRenderer();
         physicalWorld = new World(new Vector2(), false);
 
@@ -25,6 +26,16 @@ public class PhysicsLayer {
         createStaticBlocks();
         deployTeamBlue();
         deployTeamRed();
+
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                physicalWorld.step(1/60f,6,2);
+                for(RoboMaster roboMaster : environment.allRoboMasters){
+                    roboMaster.simulateFriction();
+                }
+            }
+        };
     }
 
     private void createBoundary(float width, float height){
@@ -133,10 +144,7 @@ public class PhysicsLayer {
     }
 
     public void step(){
-        physicalWorld.step(1/60f,6,2);
-        for(RoboMaster roboMaster : environment.allRoboMasters){
-            roboMaster.simulateFriction();
-        }
+        runnable.run();
     }
 
     float timeState;

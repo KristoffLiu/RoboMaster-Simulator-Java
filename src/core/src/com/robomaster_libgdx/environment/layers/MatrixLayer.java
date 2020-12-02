@@ -1,10 +1,8 @@
-package com.robomaster_libgdx.environment.simulatinglayers;
+package com.robomaster_libgdx.environment.layers;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.robomaster_libgdx.environment.Environment;
-import com.robomaster_libgdx.environment.simulatinglayers.baselayers.VisualLayer;
+import com.robomaster_libgdx.environment.layers.baselayers.VisualLayer;
 
 public class MatrixLayer extends VisualLayer {
     float timestate = 0f;

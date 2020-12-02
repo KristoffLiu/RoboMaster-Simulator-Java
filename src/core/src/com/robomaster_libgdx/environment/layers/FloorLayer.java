@@ -1,11 +1,10 @@
-package com.robomaster_libgdx.environment.simulatinglayers;
+package com.robomaster_libgdx.environment.layers;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.robomaster_libgdx.environment.Environment;
-import com.robomaster_libgdx.environment.robomasters.RoboMaster;
-import com.robomaster_libgdx.environment.simulatinglayers.baselayers.VisualLayer;
+import com.robomaster_libgdx.environment.layers.baselayers.VisualLayer;
 
 public class FloorLayer extends VisualLayer {
     Environment environment;

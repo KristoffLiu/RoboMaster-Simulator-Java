@@ -1,13 +1,13 @@
-package com.robomaster_libgdx.environment.simulatinglayers;
+package com.robomaster_libgdx.environment.layers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.robomaster_libgdx.environment.Environment;
-import com.robomaster_libgdx.environment.robomasters.RoboMaster;
-import com.robomaster_libgdx.environment.simulatinglayers.baselayers.VisualLayer;
+import com.robomaster_libgdx.robomasters.RoboMaster;
+import com.robomaster_libgdx.environment.layers.baselayers.VisualLayer;
 
 import java.awt.*;
 
@@ -15,14 +15,30 @@ public class LidarPointCloudLayer extends VisualLayer {
     ShapeRenderer shapeRenderer;
     ShapeRenderer shapeRenderer2;
 
+    Runnable runnable;
+
     //ShapeRenderer circleRenderer;
     public Array<Vector2> lidarPointCloudPointsArray;
-    public LidarPointCloudLayer(Environment environment) {
-        super(environment);
+    public LidarPointCloudLayer(Environment env) {
+        super(env);
         shapeRenderer = new ShapeRenderer();
         shapeRenderer2 = new ShapeRenderer();
         //circleRenderer = new ShapeRenderer();
         lidarPointCloudPointsArray = new Array<>();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                if(timestate > 1/30f){
+                    lidarPointCloudPointsArray = lidarPointCloudSimulate(
+                            environment.teamBlue.get(0).getLidarPosition().x,
+                            environment.teamBlue.get(0).getLidarPosition().y);
+                    timestate = 0f;
+                }
+                else{
+                    timestate += Gdx.graphics.getDeltaTime();
+                }
+            }
+        };
     }
 
     @Override
@@ -94,32 +110,14 @@ public class LidarPointCloudLayer extends VisualLayer {
                     roboMaster.getLidarPosition().y + (float) (3f * Math.cos(roboMaster.getCannonAngle())));
         }
         shapeRenderer2.end();
-
-
-//        circleRenderer.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
-//        circleRenderer.setAutoShapeType(true);
-//        circleRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        circleRenderer.setColor(1.0f,0,0,1.0f);
-//        circleRenderer.circle(
-//                (environment.teamBlue.get(0).getLidarPosition().x),
-//                (environment.teamBlue.get(0).getLidarPosition().y),
-//                0.5f,50);
-//        circleRenderer.end();
     }
 
     float timestate = 0;
     public void update(float delta){
         //flushArea();
-        if(timestate > 1/30f){
-            lidarPointCloudPointsArray = lidarPointCloudSimulate(
-                    environment.teamBlue.get(0).getLidarPosition().x,
-                    environment.teamBlue.get(0).getLidarPosition().y);
-            timestate = 0f;
-        }
-        else{
-            timestate += delta;
-        }
+        runnable.run();
     }
+
 
     public Array<Vector2> lidarPointCloudSimulate(float c_x, float c_y){
         Array<Vector2> pointsArray = new Array<>();

@@ -1,12 +1,10 @@
-package com.robomaster_libgdx.environment.simulatinglayers;
+package com.robomaster_libgdx.environment.layers;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.robomaster_libgdx.environment.Environment;
 import com.robomaster_libgdx.environment.libs.actors.CustomActor;
-import com.robomaster_libgdx.environment.robomasters.RoboMaster;
-import com.robomaster_libgdx.environment.simulatinglayers.baselayers.VisualLayer;
+import com.robomaster_libgdx.robomasters.RoboMaster;
+import com.robomaster_libgdx.environment.layers.baselayers.VisualLayer;
 
 public class RenderedLayer extends VisualLayer {
 
@@ -15,7 +13,7 @@ public class RenderedLayer extends VisualLayer {
         renderBirthZone();
         renderBlocks();
         renderBuffZone();
-        renderRoboMasters();
+        //renderRoboMasters();
     }
 
     public void renderBirthZone(){
