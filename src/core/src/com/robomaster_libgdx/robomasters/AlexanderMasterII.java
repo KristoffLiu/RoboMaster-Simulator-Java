@@ -15,5 +15,6 @@ public class AlexanderMasterII extends RoboMaster {
     private float cannon_range = 180;       //degree
     private float bullet_speed = 25;        //m/s
     private int max_carrying_bullet = 300;  //m/s
+    private int HP = 2000;
 
 }
