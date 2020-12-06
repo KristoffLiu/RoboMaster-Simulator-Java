@@ -164,7 +164,7 @@ public abstract class RoboMaster extends MovingObject {
         m_bullet.createFixture(fd);
 
         //m_bullet.setLinearVelocity(new Vector2(400, 0));
-        m_bullet.setLinearVelocity(VectorHelper.getForce(25f,this.getCannonAngle()));
+        m_bullet.setLinearVelocity(VectorHelper.getVector(25f,this.getCannonAngle()));
     }
 
     public float getFacingAngle() {
@@ -182,37 +182,37 @@ public abstract class RoboMaster extends MovingObject {
     public void moveForward() {
         float force = 250f;
         float worldAngle = getFacingAngle();
-        body.applyForce(VectorHelper.getForce(force, worldAngle), getPosition(), false);
+        body.applyForce(VectorHelper.getVector(force, worldAngle), getPosition(), false);
     }
 
     public void moveLeft() {
         float force = 250f;
         float worldAngle = getFacingAngle();
-        body.applyForce(VectorHelper.getForce(force, worldAngle - (float) (Math.PI / 2f)), getPosition(), false);
+        body.applyForce(VectorHelper.getVector(force, worldAngle - (float) (Math.PI / 2f)), getPosition(), false);
     }
 
     public void moveRight() {
         float force = 250f;
         float worldAngle = getFacingAngle();
-        body.applyForce(VectorHelper.getForce(force, worldAngle + (float) (Math.PI / 2f)), getPosition(), false);
+        body.applyForce(VectorHelper.getVector(force, worldAngle + (float) (Math.PI / 2f)), getPosition(), false);
     }
 
     public void moveBehind() {
         float force = -250f;
         float worldAngle = getFacingAngle();
-        body.applyForce(VectorHelper.getForce(force, worldAngle), getPosition(), false);
+        body.applyForce(VectorHelper.getVector(force, worldAngle), getPosition(), false);
     }
 
     public void move() {
         float force = -50f;
         float worldAngle = getFacingAngle();
-        body.applyForce(VectorHelper.getForce(force, worldAngle), getPosition(), false);
+        body.applyForce(VectorHelper.getVector(force, worldAngle), getPosition(), false);
     }
 
     public void rotate() {
         float force = -50f;
         float worldAngle = getFacingAngle();
-        body.applyForce(VectorHelper.getForce(force, worldAngle), getPosition(), false);
+        body.applyForce(VectorHelper.getVector(force, worldAngle), getPosition(), false);
     }
 
     public void drive(Vector2 force1) {
@@ -260,10 +260,10 @@ public abstract class RoboMaster extends MovingObject {
                 directionAngle = (float) (directionAngle % (2 * Math.PI));
             }
             Gdx.app.log("", String.valueOf(directionAngle));
-            this.drive(VectorHelper.getForce(friction, directionAngle),
-                    VectorHelper.getForce(friction, directionAngle),
-                    VectorHelper.getForce(friction, directionAngle),
-                    VectorHelper.getForce(friction, directionAngle));
+            this.drive(VectorHelper.getVector(friction, directionAngle),
+                    VectorHelper.getVector(friction, directionAngle),
+                    VectorHelper.getVector(friction, directionAngle),
+                    VectorHelper.getVector(friction, directionAngle));
         }
         if (!(this.getAngularVelocity() == 0f)) {
             this.body.setAngularVelocity(this.getAngularVelocity() + (-this.getAngularVelocity() / 5));
