@@ -1,12 +1,12 @@
-package com.robomaster_libgdx.environment.layers.baselayers;
+package com.robomaster_libgdx.simulator.layers.baselayers;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.robomaster_libgdx.environment.Environment;
+import com.robomaster_libgdx.simulator.Renderer;
 
 public class VisualLayer extends Layer {
 
-    public VisualLayer(Environment environment) {
-        super(environment.view.getViewport(),environment);
+    public VisualLayer(Renderer renderer) {
+        super(renderer.view.getViewport(), renderer);
     }
 
     @Override

@@ -1,8 +1,7 @@
-package com.robomaster_libgdx;
+package com.robomaster_libgdx.simulator;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.robomaster_libgdx.environment.Environment;
 
 public class Simulator extends Game {
 
@@ -11,15 +10,15 @@ public class Simulator extends Game {
 	public final float VIEW_WIDTH = 1920;
 	public final float VIEW_HEIGHT = 1080;
 
-	Environment environment;
+	Renderer renderer;
 
 	/**
 	 * Called when the game is first created.
 	 */
 	@Override
 	public void create() {
-		environment = new Environment(this);
-		setScreen(environment);
+		renderer = new Renderer(this);
+		setScreen(renderer);
 	}
 
 
@@ -37,9 +36,9 @@ public class Simulator extends Game {
 
 
 		// When the game finished, dispose everything
-		if (environment != null) {
-			environment.dispose();
-			environment = null;
+		if (renderer != null) {
+			renderer.dispose();
+			renderer = null;
 		}
 	}
 

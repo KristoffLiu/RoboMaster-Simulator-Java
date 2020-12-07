@@ -1,9 +1,8 @@
 package com.robomaster_libgdx.simulator.desktop;
 
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.robomaster_libgdx.Simulator;
+import com.robomaster_libgdx.simulator.Simulator;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

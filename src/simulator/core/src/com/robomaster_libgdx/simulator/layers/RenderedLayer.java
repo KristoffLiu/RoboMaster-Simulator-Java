@@ -1,15 +1,15 @@
-package com.robomaster_libgdx.environment.layers;
+package com.robomaster_libgdx.simulator.layers;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.robomaster_libgdx.environment.Environment;
-import com.robomaster_libgdx.environment.libs.actors.CustomActor;
+import com.robomaster_libgdx.simulator.Renderer;
+import com.robomaster_libgdx.simulator.libs.actors.CustomActor;
 import com.robomaster_libgdx.robomasters.RoboMaster;
-import com.robomaster_libgdx.environment.layers.baselayers.VisualLayer;
+import com.robomaster_libgdx.simulator.layers.baselayers.VisualLayer;
 
 public class RenderedLayer extends VisualLayer {
 
-    public RenderedLayer(Environment environment) {
-        super(environment);
+    public RenderedLayer(Renderer renderer) {
+        super(renderer);
         renderBirthZone();
         renderBlocks();
         renderBuffZone();

@@ -1,15 +1,15 @@
-package com.robomaster_libgdx.environment.layers;
+package com.robomaster_libgdx.simulator.layers;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.robomaster_libgdx.environment.Environment;
-import com.robomaster_libgdx.environment.layers.baselayers.VisualLayer;
+import com.robomaster_libgdx.simulator.Renderer;
+import com.robomaster_libgdx.simulator.layers.baselayers.VisualLayer;
 
 public class MatrixLayer extends VisualLayer {
     float timestate = 0f;
 
     public boolean[][] pointMatrix;
-    public MatrixLayer(Environment environment) {
-        super(environment);
+    public MatrixLayer(Renderer renderer) {
+        super(renderer);
 
         pointMatrix = new boolean[8490][4890];
 

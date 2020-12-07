@@ -1,4 +1,4 @@
-package com.robomaster_libgdx.environment;
+package com.robomaster_libgdx.simulator;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.*;

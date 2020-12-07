@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.*;
 import com.robomaster_libgdx.helpers.VectorHelper;
-import com.robomaster_libgdx.environment.libs.actors.MovingObject;
+import com.robomaster_libgdx.simulator.libs.actors.MovingObject;
 
 public abstract class RoboMaster extends MovingObject {
     int PIN;

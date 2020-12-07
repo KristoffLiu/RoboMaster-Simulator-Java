@@ -1,19 +1,18 @@
-package com.robomaster_libgdx.environment;
+package com.robomaster_libgdx.simulator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Array;
-import com.robomaster_libgdx.environment.libs.Assets;
+import com.robomaster_libgdx.simulator.libs.Assets;
 import com.robomaster_libgdx.robomasters.AlexanderMasterII;
 import com.robomaster_libgdx.robomasters.RoboMaster;
-import com.robomaster_libgdx.environment.maps.StandardCompetitionMap2020;
-import com.robomaster_libgdx.environment.layers.*;
-import com.robomaster_libgdx.Simulator;
+import com.robomaster_libgdx.simulator.maps.StandardCompetitionMap2020;
+import com.robomaster_libgdx.simulator.layers.*;
 
 
-public class Environment implements Screen {
+public class Renderer implements Screen {
     Simulator simulator;
     Assets assets = new Assets();
 
@@ -35,7 +34,7 @@ public class Environment implements Screen {
     public Array<RoboMaster> teamBlue = new Array<>();
     public Array<RoboMaster> teamRed = new Array<>();
 
-    public Environment(final Simulator simulator){
+    public Renderer(final Simulator simulator){
         this.simulator = simulator;
 
         for(int i = 0; i <= 1; i++){

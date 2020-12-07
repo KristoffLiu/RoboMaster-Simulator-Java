@@ -1,9 +1,7 @@
-package com.robomaster_libgdx.environment;
+package com.robomaster_libgdx.simulator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -13,16 +11,16 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
  */
 public class GlobalInputEventHandler extends InputListener {
     float MouseMovingVelocityFactor = 20;
-    Environment environment;
+    Renderer renderer;
     View view;
     final String TAG = "GlobalInputEventHandler";
 
     boolean isLeftControlKeyDown = false;
     boolean isLeftAltKeyDown = false;
 
-    public GlobalInputEventHandler(Environment environment){
-        this.environment = environment;
-        this.view = environment.view;
+    public GlobalInputEventHandler(Renderer renderer){
+        this.renderer = renderer;
+        this.view = renderer.view;
     }
 
 
@@ -40,28 +38,28 @@ public class GlobalInputEventHandler extends InputListener {
                 isLeftAltKeyDown = true;
                 break;
             case Input.Keys.Z:
-                environment.teamBlue.get(0).cannonRotateCCW();
+                renderer.teamBlue.get(0).cannonRotateCCW();
                 break;
             case Input.Keys.C:
-                environment.teamBlue.get(0).cannonRotateCW();
+                renderer.teamBlue.get(0).cannonRotateCW();
                 break;
             case Input.Keys.W:
-                environment.teamBlue.get(0).moveForward();
+                renderer.teamBlue.get(0).moveForward();
                 break;
             case Input.Keys.A:
-                environment.teamBlue.get(0).moveLeft();
+                renderer.teamBlue.get(0).moveLeft();
                 break;
             case Input.Keys.D:
-                environment.teamBlue.get(0).moveRight();
+                renderer.teamBlue.get(0).moveRight();
                 break;
             case Input.Keys.S:
-                environment.teamBlue.get(0).moveBehind();
+                renderer.teamBlue.get(0).moveBehind();
                 break;
             case Input.Keys.L:
-                environment.teamBlue.get(0).slowDown();
+                renderer.teamBlue.get(0).slowDown();
                 break;
             case Input.Keys.J:
-                environment.teamBlue.get(0).shoot();
+                renderer.teamBlue.get(0).shoot();
                 break;
         }
         return false;

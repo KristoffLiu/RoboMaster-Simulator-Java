@@ -1,29 +1,28 @@
-package com.robomaster_libgdx.environment.maps;
+package com.robomaster_libgdx.simulator.maps;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.robomaster_libgdx.environment.Environment;
+import com.robomaster_libgdx.simulator.Renderer;
 
 public class StandardCompetitionMap2020 extends Map {
-    Environment environment;
+    Renderer renderer;
     private final float scale = 1f/1000f;
 
     private TiledMap map;
     private TmxMapLoader loader;
-    private OrthogonalTiledMapRenderer renderer;
+    private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 
-    public StandardCompetitionMap2020(Environment environment){
-        this.environment = environment;
+    public StandardCompetitionMap2020(Renderer renderer){
+        this.renderer = renderer;
         loader      = new TmxMapLoader();
         map         = loader.load("Map/CompetitionMap/map.tmx");
-        renderer    = new OrthogonalTiledMapRenderer(map,scale);
+        this.orthogonalTiledMapRenderer = new OrthogonalTiledMapRenderer(map,scale);
     }
 
     public Array<TextureMapObject> getBlocks(){
@@ -54,7 +53,7 @@ public class StandardCompetitionMap2020 extends Map {
     }
 
     public void render(){
-        renderer.setView((OrthographicCamera) environment.view.getOrthographicCamera());
-        renderer.render();
+        orthogonalTiledMapRenderer.setView((OrthographicCamera) renderer.view.getOrthographicCamera());
+        orthogonalTiledMapRenderer.render();
     }
 }

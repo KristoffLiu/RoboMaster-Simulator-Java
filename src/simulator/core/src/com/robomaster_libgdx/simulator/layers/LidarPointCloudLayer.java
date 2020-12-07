@@ -1,13 +1,13 @@
-package com.robomaster_libgdx.environment.layers;
+package com.robomaster_libgdx.simulator.layers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.robomaster_libgdx.environment.Environment;
+import com.robomaster_libgdx.simulator.Renderer;
 import com.robomaster_libgdx.robomasters.RoboMaster;
-import com.robomaster_libgdx.environment.layers.baselayers.VisualLayer;
+import com.robomaster_libgdx.simulator.layers.baselayers.VisualLayer;
 
 import java.awt.*;
 
@@ -19,7 +19,7 @@ public class LidarPointCloudLayer extends VisualLayer {
 
     //ShapeRenderer circleRenderer;
     public Array<Vector2> lidarPointCloudPointsArray;
-    public LidarPointCloudLayer(Environment env) {
+    public LidarPointCloudLayer(Renderer env) {
         super(env);
         shapeRenderer = new ShapeRenderer();
         shapeRenderer2 = new ShapeRenderer();

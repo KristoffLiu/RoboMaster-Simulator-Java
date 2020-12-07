@@ -1,22 +1,22 @@
-package com.robomaster_libgdx.environment.layers;
+package com.robomaster_libgdx.simulator.layers;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.robomaster_libgdx.environment.Environment;
+import com.robomaster_libgdx.simulator.Renderer;
 import com.robomaster_libgdx.robomasters.RoboMaster;
 
 public class PhysicsLayer {
-    Environment environment;
+    Renderer renderer;
 
     World physicalWorld;
     Box2DDebugRenderer box2DDebugRenderer;
 
     Runnable runnable;
 
-    public PhysicsLayer(Environment env) {
-        this.environment = env;
+    public PhysicsLayer(Renderer env) {
+        this.renderer = env;
         box2DDebugRenderer = new Box2DDebugRenderer();
         physicalWorld = new World(new Vector2(), false);
 
@@ -31,7 +31,7 @@ public class PhysicsLayer {
             @Override
             public void run() {
                 physicalWorld.step(1/60f,6,2);
-                for(RoboMaster roboMaster : environment.allRoboMasters){
+                for(RoboMaster roboMaster : renderer.allRoboMasters){
                     roboMaster.simulateFriction();
                 }
             }
@@ -93,7 +93,7 @@ public class PhysicsLayer {
     }
 
     private void createStaticBlocks(){
-        for(TextureMapObject textureMapObject : environment.map.getBlocks()){
+        for(TextureMapObject textureMapObject : renderer.map.getBlocks()){
             float scale = 1f / 1000f;
             float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
             float halfHeight = textureMapObject.getTextureRegion().getRegionHeight() / 2f * scale;
@@ -111,7 +111,7 @@ public class PhysicsLayer {
 
     private void deployTeamBlue(){
         int i = 0;
-        for(TextureMapObject textureMapObject : environment.map.getBirthZone()){
+        for(TextureMapObject textureMapObject : renderer.map.getBirthZone()){
             if(textureMapObject.getProperties().containsKey("blue")){
                 float scale = 1f / 1000f;
                 float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
@@ -120,7 +120,7 @@ public class PhysicsLayer {
                 float y = textureMapObject.getY() * scale + halfHeight;
                 Vector2 centre = new Vector2();
                 float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-                environment.teamBlue.get(i).createRoboMasterBody(x,y,this.physicalWorld);
+                renderer.teamBlue.get(i).createRoboMasterBody(x,y,this.physicalWorld);
                 i ++;
             }
         }
@@ -128,7 +128,7 @@ public class PhysicsLayer {
 
     private void deployTeamRed(){
         int i = 0;
-        for(TextureMapObject textureMapObject : environment.map.getBirthZone()){
+        for(TextureMapObject textureMapObject : renderer.map.getBirthZone()){
                 if(textureMapObject.getProperties().containsKey("red")){
                 float scale = 1f / 1000f;
                 float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
@@ -137,7 +137,7 @@ public class PhysicsLayer {
                 float y = textureMapObject.getY() * scale + halfHeight;
                 Vector2 centre = new Vector2();
                 float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-                environment.teamRed.get(i).createRoboMasterBody(x,y,this.physicalWorld);
+                renderer.teamRed.get(i).createRoboMasterBody(x,y,this.physicalWorld);
                 i ++;
             }
         }
@@ -149,7 +149,7 @@ public class PhysicsLayer {
 
     float timeState;
     public void render(float delta){
-        box2DDebugRenderer.render(physicalWorld, environment.view.getOrthographicCamera().combined);
+        box2DDebugRenderer.render(physicalWorld, renderer.view.getOrthographicCamera().combined);
 //        if(timeState > 1f){
 //            timeState = 0f;
 ////            environment.allRoboMasters.forEach(x -> x.shoot());
