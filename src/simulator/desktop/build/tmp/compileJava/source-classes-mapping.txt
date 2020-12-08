@@ -1,2 +1,0 @@
-com/robomaster_java/simulator/desktop/DesktopLauncher.java
- com.robomaster_java.simulator.desktop.DesktopLauncher

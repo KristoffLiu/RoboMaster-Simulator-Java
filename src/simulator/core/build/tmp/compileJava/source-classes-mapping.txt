@@ -1,62 +1,58 @@
-com/robomaster_java/simulator/Configuration.java
- com.robomaster_java.simulator.Configuration
-com/robomaster_java/robomasters/AlexanderMasterII.java
- com.robomaster_java.robomasters.AlexanderMasterII
-com/robomaster_java/simulator/layers/LidarPointCloudLayer.java
- com.robomaster_java.simulator.layers.LidarPointCloudLayer
- com.robomaster_java.simulator.layers.LidarPointCloudLayer$1
-com/robomaster_java/simulator/GlobalInputEventHandler.java
- com.robomaster_java.simulator.GlobalInputEventHandler
-com/robomaster_java/simulator/layers/FloorLayer.java
- com.robomaster_java.simulator.layers.FloorLayer
-com/robomaster_java/simulator/libs/actors/CustomActor.java
- com.robomaster_java.simulator.libs.actors.CustomActor
-com/robomaster_java/simulator/Renderer.java
- com.robomaster_java.simulator.Renderer
-com/robomaster_java/simulator/layers/MatrixLayer.java
- com.robomaster_java.simulator.layers.MatrixLayer
-com/robomaster_java/DesktopLauncher.java
- com.robomaster_java.DesktopLauncher
-com/robomaster_java/robomasters/components/Wheel.java
- com.robomaster_java.robomasters.components.Wheel
-com/robomaster_java/robomasters/ElectronicSpeedController.java
- com.robomaster_java.robomasters.ElectronicSpeedController
-com/robomaster_java/simulator/libs/Assets.java
- com.robomaster_java.simulator.libs.Assets
-com/robomaster_java/simulator/layers/PhysicsLayer.java
- com.robomaster_java.simulator.layers.PhysicsLayer
- com.robomaster_java.simulator.layers.PhysicsLayer$1
-com/robomaster_java/robomasters/RoboMaster.java
- com.robomaster_java.robomasters.RoboMaster
-com/robomaster_java/robomasters/ProtoMaster.java
- com.robomaster_java.robomasters.ProtoMaster
-com/robomaster_java/simulator/View.java
- com.robomaster_java.simulator.View
-com/robomaster_java/robomasters/AlexanderMasterI.java
- com.robomaster_java.robomasters.AlexanderMasterI
-com/robomaster_java/Environment.java
- com.robomaster_java.Environment
-com/robomaster_java/simulator/layers/RenderedLayer.java
- com.robomaster_java.simulator.layers.RenderedLayer
-com/robomaster_java/simulator/layers/DebugLayer.java
- com.robomaster_java.simulator.layers.DebugLayer
-com/robomaster_java/judgement/System.java
- com.robomaster_java.judgement.System
-com/robomaster_java/simulator/layers/baselayers/UILayer.java
- com.robomaster_java.simulator.layers.baselayers.UILayer
-com/robomaster_java/simulator/Simulator.java
- com.robomaster_java.simulator.Simulator
-com/robomaster_java/simulator/layers/baselayers/VisualLayer.java
- com.robomaster_java.simulator.layers.baselayers.VisualLayer
-com/robomaster_java/simulator/maps/StandardCompetitionMap2020.java
- com.robomaster_java.simulator.maps.StandardCompetitionMap2020
-com/robomaster_java/simulator/maps/Map.java
- com.robomaster_java.simulator.maps.Map
-com/robomaster_java/simulator/layers/baselayers/Layer.java
- com.robomaster_java.simulator.layers.baselayers.Layer
-com/robomaster_java/simulator/layers/FrameRate.java
- com.robomaster_java.simulator.layers.FrameRate
-com/robomaster_java/helpers/VectorHelper.java
- com.robomaster_java.helpers.VectorHelper
-com/robomaster_java/simulator/libs/actors/MovingObject.java
- com.robomaster_java.simulator.libs.actors.MovingObject
+com/kristoff/robomaster_simulator/core/simulator/libs/actors/MovingObject.java
+ com.kristoff.robomaster_simulator.core.simulator.libs.actors.MovingObject
+com/kristoff/robomaster_simulator/core/util/VectorHelper.java
+ com.kristoff.robomaster_simulator.core.util.VectorHelper
+com/kristoff/robomaster_simulator/core/simulator/layers/LidarPointCloudLayer.java
+ com.kristoff.robomaster_simulator.core.simulator.layers.LidarPointCloudLayer
+ com.kristoff.robomaster_simulator.core.simulator.layers.LidarPointCloudLayer$1
+com/kristoff/robomaster_simulator/core/simulator/layers/RenderedLayer.java
+ com.kristoff.robomaster_simulator.core.simulator.layers.RenderedLayer
+com/kristoff/robomaster_simulator/core/simulator/layers/FrameRate.java
+ com.kristoff.robomaster_simulator.core.simulator.layers.FrameRate
+com/kristoff/robomaster_simulator/core/robomasters/ElectronicSpeedController.java
+ com.kristoff.robomaster_simulator.core.robomasters.ElectronicSpeedController
+com/kristoff/robomaster_simulator/core/simulator/layers/baselayers/Layer.java
+ com.kristoff.robomaster_simulator.core.simulator.layers.baselayers.Layer
+com/kristoff/robomaster_simulator/core/simulator/layers/PhysicsLayer.java
+ com.kristoff.robomaster_simulator.core.simulator.layers.PhysicsLayer
+ com.kristoff.robomaster_simulator.core.simulator.layers.PhysicsLayer$1
+com/kristoff/robomaster_simulator/core/simulator/layers/MatrixLayer.java
+ com.kristoff.robomaster_simulator.core.simulator.layers.MatrixLayer
+com/kristoff/robomaster_simulator/core/simulator/Renderer.java
+ com.kristoff.robomaster_simulator.core.simulator.Renderer
+com/kristoff/robomaster_simulator/core/robomasters/components/Wheel.java
+ com.kristoff.robomaster_simulator.core.robomasters.components.Wheel
+com/kristoff/robomaster_simulator/core/simulator/Simulator.java
+ com.kristoff.robomaster_simulator.core.simulator.Simulator
+com/kristoff/robomaster_simulator/core/robomasters/AlexanderMasterI.java
+ com.kristoff.robomaster_simulator.core.robomasters.AlexanderMasterI
+com/kristoff/robomaster_simulator/core/simulator/View.java
+ com.kristoff.robomaster_simulator.core.simulator.View
+com/kristoff/robomaster_simulator/core/simulator/libs/Assets.java
+ com.kristoff.robomaster_simulator.core.simulator.libs.Assets
+com/kristoff/robomaster_simulator/core/robomasters/AlexanderMasterII.java
+ com.kristoff.robomaster_simulator.core.robomasters.AlexanderMasterII
+com/kristoff/robomaster_simulator/core/robomasters/RoboMaster.java
+ com.kristoff.robomaster_simulator.core.robomasters.RoboMaster
+com/kristoff/robomaster_simulator/core/simulator/layers/baselayers/VisualLayer.java
+ com.kristoff.robomaster_simulator.core.simulator.layers.baselayers.VisualLayer
+com/kristoff/robomaster_simulator/core/simulator/Configuration.java
+ com.kristoff.robomaster_simulator.core.simulator.Configuration
+com/kristoff/robomaster_simulator/core/simulator/libs/actors/CustomActor.java
+ com.kristoff.robomaster_simulator.core.simulator.libs.actors.CustomActor
+com/kristoff/robomaster_simulator/core/simulator/GlobalInputEventHandler.java
+ com.kristoff.robomaster_simulator.core.simulator.GlobalInputEventHandler
+com/kristoff/robomaster_simulator/core/simulator/layers/FloorLayer.java
+ com.kristoff.robomaster_simulator.core.simulator.layers.FloorLayer
+com/kristoff/robomaster_simulator/core/simulator/maps/Map.java
+ com.kristoff.robomaster_simulator.core.simulator.maps.Map
+com/kristoff/robomaster_simulator/core/simulator/layers/DebugLayer.java
+ com.kristoff.robomaster_simulator.core.simulator.layers.DebugLayer
+com/kristoff/robomaster_simulator/core/simulator/maps/StandardCompetitionMap2020.java
+ com.kristoff.robomaster_simulator.core.simulator.maps.StandardCompetitionMap2020
+com/kristoff/robomaster_simulator/core/judgement/System.java
+ com.kristoff.robomaster_simulator.core.judgement.System
+com/kristoff/robomaster_simulator/core/robomasters/ProtoMaster.java
+ com.kristoff.robomaster_simulator.core.robomasters.ProtoMaster
+com/kristoff/robomaster_simulator/core/simulator/layers/baselayers/UILayer.java
+ com.kristoff.robomaster_simulator.core.simulator.layers.baselayers.UILayer
