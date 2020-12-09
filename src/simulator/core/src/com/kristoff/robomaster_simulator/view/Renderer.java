@@ -4,27 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.utils.Array;
-import com.kristoff.robomaster_simulator.core.Configuration;
+import com.kristoff.robomaster_simulator.core.Simulator;
 import com.kristoff.robomaster_simulator.io.GlobalInputEventHandler;
-import com.kristoff.robomaster_simulator.view.Frame;
-import com.kristoff.robomaster_simulator.view.View;
 import com.kristoff.robomaster_simulator.view.layers.*;
 import com.kristoff.robomaster_simulator.view.base.Assets;
-import com.kristoff.robomaster_simulator.robomasters.AlexanderMasterII;
-import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.maps.StandardCompetitionMap2020;
 
 
 public class Renderer implements Screen {
-    Frame frame;
+    Simulator simulator;
     Assets assets = new Assets();
 
     public final float width = 8.49f;
     public final float height = 4.89f;
 
     public View view;
-    public StandardCompetitionMap2020 map;
+
 
     public FloorLayer floorLayer;
     public PhysicsLayer physicsLayer;
@@ -34,22 +28,17 @@ public class Renderer implements Screen {
 
     public FrameRate frameRate;
 
-    public Array<RoboMaster> allRoboMasters = new Array<>();
-    public Array<RoboMaster> teamBlue = new Array<>();
-    public Array<RoboMaster> teamRed = new Array<>();
 
-    public Renderer(final Frame frame){
-        this.frame = frame;
 
-        for(int i = 0; i <= 1; i++){
-            RoboMaster roboMaster = new AlexanderMasterII();
-            teamBlue.add(roboMaster);
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            physicsLayer.step();
         }
-        for(int i = 0; i <= 1; i++){
-            teamRed.add(new AlexanderMasterII());
-        }
-        allRoboMasters.addAll(teamBlue);
-        allRoboMasters.addAll(teamRed);
+    };
+
+    public Renderer(final Simulator simulator){
+        this.simulator = simulator;
 
         view = new View(width, height);
         map = new StandardCompetitionMap2020(this);
@@ -61,10 +50,6 @@ public class Renderer implements Screen {
         matrixLayer = new MatrixLayer(this);
         lidarPointCloudLayer = new LidarPointCloudLayer(this);
         frameRate = new FrameRate();
-
-        for(RoboMaster roboMaster : teamBlue){
-            roboMaster.transformRotation((float) (Math.PI));
-        }
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(floorLayer);
@@ -115,7 +100,7 @@ public class Renderer implements Screen {
         accum += Gdx.graphics.getDeltaTime();
         while (accum >= 1/60f) {
             accum -= 1/60f;
-            physicsLayer.step();
+            runnable.run();
         }
     }
 
