@@ -1,19 +1,22 @@
-package com.kristoff.robomaster_simulator.core.simulator;
+package com.kristoff.robomaster_simulator.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Array;
-import com.kristoff.robomaster_simulator.render.layers.*;
-import com.kristoff.robomaster_simulator.render.base.Assets;
+import com.kristoff.robomaster_simulator.io.GlobalInputEventHandler;
+import com.kristoff.robomaster_simulator.view.Frame;
+import com.kristoff.robomaster_simulator.view.View;
+import com.kristoff.robomaster_simulator.view.layers.*;
+import com.kristoff.robomaster_simulator.view.base.Assets;
 import com.kristoff.robomaster_simulator.robomasters.AlexanderMasterII;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.core.simulator.maps.StandardCompetitionMap2020;
+import com.kristoff.robomaster_simulator.maps.StandardCompetitionMap2020;
 
 
 public class Renderer implements Screen {
-    Simulator simulator;
+    Frame frame;
     Assets assets = new Assets();
 
     public final float width = 8.49f;
@@ -34,8 +37,8 @@ public class Renderer implements Screen {
     public Array<RoboMaster> teamBlue = new Array<>();
     public Array<RoboMaster> teamRed = new Array<>();
 
-    public Renderer(final Simulator simulator){
-        this.simulator = simulator;
+    public Renderer(final Frame frame){
+        this.frame = frame;
 
         for(int i = 0; i <= 1; i++){
             RoboMaster roboMaster = new AlexanderMasterII();

@@ -1,2 +1,5 @@
-package com.kristoff.robomaster_simulator.core;public class Simulator {
+package com.kristoff.robomaster_simulator.core;
+
+public class Simulator {
 }
+r

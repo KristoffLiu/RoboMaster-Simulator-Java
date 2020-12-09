@@ -1,13 +1,13 @@
-package com.kristoff.robomaster_simulator.core;
+package com.kristoff.robomaster_simulator.physics;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.view.Renderer;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.core.Renderer;
 
-public class PhysicsLayer {
+public class PhysicalSimulation {
     Renderer renderer;
 
     World physicalWorld;
@@ -15,7 +15,7 @@ public class PhysicsLayer {
 
     Runnable runnable;
 
-    public PhysicsLayer(Renderer env) {
+    public PhysicalSimulation(Renderer env) {
         this.renderer = env;
         box2DDebugRenderer = new Box2DDebugRenderer();
         physicalWorld = new World(new Vector2(), false);
