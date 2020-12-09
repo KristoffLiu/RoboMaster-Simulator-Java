@@ -35,3 +35,7 @@ gradle-app.setting
 /desktop/build/
 /html/build/
 /ios/build/
+
+##simulator
+
+src/simulator/core/build
