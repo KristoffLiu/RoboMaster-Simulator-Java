@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.core.simulator;
+package com.kristoff.robomaster_simulator.core;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.utils.viewport.StretchViewport;

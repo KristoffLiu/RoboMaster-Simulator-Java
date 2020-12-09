@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.core.simulator.libs.actors;
+package com.kristoff.robomaster_simulator.render.base.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;

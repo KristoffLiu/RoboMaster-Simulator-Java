@@ -5,12 +5,10 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Array;
-import com.kristoff.robomaster_simulator.core.simulator.layers.*;
-import com.kristoff.robomaster_simulator.core.simulator.layers.*;
-import com.kristoff.robomaster_simulator.core.simulator.layers.*;
-import com.kristoff.robomaster_simulator.core.simulator.libs.Assets;
-import com.kristoff.robomaster_simulator.core.robomasters.AlexanderMasterII;
-import com.kristoff.robomaster_simulator.core.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.render.layers.*;
+import com.kristoff.robomaster_simulator.render.base.Assets;
+import com.kristoff.robomaster_simulator.robomasters.AlexanderMasterII;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.core.simulator.maps.StandardCompetitionMap2020;
 
 

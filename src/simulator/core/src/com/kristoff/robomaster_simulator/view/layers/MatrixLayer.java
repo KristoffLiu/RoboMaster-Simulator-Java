@@ -1,8 +1,8 @@
-package com.kristoff.robomaster_simulator.core.simulator.layers;
+package com.kristoff.robomaster_simulator.render.layers;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.kristoff.robomaster_simulator.core.simulator.Renderer;
-import com.kristoff.robomaster_simulator.core.simulator.layers.baselayers.VisualLayer;
+import com.kristoff.robomaster_simulator.core.Renderer;
+import com.kristoff.robomaster_simulator.render.base.layers.VisualLayer;
 
 public class MatrixLayer extends VisualLayer {
     float timestate = 0f;
