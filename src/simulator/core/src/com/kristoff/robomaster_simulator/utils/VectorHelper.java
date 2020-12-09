@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.util;
+package com.kristoff.robomaster_simulator.utils;
 
 import com.badlogic.gdx.math.Vector2;
 

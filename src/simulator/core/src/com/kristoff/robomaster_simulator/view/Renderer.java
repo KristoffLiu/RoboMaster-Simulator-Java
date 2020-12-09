@@ -113,8 +113,8 @@ public class Renderer implements Screen {
 
     private void physicalSimulate(float delta){
         accum += Gdx.graphics.getDeltaTime();
-        while (accum >= Configuration.physicalWorldStep) {
-            accum -= Configuration.physicalWorldStep;
+        while (accum >= 1/60f) {
+            accum -= 1/60f;
             physicsLayer.step();
         }
     }

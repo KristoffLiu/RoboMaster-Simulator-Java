@@ -18,15 +18,15 @@ public class Simulator {
     }
 
     public void start(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-                    physicalSimulation.step();
-                    Thread.sleep(1000f);
-                }
-            }
-        });
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true){
+//                    physicalSimulation.step();
+//                    Thread.sleep(1000f);
+//                }
+//            }
+//        });
     }
 
     public void launch(){
