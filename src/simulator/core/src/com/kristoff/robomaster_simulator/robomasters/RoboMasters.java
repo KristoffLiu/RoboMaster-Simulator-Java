@@ -17,10 +17,6 @@ public class RoboMasters {
         }
         all.addAll(teamBlue);
         all.addAll(teamRed);
-
-        for(RoboMaster roboMaster : teamBlue){
-            roboMaster.transformRotation((float) (Math.PI));
-        }
     }
 
     public Array<RoboMaster> getAll(){

@@ -3,8 +3,10 @@ package com.kristoff.robomaster_simulator.core;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.kristoff.robomaster_simulator.io.GlobalInputEventHandler;
 import com.kristoff.robomaster_simulator.maps.Map;
 import com.kristoff.robomaster_simulator.physicalsimulation.PhysicalSimulation;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.view.Renderer;
 
 public class Simulator extends Game {
@@ -14,10 +16,12 @@ public class Simulator extends Game {
 	public final float VIEW_WIDTH = 1920;
 	public final float VIEW_HEIGHT = 1080;
 
-	Renderer renderer;
-	PhysicalSimulation physicalSimulation;
-	Map map;
+	SimulatorConfiguration config = new SimulatorConfiguration();
 
+	public Renderer renderer;
+	public PhysicalSimulation physicalSimulation;
+	public Map map;
+	public RoboMasters roboMasters;
 
 
 	public Simulator(){
@@ -29,9 +33,10 @@ public class Simulator extends Game {
 	 */
 	@Override
 	public void create() {
-		physicalSimulation = new PhysicalSimulation();
+		map = new Map("CompetitionMap");
+		roboMasters = new RoboMasters();
+		physicalSimulation = new PhysicalSimulation(this);
 		renderer = new Renderer(this);
-		map = ;
 		setScreen(renderer);
 	}
 
@@ -56,19 +61,31 @@ public class Simulator extends Game {
 
 	@Override
 	public void render () {
-
+		super.render();
 	}
 
 	public void launch(){
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		LwjglApplicationConfiguration rendererConfig = new LwjglApplicationConfiguration();
 
-		config.title = "RoboMaster Simulator - Java Platform";
+		rendererConfig.title = "RoboMaster Simulator - Java Platform";
 
-		float scaleFactor = 0.6f;
-		config.width = (int) (1920 * scaleFactor);
-		config.height = (int) (1080 * scaleFactor);
-		config.useGL30 = true;
-		config.foregroundFPS = 60;
-		new LwjglApplication(new Simulator(), config);
+		rendererConfig.width = (int) (this.config.width * this.config.scaleFactor);
+		rendererConfig.height = (int) (this.config.height * this.config.scaleFactor);
+		rendererConfig.foregroundFPS = this.config.renderedFrameRate;
+		rendererConfig.backgroundFPS = 120;
+
+		rendererConfig.useGL30 = true;
+		new LwjglApplication(new Simulator(), rendererConfig);
+
+//		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+//
+//		config.title = "RoboMaster Simulator - Java Platform";
+//
+//		float scaleFactor = 0.6f;
+//		config.width = (int) (1920 * scaleFactor);
+//		config.height = (int) (1080 * scaleFactor);
+//		config.useGL30 = true;
+//		config.foregroundFPS = 60;
+//		new LwjglApplication(new Simulator(), config);
 	}
 }

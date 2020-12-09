@@ -4,10 +4,10 @@ import com.kristoff.robomaster_simulator.core.Simulator;
 
 public class RLlibEnvironment implements RLlibEnvironmentInterface{
     Simulator simulator;
-    RLlibEnvironmentConfiguration config;
+    RLlibEnvironmentSimulatorConfiguration config;
 
     public RLlibEnvironment(){
-        config = new RLlibEnvironmentConfiguration();
+        config = new RLlibEnvironmentSimulatorConfiguration();
         simulator = new Simulator();
     }
 
@@ -28,9 +28,9 @@ public class RLlibEnvironment implements RLlibEnvironmentInterface{
 
     @Override
     public void render(){
-        if(config.isRendering){
-
-        }
+//        if(config.isRendering){
+//
+//        }
     }
 
     @Override
@@ -39,6 +39,6 @@ public class RLlibEnvironment implements RLlibEnvironmentInterface{
     }
 
     public void isRendering(boolean bool){
-        config.isRendering = bool;
+        //config.isRendering = bool;
     }
 }

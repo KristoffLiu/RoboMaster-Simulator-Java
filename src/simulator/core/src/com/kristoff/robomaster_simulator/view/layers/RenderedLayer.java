@@ -17,7 +17,7 @@ public class RenderedLayer extends VisualLayer {
     }
 
     public void renderBirthZone(){
-        for(TextureMapObject textureMapObject : environment.map.getBirthZone()){
+        for(TextureMapObject textureMapObject : environment.map.getBirthZones()){
             float scale = 1f / 1000f;
             CustomActor actor = new CustomActor(textureMapObject.getTextureRegion());
             actor.setX(textureMapObject.getX() * scale);
@@ -41,7 +41,7 @@ public class RenderedLayer extends VisualLayer {
     }
 
     public void renderBuffZone(){
-        for(TextureMapObject textureMapObject : environment.map.getBuffZone()){
+        for(TextureMapObject textureMapObject : environment.map.getBuffZones()){
             float scale = 1f / 1000f;
             CustomActor actor = new CustomActor(textureMapObject.getTextureRegion());
             actor.setX(textureMapObject.getX() * scale);
@@ -53,7 +53,7 @@ public class RenderedLayer extends VisualLayer {
     }
 
     public void renderRoboMasters() {
-        for (CustomActor actor : environment.allRoboMasters) {
+        for (CustomActor actor : environment.roboMasters.getAll()) {
             this.addActor(actor);
         }
     }
@@ -62,7 +62,7 @@ public class RenderedLayer extends VisualLayer {
     public void act (float delta) {
         float scale = 1f / 1000f;
         super.act(delta);
-        for (RoboMaster roboMaster : environment.allRoboMasters) {
+        for (RoboMaster roboMaster : environment.roboMasters.getAll()) {
             roboMaster.act();
         }
     }

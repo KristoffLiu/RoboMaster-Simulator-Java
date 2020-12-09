@@ -17,6 +17,9 @@ public class LidarPointCloudLayer extends VisualLayer {
 
     Runnable runnable;
 
+    Runnable renderLidarPoints;
+
+
     //ShapeRenderer circleRenderer;
     public Array<Vector2> lidarPointCloudPointsArray;
     public LidarPointCloudLayer(Renderer env) {
@@ -30,13 +33,58 @@ public class LidarPointCloudLayer extends VisualLayer {
             public void run() {
                 if(timestate > 1/30f){
                     lidarPointCloudPointsArray = lidarPointCloudSimulate(
-                            environment.teamBlue.get(0).getLidarPosition().x,
-                            environment.teamBlue.get(0).getLidarPosition().y);
+                            environment.roboMasters.getTeamBlue().get(0).getLidarPosition().x,
+                            environment.roboMasters.getTeamBlue().get(0).getLidarPosition().y);
                     timestate = 0f;
                 }
                 else{
                     timestate += Gdx.graphics.getDeltaTime();
                 }
+            }
+        };
+
+        renderLidarPoints = new Runnable() {
+            @Override
+            public void run() {
+                shapeRenderer.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
+                shapeRenderer.setAutoShapeType(true);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                for(Vector2 vector2 : getLidarPointCloudPointsArray()){
+                    int i = (int)vector2.x;
+                    int j = (int)vector2.y;
+                    Point a = new Point(i,j);
+                    Point b = new Point(
+                            (int)(environment.roboMasters.getTeamBlue().get(0).getLidarPosition().x * 1000),
+                            (int)(environment.roboMasters.getTeamBlue().get(0).getLidarPosition().y * 1000));
+                    float distance = (float) a.distance(b);
+                    float red;
+                    float green;
+                    float blue;
+                    if(distance <= 7000){
+                        red = - 1f/7000f * distance + 1.0f;
+                    }
+                    else {
+                        red = 0f;
+                    }
+                    if (distance <= 6000){
+                        green = 1f/6000f * distance;
+                    }
+                    else {
+                        green = 1.0f;
+                    }
+                    if (distance <= 5000 && distance >= 2000){
+                        blue = -1f/3000f * distance + 5f/3f;
+                    }
+                    else {
+                        blue = 0f;
+                    }
+                    shapeRenderer.setColor(red,green,blue,1.0f);
+                    shapeRenderer.circle(
+                            i / 1000f,
+                            j / 1000f,
+                            0.04f,10);
+                }
+                shapeRenderer.end();
             }
         };
     }
@@ -51,50 +99,12 @@ public class LidarPointCloudLayer extends VisualLayer {
     @Override
     public void draw(){
         super.draw();
-        shapeRenderer.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
-        shapeRenderer.setAutoShapeType(true);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        for(Vector2 vector2 : getLidarPointCloudPointsArray()){
-            int i = (int)vector2.x;
-            int j = (int)vector2.y;
-            Point a = new Point(i,j);
-            Point b = new Point(
-                    (int)(environment.teamBlue.get(0).getLidarPosition().x * 1000),
-                    (int)(environment.teamBlue.get(0).getLidarPosition().y * 1000));
-            float distance = (float) a.distance(b);
-            float red;
-            float green;
-            float blue;
-            if(distance <= 7000){
-                red = - 1f/7000f * distance + 1.0f;
-            }
-            else {
-                red = 0f;
-            }
-            if (distance <= 6000){
-                green = 1f/6000f * distance;
-            }
-            else {
-                green = 1.0f;
-            }
-            if (distance <= 5000 && distance >= 2000){
-                blue = -1f/3000f * distance + 5f/3f;
-            }
-            else {
-                blue = 0f;
-            }
-            shapeRenderer.setColor(red,green,blue,1.0f);
-            shapeRenderer.circle(
-                    i / 1000f,
-                    j / 1000f,
-                    0.04f,10);
-        }
-        shapeRenderer.end();
+        renderLidarPoints.run();
 
         shapeRenderer2.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer2.setAutoShapeType(true);
         shapeRenderer2.begin(ShapeRenderer.ShapeType.Line);
-        for(RoboMaster roboMaster : environment.allRoboMasters){
+        for(RoboMaster roboMaster : environment.roboMasters.getAll()){
             shapeRenderer2.setColor(1.0f,0,0,1.0f);
             shapeRenderer2.line(
                     roboMaster.getLidarPosition().x,

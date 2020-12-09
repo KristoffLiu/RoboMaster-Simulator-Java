@@ -18,43 +18,67 @@ public class Map {
     private TmxMapLoader loader;
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 
+    Array<TextureMapObject> blocks;
+    Array<TextureMapObject> birthZones;
+    Array<TextureMapObject> buffZones;
+
     //"Map/CompetitionMap/map.tmx"
     public Map(String mapName){
-        this.renderer = renderer;
         loader      = new TmxMapLoader();
-        map         = loader.load();
+        map         = loader.load(MapSets.getMapPath(mapName));
         this.orthogonalTiledMapRenderer = new OrthogonalTiledMapRenderer(map,scale);
+
+        addBlocks();
+        addBirthZones();
+        addBuffZones();
+    }
+
+    public void addBlocks(){
+        blocks = new Array<>();
+        MapLayer blocksLayer = this.map.getLayers().get("Block_Zone");
+        for(MapObject mapObject : blocksLayer.getObjects()){
+            blocks.add((TextureMapObject) mapObject);
+        }
+    }
+
+    public void addBirthZones(){
+        birthZones = new Array<>();
+        MapLayer blocksLayer = this.map.getLayers().get("Birth_Zone");
+        for(MapObject mapObject : blocksLayer.getObjects()){
+            birthZones.add((TextureMapObject) mapObject);
+        }
+    }
+
+    public void addBuffZones(){
+        buffZones = new Array<>();
+        MapLayer blocksLayer = this.map.getLayers().get("Buff_Zone");
+        for(MapObject mapObject : blocksLayer.getObjects()){
+            buffZones.add((TextureMapObject) mapObject);
+        }
     }
 
     public Array<TextureMapObject> getBlocks(){
-        Array<TextureMapObject> textureMapObjects = new Array<>();
-        MapLayer blocksLayer = this.map.getLayers().get("Block_Zone");
-        for(MapObject mapObject : blocksLayer.getObjects()){
-            textureMapObjects.add((TextureMapObject) mapObject);
-        }
-        return textureMapObjects;
+        return blocks;
     }
 
-    public Array<TextureMapObject> getBirthZone(){
-        Array<TextureMapObject> textureMapObjects = new Array<>();
-        MapLayer blocksLayer = this.map.getLayers().get("Birth_Zone");
-        for(MapObject mapObject : blocksLayer.getObjects()){
-            textureMapObjects.add((TextureMapObject) mapObject);
-        }
-        return textureMapObjects;
+    public Array<TextureMapObject> getBirthZones(){
+        return birthZones;
     }
 
-    public Array<TextureMapObject> getBuffZone(){
-        Array<TextureMapObject> textureMapObjects = new Array<>();
-        MapLayer blocksLayer = this.map.getLayers().get("Buff_Zone");
-        for(MapObject mapObject : blocksLayer.getObjects()){
-            textureMapObjects.add((TextureMapObject) mapObject);
-        }
-        return textureMapObjects;
+    public Array<TextureMapObject> getBuffZones(){
+        return buffZones;
     }
 
     public void render(){
-        orthogonalTiledMapRenderer.setView((OrthographicCamera) renderer.view.getOrthographicCamera());
-        orthogonalTiledMapRenderer.render();
+        try{
+            if(this.renderer != null){
+                orthogonalTiledMapRenderer.setView(renderer.view.getOrthographicCamera());
+                orthogonalTiledMapRenderer.render();
+            }
+
+        }
+        finally {
+
+        }
     }
 }

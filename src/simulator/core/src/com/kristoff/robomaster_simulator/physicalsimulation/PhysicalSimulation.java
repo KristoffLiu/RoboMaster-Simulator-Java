@@ -4,19 +4,23 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.core.Simulator;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.view.Renderer;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 
 public class PhysicalSimulation {
-    Renderer renderer;
+    Simulator simulator;
+    RoboMasters roboMasters;
 
-    World physicalWorld;
+    public World physicalWorld;
     Box2DDebugRenderer box2DDebugRenderer;
 
     Runnable runnable;
 
-    public PhysicalSimulation(Renderer env) {
-        this.renderer = env;
+    public PhysicalSimulation(final Simulator simulator) {
+        this.simulator = simulator;
+        roboMasters = simulator.roboMasters;
         box2DDebugRenderer = new Box2DDebugRenderer();
         physicalWorld = new World(new Vector2(), false);
 
@@ -27,11 +31,15 @@ public class PhysicalSimulation {
         deployTeamBlue();
         deployTeamRed();
 
+        for(RoboMaster roboMaster : roboMasters.getTeamBlue()){
+            roboMaster.transformRotation((float) (Math.PI));
+        }
+
         runnable = new Runnable() {
             @Override
             public void run() {
                 physicalWorld.step(1/60f,6,2);
-                for(RoboMaster roboMaster : renderer.allRoboMasters){
+                for(RoboMaster roboMaster : simulator.roboMasters.getAll()){
                     roboMaster.simulateFriction();
                 }
             }
@@ -93,7 +101,7 @@ public class PhysicalSimulation {
     }
 
     private void createStaticBlocks(){
-        for(TextureMapObject textureMapObject : renderer.map.getBlocks()){
+        for(TextureMapObject textureMapObject : this.simulator.map.getBlocks()){
             float scale = 1f / 1000f;
             float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
             float halfHeight = textureMapObject.getTextureRegion().getRegionHeight() / 2f * scale;
@@ -111,7 +119,7 @@ public class PhysicalSimulation {
 
     private void deployTeamBlue(){
         int i = 0;
-        for(TextureMapObject textureMapObject : renderer.map.getBirthZone()){
+        for(TextureMapObject textureMapObject : this.simulator.map.getBirthZones()){
             if(textureMapObject.getProperties().containsKey("blue")){
                 float scale = 1f / 1000f;
                 float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
@@ -120,7 +128,7 @@ public class PhysicalSimulation {
                 float y = textureMapObject.getY() * scale + halfHeight;
                 Vector2 centre = new Vector2();
                 float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-                renderer.teamBlue.get(i).createRoboMasterBody(x,y,this.physicalWorld);
+                this.simulator.roboMasters.getTeamBlue().get(i).createRoboMasterBody(x,y,this.physicalWorld);
                 i ++;
             }
         }
@@ -128,7 +136,7 @@ public class PhysicalSimulation {
 
     private void deployTeamRed(){
         int i = 0;
-        for(TextureMapObject textureMapObject : renderer.map.getBirthZone()){
+        for(TextureMapObject textureMapObject : this.simulator.map.getBirthZones()){
                 if(textureMapObject.getProperties().containsKey("red")){
                 float scale = 1f / 1000f;
                 float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
@@ -137,7 +145,7 @@ public class PhysicalSimulation {
                 float y = textureMapObject.getY() * scale + halfHeight;
                 Vector2 centre = new Vector2();
                 float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-                renderer.teamRed.get(i).createRoboMasterBody(x,y,this.physicalWorld);
+                this.simulator.roboMasters.getTeamRed().get(i).createRoboMasterBody(x,y,this.physicalWorld);
                 i ++;
             }
         }
@@ -149,7 +157,7 @@ public class PhysicalSimulation {
 
     float timeState;
     public void render(float delta){
-        box2DDebugRenderer.render(physicalWorld, renderer.view.getOrthographicCamera().combined);
+        box2DDebugRenderer.render(physicalWorld, this.simulator.renderer.view.getOrthographicCamera().combined);
 //        if(timeState > 1f){
 //            timeState = 0f;
 ////            environment.allRoboMasters.forEach(x -> x.shoot());

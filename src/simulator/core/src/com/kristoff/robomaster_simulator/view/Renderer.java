@@ -6,6 +6,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.kristoff.robomaster_simulator.core.Simulator;
 import com.kristoff.robomaster_simulator.io.GlobalInputEventHandler;
+import com.kristoff.robomaster_simulator.maps.Map;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.view.layers.*;
 import com.kristoff.robomaster_simulator.view.base.Assets;
 
@@ -18,10 +20,12 @@ public class Renderer implements Screen {
     public final float height = 4.89f;
 
     public View view;
+    public RoboMasters roboMasters;
+    public Map map;
 
 
     public FloorLayer floorLayer;
-    public PhysicsLayer physicsLayer;
+    public PhysicsDebugLayer physicsDebugLayer;
     public MatrixLayer matrixLayer;
     public RenderedLayer renderedLayer;
     public LidarPointCloudLayer lidarPointCloudLayer;
@@ -33,20 +37,21 @@ public class Renderer implements Screen {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            physicsLayer.step();
+            simulator.physicalSimulation.step();
         }
     };
 
     public Renderer(final Simulator simulator){
         this.simulator = simulator;
+        this.roboMasters = simulator.roboMasters;
 
         view = new View(width, height);
-        map = new StandardCompetitionMap2020(this);
+        map = simulator.map;
 
         floorLayer = new FloorLayer(this);
         floorLayer.addListener(new GlobalInputEventHandler(this));
         renderedLayer = new RenderedLayer(this);
-        physicsLayer = new PhysicsLayer(this);
+        physicsDebugLayer = new PhysicsDebugLayer(simulator);
         matrixLayer = new MatrixLayer(this);
         lidarPointCloudLayer = new LidarPointCloudLayer(this);
         frameRate = new FrameRate();
@@ -89,7 +94,7 @@ public class Renderer implements Screen {
 
         renderedLayer.act();
         renderedLayer.draw();
-        physicsLayer.render(delta);
+        physicsDebugLayer.render(delta);
         frameRate.update();
         frameRate.render();
     }
