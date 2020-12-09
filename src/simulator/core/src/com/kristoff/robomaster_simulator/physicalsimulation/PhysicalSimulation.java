@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.physics;
+package com.kristoff.robomaster_simulator.physicalsimulation;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;

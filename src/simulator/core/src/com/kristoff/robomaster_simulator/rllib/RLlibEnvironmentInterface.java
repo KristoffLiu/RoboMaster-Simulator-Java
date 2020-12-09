@@ -1,9 +1,9 @@
-package com.kristoff.robomaster_simulator.launcher.entrypoints.rllibentrypoint;
+package com.kristoff.robomaster_simulator.rllib;
 
 public interface RLlibEnvironmentInterface {
     void seed();
     void reset();
-    void step();
+    Step step();
     void render();
     void close();
 }

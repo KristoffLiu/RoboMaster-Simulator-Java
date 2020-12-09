@@ -1,11 +1,11 @@
-package com.kristoff.robomaster_simulator.core;
+package com.kristoff.robomaster_simulator.view;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-public class Simulator extends Game {
+public class Frame extends Game {
 
-	public static Simulator current;
+	public static Frame current;
 
 	public final float VIEW_WIDTH = 1920;
 	public final float VIEW_HEIGHT = 1080;

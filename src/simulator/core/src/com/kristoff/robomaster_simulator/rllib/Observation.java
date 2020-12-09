@@ -1,2 +1,5 @@
-package com.kristoff.robomaster_simulator.rllib;public class Observation {
+package com.kristoff.robomaster_simulator.rllib;
+
+public class Observation {
+
 }

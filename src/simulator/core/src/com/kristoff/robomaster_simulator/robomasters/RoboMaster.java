@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.core.robomasters;
+package com.kristoff.robomaster_simulator.robomasters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.*;
-import com.kristoff.robomaster_simulator.core.util.VectorHelper;
-import com.kristoff.robomaster_simulator.core.simulator.libs.actors.MovingObject;
+import com.kristoff.robomaster_simulator.util.VectorHelper;
+import com.kristoff.robomaster_simulator.view.base.actors.MovingObject;
 
 public abstract class RoboMaster extends MovingObject {
     int PIN;

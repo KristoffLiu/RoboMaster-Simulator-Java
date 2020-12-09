@@ -1,10 +1,10 @@
-package com.kristoff.robomaster_simulator.render.layers;
+package com.kristoff.robomaster_simulator.view.layers;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.kristoff.robomaster_simulator.core.Renderer;
-import com.kristoff.robomaster_simulator.render.base.actors.CustomActor;
+import com.kristoff.robomaster_simulator.view.Renderer;
+import com.kristoff.robomaster_simulator.view.base.actors.CustomActor;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.render.base.layers.VisualLayer;
+import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
 
 public class RenderedLayer extends VisualLayer {
 

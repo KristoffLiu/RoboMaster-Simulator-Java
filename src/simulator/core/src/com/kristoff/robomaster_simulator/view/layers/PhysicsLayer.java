@@ -1,11 +1,11 @@
-package com.kristoff.robomaster_simulator.core;
+package com.kristoff.robomaster_simulator.view.layers;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.core.Renderer;
+import com.kristoff.robomaster_simulator.view.Renderer;
 
 public class PhysicsLayer {
     Renderer renderer;

@@ -1,10 +1,11 @@
-package com.kristoff.robomaster_simulator.core;
+package com.kristoff.robomaster_simulator.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.core.Configuration;
 import com.kristoff.robomaster_simulator.io.GlobalInputEventHandler;
 import com.kristoff.robomaster_simulator.view.Frame;
 import com.kristoff.robomaster_simulator.view.View;

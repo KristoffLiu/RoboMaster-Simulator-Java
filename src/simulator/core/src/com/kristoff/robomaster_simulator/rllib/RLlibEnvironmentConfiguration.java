@@ -1,8 +1,7 @@
 package com.kristoff.robomaster_simulator.rllib;
 
-public class RLlibEnvironmentConfig {
-    public boolean isRendering = true;
-    public int width = 1920;
-    public int height = 11080;
-    public float scaleFactor = 0.6f;
+import com.kristoff.robomaster_simulator.core.Configuration;
+
+public class RLlibEnvironmentConfiguration extends Configuration {
+
 }

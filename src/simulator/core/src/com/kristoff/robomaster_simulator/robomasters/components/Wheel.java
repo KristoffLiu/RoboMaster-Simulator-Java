@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.core.robomasters.components;
+package com.kristoff.robomaster_simulator.robomasters.components;
 
 public class Wheel{
 

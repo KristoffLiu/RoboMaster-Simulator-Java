@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.core;
+package com.kristoff.robomaster_simulator.view;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.*;
