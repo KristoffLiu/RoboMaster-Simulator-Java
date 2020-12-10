@@ -11,10 +11,10 @@ public class RenderedLayer extends VisualLayer {
 
     public RenderedLayer(Renderer renderer) {
         super(renderer);
-        //addBirthZones();
-        //addBlocks();
-        //addBuffZones();
-        //renderRoboMasters();
+        addBirthZones();
+        addBlocks();
+        addBuffZones();
+        renderRoboMasters();
     }
 
     public void addBirthZones(){

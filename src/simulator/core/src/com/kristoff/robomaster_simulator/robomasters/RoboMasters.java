@@ -34,25 +34,31 @@ public class RoboMasters extends Array<RoboMaster> {
     }
 
     public static Array<RoboMasterPoint> getCurrentPoints(){
-        Array<RoboMasterPoint> currentPoints = new Array<>();
-        for(RoboMaster roboMaster : all){
-            currentPoints.addAll(roboMaster.matrix.current);
+        synchronized (all){
+            Array<RoboMasterPoint> currentPoints = new Array<>();
+            for(RoboMaster roboMaster : all){
+                currentPoints.addAll(roboMaster.matrix.current);
+            }
+            return currentPoints;
         }
-        return currentPoints;
     }
 
     public static Array<RoboMasterPoint> getPreviousPoints(){
-        Array<RoboMasterPoint> previousPoints = new Array<>();
-        for(RoboMaster roboMaster : all){
-            previousPoints.addAll(roboMaster.matrix.previous);
+        synchronized (all){
+            Array<RoboMasterPoint> previousPoints = new Array<>();
+            for(RoboMaster roboMaster : all){
+                previousPoints.addAll(roboMaster.matrix.previous);
+            }
+            return previousPoints;
         }
-        return previousPoints;
     }
 
     public static void stepMatrix(){
         //runnable.run();
-        for(RoboMaster roboMaster : all){
-            roboMaster.matrix.step();
+        synchronized (all){
+            for(RoboMaster roboMaster : all){
+                roboMaster.matrix.step();
+            }
         }
     }
 

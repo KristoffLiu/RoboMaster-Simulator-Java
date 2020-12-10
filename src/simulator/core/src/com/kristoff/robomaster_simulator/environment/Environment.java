@@ -33,12 +33,12 @@ public class Environment extends Game {
 	@Override
 	public void create() {
 		map = new Map("CompetitionMap");
-		RoboMasters.init();
+		simulatorThread = new SimulatorsThread();
 		physicalSimulator = new PhysicalSimulator(this);
 		matrixSimulator = new MatrixSimulator(this);
 		renderer = new Renderer(this);
 		setScreen(renderer);
-		simulatorThread = new SimulatorsThread();
+
 		isLoaded = true;
 		simulatorThread.start();
 	}
@@ -65,23 +65,8 @@ public class Environment extends Game {
 	@Override
 	public void render () {
 		if(isLoaded){
-			act(Gdx.graphics.getDeltaTime());
 			super.render();
 		}
-	}
-
-	public void act(float delta){
-//		matrixSimulator.step();
-//		physicalSimulator.step(delta);
-	}
-
-	float accum = 0f;
-	private void physicalSimulate(float delta){
-//		accum += Gdx.graphics.getDeltaTime();
-//		while (accum >= 1/60f) {
-//			accum -= 1/60f;
-//			runnable.run();
-//		}
 	}
 
 	public void launch(){

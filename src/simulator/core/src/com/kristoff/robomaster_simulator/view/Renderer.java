@@ -79,16 +79,17 @@ public class Renderer implements Screen {
         floorLayer.act();
         floorLayer.draw();
 
-        lidarPointCloudLayer.act(delta);
-        lidarPointCloudLayer.draw();
-
         renderedLayer.act();
         renderedLayer.draw();
+
+        lidarPointCloudLayer.act(delta);
+        lidarPointCloudLayer.draw();
 
         physicsDebugLayer.render(delta);
 
         frameRate.update();
         frameRate.render();
+
     }
 
     /**

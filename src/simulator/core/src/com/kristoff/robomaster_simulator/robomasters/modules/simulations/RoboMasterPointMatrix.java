@@ -24,29 +24,30 @@ public class RoboMasterPointMatrix {
         runnable = new Runnable() {
             @Override
             public void run() {
-                previous = current;
-                current = new Array<>();
-                double angle = thisRoboMaster.mainBody.body.getTransform().getRotation();
-                if(angle > 2*PI){
-                    angle = angle % (2*PI);
+                if(thisRoboMaster != RoboMasters.teamBlue.get(0)){
+                    previous = current;
+                    current = new Array<>();
+                    double angle = thisRoboMaster.mainBody.body.getTransform().getRotation();
+                    if(angle > 2*PI){
+                        angle = angle % (2*PI);
+                    }
+                    updateMatrix(
+                            angle,
+                            new Vector2(
+                                    thisRoboMaster.getPosition().x * 1000,
+                                    thisRoboMaster.getPosition().y * 1000),
+                            (int) (thisRoboMaster.property.width * 1000),
+                            (int) (thisRoboMaster.property.height * 1000),
+                            current
+                    );
                 }
-                updateMatrix(
-                        angle,
-                        new Vector2(
-                                thisRoboMaster.getPosition().x * 1000,
-                                thisRoboMaster.getPosition().y * 1000),
-                        (int) (thisRoboMaster.property.width * 1000),
-                        (int) (thisRoboMaster.property.height * 1000),
-                        current
-                );
             }
         };
     }
 
     public void step(){
-        if(this.thisRoboMaster != RoboMasters.teamBlue.get(0)){
-            runnable.run();
-        }
+        runnable.run();
+
     }
 
     private void updateMatrix(double angle, Vector2 center, int width, int height, Array<RoboMasterPoint> matrix){
