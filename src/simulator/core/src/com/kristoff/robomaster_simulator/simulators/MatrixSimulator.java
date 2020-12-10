@@ -4,36 +4,53 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.environment.Environment;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.modules.simulations.RoboMasterPoint;
 
 import static java.lang.Math.*;
 
 public class MatrixSimulator extends Simulator{
+    public static MatrixSimulator current;
+
     Environment environment;
     PhysicalSimulator physicalSimulator;
     float timestate = 0f;
 
-    public boolean[][] pointMatrix;
-    public Array<boolean[][]> roboMasterMatrixes;
+    public MatrixPointStatus[][] pointMatrix;
+    public MatrixPointStatus[][] staticObjectPointMatrix;
+
+    Runnable runnable;
 
     public MatrixSimulator(Environment environment) {
+        current = this;
         this.environment = environment;
         this.physicalSimulator = environment.physicalSimulator;
 
-        pointMatrix = new boolean[8490][4890];
+        pointMatrix = new MatrixPointStatus[8490][4890];
+        //pointMatrix = new MatrixPointStatus[8080][4480];
+        staticObjectPointMatrix = new MatrixPointStatus[8490][4890];
 
         addInnerBoundary();
         addBlocks();
+        pointMatrix = staticObjectPointMatrix.clone();
 
-        roboMasterMatrixes = new Array<>();
-        for(int i = 0;i < 4; i++){
-            roboMasterMatrixes.add(new boolean[8490][4890]);
-        }
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                for(RoboMasterPoint point : RoboMasters.getPreviousPoints()){
+                    pointMatrix[point.x][point.y] = MatrixPointStatus.Empty;
+                }
+                RoboMasters.stepMatrix();
+                for(RoboMasterPoint point : RoboMasters.getCurrentPoints()){
+                    pointMatrix[point.x][point.y] = point.status;
+                }
+            }
+        };
     }
 
     public void step(){
-        updateRoboMasters();
+        runnable.run();
     }
 
     private void addInnerBoundary(){
@@ -58,66 +75,35 @@ public class MatrixSimulator extends Simulator{
         for(int i=x;i<x+width;i++){
             for(int j=y;j<y+height;j++){
                 if((i == x || i == x+width-1) && ( j >= y && j <= y+height-1)){
-                    pointMatrix[i][j] = true;
+                    staticObjectPointMatrix[i][j] = MatrixPointStatus.StaticObject;
                 }
                 else if((i > x && i < x+width-1) && ( j == y || j == y+height-1)){
-                    pointMatrix[i][j] = true;
+                    staticObjectPointMatrix[i][j] = MatrixPointStatus.StaticObject;
                 }
                 else {
-                    pointMatrix[i][j] = false;
+                    staticObjectPointMatrix[i][j] = MatrixPointStatus.Empty;
                 }
             }
         }
     }
 
-    private Vector2 roboSidePoint(double angle, Vector2 center, int width, int height){
-        double anglein = atan(height/width);
-        double halfcross = width * width + height * height;
-        double resultx = center.x + sin(angle + anglein) * halfcross;
-        double resulty = center.y + cos(angle + anglein) * halfcross;
-        return new Vector2(Integer.parseInt(new java.text.DecimalFormat("0").format(resultx)),Integer.parseInt(new java.text.DecimalFormat("0").format(resulty)));
+    public enum MatrixPointStatus {
+        Empty,
+        StaticObject,
+        TeamRed,
+        TeamBlue
     }
 
-    private void addLineByTwoPoint(Vector2 a, Vector2 b, boolean[][] basematric){
-        int middletan = Integer.parseInt(new java.text.DecimalFormat("0").format((a.y - b.y)/(a.x - b.x)));
-        if(a.x<b.x){
-            for(int i=Integer.parseInt(new java.text.DecimalFormat("0").format(a.x));i<b.x;i++){
-                basematric[i][(Integer.parseInt(new java.text.DecimalFormat("0").format(a.y)) + middletan)] = true;
-            }
-        }
-        else{
-            for(int i=Integer.parseInt(new java.text.DecimalFormat("0").format(b.x));i<a.x;i++){
-                basematric[i][(Integer.parseInt(new java.text.DecimalFormat("0").format(b.y)) + middletan)] = true;
-            }
-        }
-    }
-
-    private void updateRoboMasters(){
-        RoboMasters.all.get(1).matrix.step();
-        RoboMasters.all.get(2).matrix.step();
-        RoboMasters.all.get(3).matrix.step();
-    }
-
-    private void flushArea(){
-        for(int i=205;i<8284;i++){
-            for(int j=205;j<4684;j++){
-                pointMatrix[i][j] = false;
-            }
-        }
-    }
-
-
-    public boolean isPointContained(int x, int y){
-        if(pointMatrix[x][y]
-           || RoboMasters.all.get(1).matrix.getMatrix()[x][y]
-           || RoboMasters.all.get(2).matrix.getMatrix()[x][y]
-           || RoboMasters.all.get(3).matrix.getMatrix()[x][y]
-           ){
-            return true;
-        }
-        else {
+    public static boolean isPointNotEmpty(int x, int y){
+        if(current.pointMatrix[x][y] == MatrixPointStatus.Empty || current.pointMatrix[x][y] == null){
             return false;
         }
+        else {
+            return true;
+        }
     }
 
+    public static RoboMasterPoint getPoint(int x, int y){
+        return new RoboMasterPoint(x,y,current.pointMatrix[x][y]);
+    }
 }

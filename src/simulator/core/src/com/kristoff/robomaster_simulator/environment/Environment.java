@@ -7,6 +7,7 @@ import com.kristoff.robomaster_simulator.maps.Map;
 import com.kristoff.robomaster_simulator.simulators.MatrixSimulator;
 import com.kristoff.robomaster_simulator.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
+import com.kristoff.robomaster_simulator.simulators.SimulatorsThread;
 import com.kristoff.robomaster_simulator.view.Renderer;
 
 public class Environment extends Game {
@@ -22,6 +23,7 @@ public class Environment extends Game {
 	public Renderer renderer;
 	public PhysicalSimulator physicalSimulator;
 	public MatrixSimulator matrixSimulator;
+	public SimulatorsThread simulatorThread;
 
 	boolean isLoaded = false;
 
@@ -36,8 +38,9 @@ public class Environment extends Game {
 		matrixSimulator = new MatrixSimulator(this);
 		renderer = new Renderer(this);
 		setScreen(renderer);
-
+		simulatorThread = new SimulatorsThread();
 		isLoaded = true;
+		simulatorThread.start();
 	}
 
 	//Changes the current screen to the one passed in
@@ -68,8 +71,8 @@ public class Environment extends Game {
 	}
 
 	public void act(float delta){
-		matrixSimulator.step();
-		physicalSimulator.step(delta);
+//		matrixSimulator.step();
+//		physicalSimulator.step(delta);
 	}
 
 	float accum = 0f;

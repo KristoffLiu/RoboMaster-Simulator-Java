@@ -6,9 +6,10 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.environment.Environment;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 
 public class PhysicalSimulator extends Simulator{
+    public static PhysicalSimulator current;
     Environment environment;
     RoboMasters roboMasters;
 
@@ -19,6 +20,7 @@ public class PhysicalSimulator extends Simulator{
 
     public PhysicalSimulator(final Environment environment) {
         this.environment = environment;
+        this.current = this;
 
         physicalWorld = new World(new Vector2(), false);
 
@@ -39,7 +41,7 @@ public class PhysicalSimulator extends Simulator{
         runnable = new Runnable() {
             @Override
             public void run() {
-                physicalWorld.step(step_delta,6,2);
+                physicalWorld.step(1/60f,6,2);
 //                for(RoboMaster roboMaster : simulator.roboMasters.getAll()){
 //                    roboMaster.simulateFriction();
 //                }

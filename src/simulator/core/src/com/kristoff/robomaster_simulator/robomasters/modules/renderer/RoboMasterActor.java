@@ -2,7 +2,7 @@ package com.kristoff.robomaster_simulator.robomasters.modules.renderer;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.view.base.actors.MovingObject;
 
 public class RoboMasterActor extends MovingObject {

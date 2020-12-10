@@ -2,9 +2,7 @@ package com.kristoff.robomaster_simulator.robomasters.modules;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
-import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 
 public class MainBody {
     RoboMaster thisRoboMaster;

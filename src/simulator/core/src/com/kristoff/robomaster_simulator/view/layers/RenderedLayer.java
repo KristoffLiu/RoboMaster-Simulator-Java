@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.view.Renderer;
 import com.kristoff.robomaster_simulator.view.base.actors.CustomActor;
-import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
 
 public class RenderedLayer extends VisualLayer {

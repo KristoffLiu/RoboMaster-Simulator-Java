@@ -1,60 +1,59 @@
 package com.kristoff.robomaster_simulator.robomasters.modules.simulations;
 
 import com.badlogic.gdx.math.Vector2;
-import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
+import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
+import com.kristoff.robomaster_simulator.simulators.MatrixSimulator;
 
 import static java.lang.Math.*;
-import static java.lang.Math.atan;
 
 public class RoboMasterPointMatrix {
     RoboMaster thisRoboMaster;
-    boolean[][]  ;
+
+    public Array<RoboMasterPoint> current;
+    public Array<RoboMasterPoint> previous;
 
     Runnable runnable;
 
     public RoboMasterPointMatrix(RoboMaster roboMaster){
         this.thisRoboMaster = roboMaster;
-        roboMasterMatrix = new boolean[8490][4890];
+        current = new Array<>();
+        previous = new Array<>();
 
         runnable = new Runnable() {
             @Override
             public void run() {
-                roboMasterMatrix = new boolean[8490][4890];
+                previous = current;
+                current = new Array<>();
                 double angle = thisRoboMaster.mainBody.body.getTransform().getRotation();
                 if(angle > 2*PI){
                     angle = angle % (2*PI);
                 }
-                addRoboMaster(
+                updateMatrix(
                         angle,
                         new Vector2(
                                 thisRoboMaster.getPosition().x * 1000,
                                 thisRoboMaster.getPosition().y * 1000),
                         (int) (thisRoboMaster.property.width * 1000),
                         (int) (thisRoboMaster.property.height * 1000),
-                        roboMasterMatrix
+                        current
                 );
             }
         };
     }
 
     public void step(){
-        runnable.run();
+        if(this.thisRoboMaster != RoboMasters.teamBlue.get(0)){
+            runnable.run();
+        }
     }
 
-    public boolean[][] getMatrix(){
-        return roboMasterMatrix;
-    }
-
-    private void addRoboMaster(double angle, Vector2 center, int width, int height, boolean[][] matrix){
-
+    private void updateMatrix(double angle, Vector2 center, int width, int height, Array<RoboMasterPoint> matrix){
         Vector2 a = getVertex(angle, new Vector2(center.x - width/2,center.y + height/2), center);
         Vector2 b = getVertex(angle, new Vector2(center.x + width/2,center.y + height/2), center);
         Vector2 c = getVertex(angle, new Vector2(center.x - width/2,center.y - height/2), center);
         Vector2 d = getVertex(angle, new Vector2(center.x + width/2,center.y - height/2), center);
-//        matrix[(int)a.x][(int)a.y] = true;
-//        matrix[(int)b.x][(int)b.y] = true;
-//        matrix[(int)c.x][(int)d.y] = true;
-//        matrix[(int)d.x][(int)d.y] = true;
         addLineByTwoPoint(a, b, matrix);
         addLineByTwoPoint(b, d, matrix);
         addLineByTwoPoint(c, d, matrix);
@@ -68,36 +67,20 @@ public class RoboMasterPointMatrix {
         );
     }
 
-    private Vector2 roboSidePoint(double angle, Vector2 center, int width, int height){
-        double anglein = atan((double)height/(double)width);
-        double halfcross = width * width + height * height;
-        double resultx = center.x + sin(angle + anglein) * Math.sqrt(halfcross);
-        double resulty = center.y + cos(angle + anglein) * Math.sqrt(halfcross);
-        return new Vector2((int)resultx, (int) resulty);
-    }
-
-    private void addLineByTwoPoint(Vector2 a, Vector2 b, boolean[][] matrix){
-//        int middletan = (int) ((a.y - b.y)/(a.x - b.x));
-//        if(a.x<b.x){
-//            for(int i = (int) a.x ;i<b.x;i++){
-//                matrix[i][(int)(a.y + middletan * (i - a.x))] = true;
-//            }
-//        }
-//        else{
-//            for(int i = (int) b.x ;i<a.x;i++){
-//                matrix[i][(int)(b.y + middletan * (i - a.x))] = true;
-//            }
-//        }
-
+    private void addLineByTwoPoint(Vector2 a, Vector2 b, Array<RoboMasterPoint> matrix){
         float gradient = (a.y - b.y)/(a.x - b.x);
+        MatrixSimulator.MatrixPointStatus pointStatus = MatrixSimulator.MatrixPointStatus.TeamBlue;
+        if(thisRoboMaster.team == RoboMasters.teamRed){
+            pointStatus = MatrixSimulator.MatrixPointStatus.TeamRed;
+        }
         if(a.x < b.x){
             for(int i = 0 ; i < b.x - a.x; i++ ){
-                matrix[(int)a.x + i][(int)(a.y + gradient * i)] = true;
+                matrix.add(new RoboMasterPoint((int)a.x + i, (int)(a.y + gradient * i),pointStatus));
             }
         }
         else{
             for(int i = 0 ; i < a.x - b.x; i++ ){
-                matrix[(int)b.x + i][(int)(b.y + gradient * i)] = true;
+                matrix.add(new RoboMasterPoint((int)b.x + i, (int)(b.y + gradient * i),pointStatus));
             }
         }
     }

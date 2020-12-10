@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.robomasters.types;
+package com.kristoff.robomaster_simulator.robomasters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,6 +9,7 @@ import com.kristoff.robomaster_simulator.robomasters.modules.properties.Property
 import com.kristoff.robomaster_simulator.robomasters.modules.renderer.RoboMasterActor;
 import com.kristoff.robomaster_simulator.robomasters.modules.simulations.ElectronicSpeedController;
 import com.kristoff.robomaster_simulator.robomasters.modules.MainBody;
+import com.kristoff.robomaster_simulator.robomasters.modules.simulations.Observation;
 import com.kristoff.robomaster_simulator.robomasters.modules.simulations.RoboMasterPointMatrix;
 import com.kristoff.robomaster_simulator.robomasters.modules.weapons.Cannon;
 import com.kristoff.robomaster_simulator.utils.VectorHelper;
@@ -28,20 +29,26 @@ public abstract class RoboMaster{
 
     //box2d properties
 
+    public RoboMasters team;
     public RoboMasterActor actor;
     public Property property;
     public MainBody mainBody;
     public Cannon cannon;
     public RoboMasterPointMatrix matrix;
+    public Observation observation;
 
     ElectronicSpeedController ESC;
 
-    public RoboMaster(TextureRegion textureRegion) {
+    public RoboMaster(TextureRegion textureRegion, RoboMasters roboMasters) {
+        this.team = roboMasters;
+        this.team.add(this);
+
         actor = new RoboMasterActor(textureRegion,this);
         property = new Property();
         mainBody = new MainBody(this);
         cannon = new Cannon(this);
         matrix = new RoboMasterPointMatrix(this);
+        observation = new Observation(this);
 
         shapeRenderer = new ShapeRenderer();
     }
@@ -198,6 +205,4 @@ public abstract class RoboMaster{
         mainBody.init(x,y,physicalWorld);
         cannon.init(x,y,physicalWorld);
     }
-
-
 }

@@ -2,11 +2,14 @@ package com.kristoff.robomaster_simulator.robomasters.types;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 
 public class AlexanderMasterII extends RoboMaster {
-    public AlexanderMasterII(){
+    public AlexanderMasterII(RoboMasters roboMasters){
         super(new TextureRegion(
-                        new Texture("RoboMasters/AlexanderMaster.png")));
+                        new Texture("RoboMasters/AlexanderMaster.png")),
+                roboMasters);
     }
 //    private double weight = 17.1;           //Kg
 //    private int max_forward_speed = 3;      //m/s

@@ -1,25 +1,65 @@
 package com.kristoff.robomaster_simulator.robomasters;
 
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.robomasters.modules.simulations.RoboMasterPoint;
 import com.kristoff.robomaster_simulator.robomasters.types.AlexanderMasterII;
-import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
+import com.kristoff.robomaster_simulator.simulators.MatrixSimulator;
 
-public class RoboMasters {
-    public static Array<RoboMaster> all = new Array<>();
-    public static Array<RoboMaster> teamBlue = new Array<>();
-    public static Array<RoboMaster> teamRed = new Array<>();
+public class RoboMasters extends Array<RoboMaster> {
+    public static RoboMasters all       = new RoboMasters();
+    public static RoboMasters teamBlue  = new RoboMasters();
+    public static RoboMasters teamRed   = new RoboMasters();
+
+    static Runnable runnable;
 
     public static void init(){
         if(all.size == 0){
             for(int i = 0; i <= 1; i++){
-                RoboMaster roboMaster = new AlexanderMasterII();
-                teamBlue.add(roboMaster);
+                new AlexanderMasterII(teamBlue);
             }
             for(int i = 0; i <= 1; i++){
-                teamRed.add(new AlexanderMasterII());
+                new AlexanderMasterII(teamRed);
             }
             all.addAll(teamBlue);
             all.addAll(teamRed);
         }
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                for(RoboMaster roboMaster : all){
+                    roboMaster.matrix.step();
+                }
+            }
+        };
+    }
+
+    public static Array<RoboMasterPoint> getCurrentPoints(){
+        Array<RoboMasterPoint> currentPoints = new Array<>();
+        for(RoboMaster roboMaster : all){
+            currentPoints.addAll(roboMaster.matrix.current);
+        }
+        return currentPoints;
+    }
+
+    public static Array<RoboMasterPoint> getPreviousPoints(){
+        Array<RoboMasterPoint> previousPoints = new Array<>();
+        for(RoboMaster roboMaster : all){
+            previousPoints.addAll(roboMaster.matrix.previous);
+        }
+        return previousPoints;
+    }
+
+    public static void stepMatrix(){
+        //runnable.run();
+        for(RoboMaster roboMaster : all){
+            roboMaster.matrix.step();
+        }
+    }
+
+    public static void stepObservation(){
+//        for(RoboMaster roboMaster : all){
+//            roboMaster.observation.step();
+//        }
+        teamBlue.get(0).observation.step();
     }
 }
