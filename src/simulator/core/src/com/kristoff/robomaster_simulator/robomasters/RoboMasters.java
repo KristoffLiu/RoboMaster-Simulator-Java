@@ -1,33 +1,25 @@
 package com.kristoff.robomaster_simulator.robomasters;
 
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.robomasters.types.AlexanderMasterII;
+import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
 
 public class RoboMasters {
-    Array<RoboMaster> all = new Array<>();
-    Array<RoboMaster> teamBlue = new Array<>();
-    Array<RoboMaster> teamRed = new Array<>();
+    public static Array<RoboMaster> all = new Array<>();
+    public static Array<RoboMaster> teamBlue = new Array<>();
+    public static Array<RoboMaster> teamRed = new Array<>();
 
-    public RoboMasters(){
-        for(int i = 0; i <= 1; i++){
-            RoboMaster roboMaster = new AlexanderMasterII();
-            teamBlue.add(roboMaster);
+    public static void init(){
+        if(all.size == 0){
+            for(int i = 0; i <= 1; i++){
+                RoboMaster roboMaster = new AlexanderMasterII();
+                teamBlue.add(roboMaster);
+            }
+            for(int i = 0; i <= 1; i++){
+                teamRed.add(new AlexanderMasterII());
+            }
+            all.addAll(teamBlue);
+            all.addAll(teamRed);
         }
-        for(int i = 0; i <= 1; i++){
-            teamRed.add(new AlexanderMasterII());
-        }
-        all.addAll(teamBlue);
-        all.addAll(teamRed);
-    }
-
-    public Array<RoboMaster> getAll(){
-        return all;
-    }
-
-    public Array<RoboMaster> getTeamBlue(){
-        return teamBlue;
-    }
-
-    public Array<RoboMaster> getTeamRed(){
-        return teamRed;
     }
 }

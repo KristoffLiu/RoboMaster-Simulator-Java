@@ -1,14 +1,14 @@
 package com.kristoff.robomaster_simulator.rllib;
 
-import com.kristoff.robomaster_simulator.core.Simulator;
+import com.kristoff.robomaster_simulator.environment.Environment;
 
 public class RLlibEnvironment implements RLlibEnvironmentInterface{
-    Simulator simulator;
+    Environment environment;
     RLlibEnvironmentSimulatorConfiguration config;
 
     public RLlibEnvironment(){
         config = new RLlibEnvironmentSimulatorConfiguration();
-        simulator = new Simulator();
+        environment = new Environment();
     }
 
     @Override

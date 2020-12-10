@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.kristoff.robomaster_simulator.core.Simulator;
 import com.kristoff.robomaster_simulator.view.Renderer;
 import com.kristoff.robomaster_simulator.view.View;
 
@@ -41,28 +40,28 @@ public class GlobalInputEventHandler extends InputListener {
                 isLeftAltKeyDown = true;
                 break;
             case Input.Keys.Z:
-                renderer.roboMasters.getTeamBlue().get(0).cannonRotateCCW();
+                renderer.roboMasters.teamBlue.get(0).cannon.cannonRotateCCW();
                 break;
             case Input.Keys.C:
-                renderer.roboMasters.getTeamBlue().get(0).cannonRotateCW();
+                renderer.roboMasters.teamBlue.get(0).cannon.cannonRotateCW();
                 break;
             case Input.Keys.W:
-                renderer.roboMasters.getTeamBlue().get(0).moveForward();
+                renderer.roboMasters.teamBlue.get(0).moveForward();
                 break;
             case Input.Keys.A:
-                renderer.roboMasters.getTeamBlue().get(0).moveLeft();
+                renderer.roboMasters.teamBlue.get(0).moveLeft();
                 break;
             case Input.Keys.D:
-                renderer.roboMasters.getTeamBlue().get(0).moveRight();
+                renderer.roboMasters.teamBlue.get(0).moveRight();
                 break;
             case Input.Keys.S:
-                renderer.roboMasters.getTeamBlue().get(0).moveBehind();
+                renderer.roboMasters.teamBlue.get(0).moveBehind();
                 break;
             case Input.Keys.L:
-                renderer.roboMasters.getTeamBlue().get(0).slowDown();
+                renderer.roboMasters.teamBlue.get(0).slowDown();
                 break;
             case Input.Keys.J:
-                renderer.roboMasters.getTeamBlue().get(0).shoot();
+                renderer.roboMasters.teamBlue.get(0).shoot();
                 break;
         }
         return false;

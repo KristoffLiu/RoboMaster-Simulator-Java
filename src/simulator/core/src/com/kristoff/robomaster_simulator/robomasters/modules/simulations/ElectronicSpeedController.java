@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.robomasters.simulations;
+package com.kristoff.robomaster_simulator.robomasters.modules.simulations;
 
 public class ElectronicSpeedController {
 

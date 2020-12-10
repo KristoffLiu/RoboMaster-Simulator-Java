@@ -1,6 +1,6 @@
-package com.kristoff.robomaster_simulator.core;
+package com.kristoff.robomaster_simulator.environment;
 
-public class SimulatorConfiguration {
+public class EnvironmentConfiguration {
 
     public float physicalWorldStep = 1 / 60f;
 

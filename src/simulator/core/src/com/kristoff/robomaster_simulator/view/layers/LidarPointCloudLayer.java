@@ -5,8 +5,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.view.Renderer;
-import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
 import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
 
 import java.awt.*;
@@ -32,8 +33,8 @@ public class LidarPointCloudLayer extends VisualLayer {
             @Override
             public void run() {
                 lidarPointCloudPointsArray = lidarPointCloudSimulate(
-                        environment.roboMasters.getTeamBlue().get(0).getLidarPosition().x,
-                        environment.roboMasters.getTeamBlue().get(0).getLidarPosition().y);
+                        environment.roboMasters.teamBlue.get(0).getLidarPosition().x,
+                        environment.roboMasters.teamBlue.get(0).getLidarPosition().y);
             }
         };
 
@@ -48,8 +49,8 @@ public class LidarPointCloudLayer extends VisualLayer {
                     int j = (int)vector2.y;
                     Point a = new Point(i,j);
                     Point b = new Point(
-                            (int)(environment.roboMasters.getTeamBlue().get(0).getLidarPosition().x * 1000),
-                            (int)(environment.roboMasters.getTeamBlue().get(0).getLidarPosition().y * 1000));
+                            (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().x * 1000),
+                            (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().y * 1000));
                     float distance = (float) a.distance(b);
                     float red;
                     float green;
@@ -104,7 +105,7 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer2.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer2.setAutoShapeType(true);
         shapeRenderer2.begin(ShapeRenderer.ShapeType.Line);
-        for(RoboMaster roboMaster : environment.roboMasters.getAll()){
+        for(RoboMaster roboMaster : RoboMasters.all){
             shapeRenderer2.setColor(1.0f,0,0,1.0f);
             shapeRenderer2.line(
                     roboMaster.getLidarPosition().x,
@@ -221,6 +222,6 @@ public class LidarPointCloudLayer extends VisualLayer {
     }
 
     public boolean isPointContained(int x, int y){
-        return environment.matrixSimulation.pointMatrix[x][y];
+        return environment.matrixSimulator.isPointContained(x,y);
     }
 }

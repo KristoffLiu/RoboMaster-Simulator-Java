@@ -6,12 +6,12 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
 
-public class PhysicalBody {
+public class MainBody {
     RoboMaster thisRoboMaster;
     public Body body;
     BodyDef bodyDef;
 
-    public PhysicalBody(RoboMaster roboMaster){
+    public MainBody(RoboMaster roboMaster){
         this.thisRoboMaster = roboMaster;
     }
 
@@ -26,7 +26,6 @@ public class PhysicalBody {
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(new Vector2(x, y));
-
 
         body = world.createBody(bodyDef);
 

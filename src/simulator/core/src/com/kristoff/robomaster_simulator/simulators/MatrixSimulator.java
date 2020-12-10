@@ -4,33 +4,35 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.environment.Environment;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
 
 import static java.lang.Math.*;
 
-public class MatrixSimulation {
+public class MatrixSimulator extends Simulator{
     Environment environment;
-    PhysicalSimulation physicalSimulation;
+    PhysicalSimulator physicalSimulator;
     float timestate = 0f;
 
     public boolean[][] pointMatrix;
     public Array<boolean[][]> roboMasterMatrixes;
 
-    public MatrixSimulation(Environment environment) {
+    public MatrixSimulator(Environment environment) {
         this.environment = environment;
-        this.physicalSimulation = environment.physicalSimulation;
+        this.physicalSimulator = environment.physicalSimulator;
 
         pointMatrix = new boolean[8490][4890];
 
         addInnerBoundary();
         addBlocks();
 
+        roboMasterMatrixes = new Array<>();
         for(int i = 0;i < 4; i++){
             roboMasterMatrixes.add(new boolean[8490][4890]);
         }
     }
 
-    public void update(){
+    public void step(){
         updateRoboMasters();
     }
 
@@ -91,27 +93,9 @@ public class MatrixSimulation {
     }
 
     private void updateRoboMasters(){
-        roboMasterMatrix = new boolean[8490][4890];
-        for(RoboMaster roboMaster : environment.roboMasters.getAll()){
-            roboMaster.
-        }
-    }
-
-    private void addRoboMaster(double angle, Vector2 center, int width, int height, boolean[][] basematric){
-        double crossAngle = atan(height/width);
-        Vector2 a = roboSidePoint(angle, center, width, height);
-        double AngleB = angle + 3.1415 - 2 * crossAngle;
-        Vector2 b = roboSidePoint(angle + AngleB, center, width, height);
-        double AngleC = crossAngle + 3.1415;
-        Vector2 c = roboSidePoint(AngleC, center, width, height);
-        double AngleD = AngleB + 3.1415;
-        Vector2 d = roboSidePoint(AngleD, center, width, height);
-
-
-        addLineByTwoPoint(a, b, basematric);
-        addLineByTwoPoint(b, c, basematric);
-        addLineByTwoPoint(c, d, basematric);
-        addLineByTwoPoint(d, a, basematric);
+        RoboMasters.all.get(1).matrix.step();
+        RoboMasters.all.get(2).matrix.step();
+        RoboMasters.all.get(3).matrix.step();
     }
 
     private void flushArea(){
@@ -122,8 +106,18 @@ public class MatrixSimulation {
         }
     }
 
+
     public boolean isPointContained(int x, int y){
-        return pointMatrix[x][y];
+        if(pointMatrix[x][y]
+           || RoboMasters.all.get(1).matrix.getMatrix()[x][y]
+           || RoboMasters.all.get(2).matrix.getMatrix()[x][y]
+           || RoboMasters.all.get(3).matrix.getMatrix()[x][y]
+           ){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 }

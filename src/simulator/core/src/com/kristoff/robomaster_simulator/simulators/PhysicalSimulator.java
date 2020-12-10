@@ -8,7 +8,7 @@ import com.kristoff.robomaster_simulator.environment.Environment;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
 
-public class PhysicalSimulation {
+public class PhysicalSimulator extends Simulator{
     Environment environment;
     RoboMasters roboMasters;
 
@@ -17,22 +17,24 @@ public class PhysicalSimulation {
 
     Runnable runnable;
 
-    public PhysicalSimulation(final Environment environment) {
+    public PhysicalSimulator(final Environment environment) {
         this.environment = environment;
-        roboMasters = environment.roboMasters;
-        box2DDebugRenderer = new Box2DDebugRenderer();
+
         physicalWorld = new World(new Vector2(), false);
 
+        deployTeamBlue();
+        deployTeamRed();
         //create world boundary
         this.createBoundary(0.205f, 0.205f,8.08f, 4.48f);
 
         createStaticBlocks();
-        deployTeamBlue();
-        deployTeamRed();
 
-        for(RoboMaster roboMaster : roboMasters.getTeamBlue()){
+
+        for(RoboMaster roboMaster : RoboMasters.teamBlue){
             roboMaster.transformRotation((float) (Math.PI));
         }
+
+        box2DDebugRenderer = new Box2DDebugRenderer();
 
         runnable = new Runnable() {
             @Override
@@ -127,10 +129,6 @@ public class PhysicalSimulation {
         }
     }
 
-    private void createRoboMaster(){
-
-    }
-
     private void deployTeamBlue(){
         int i = 0;
         for(TextureMapObject textureMapObject : this.environment.map.getBirthZones()){
@@ -142,7 +140,7 @@ public class PhysicalSimulation {
                 float y = textureMapObject.getY() * scale + halfHeight;
                 Vector2 centre = new Vector2();
                 float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-                this.environment.roboMasters.getTeamBlue().get(i).createRoboMasterBody(x,y,this.physicalWorld);
+                RoboMasters.teamBlue.get(i).deploy(x,y,this.physicalWorld);
                 i ++;
             }
         }
@@ -159,7 +157,7 @@ public class PhysicalSimulation {
                 float y = textureMapObject.getY() * scale + halfHeight;
                 Vector2 centre = new Vector2();
                 float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-                this.environment.roboMasters.getTeamRed().get(i).createRoboMasterBody(x,y,this.physicalWorld);
+                RoboMasters.teamRed.get(i).deploy(x,y,this.physicalWorld);
                 i ++;
             }
         }
