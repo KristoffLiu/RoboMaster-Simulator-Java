@@ -10,6 +10,15 @@ import com.badlogic.gdx.physics.box2d.joints.*;
 import com.kristoff.robomaster_simulator.utils.VectorHelper;
 import com.kristoff.robomaster_simulator.view.base.actors.MovingObject;
 
+/***
+ * //    private double weight = 17.1;           //Kg
+ * //    private int max_forward_speed = 3;      //m/s
+ * //    private int max_cross_range_speed = 2;  //m/s
+ * //    private float shooting_speed = 6;       //per second
+ * //    private float cannon_range = 180;       //degree
+ * //    private float bullet_speed = 25;        //m/s
+ * //    private int max_carrying_bullet = 300;  //m/s
+ */
 public abstract class RoboMaster extends MovingObject {
     int PIN;
     World physicalWorld;
@@ -21,7 +30,7 @@ public abstract class RoboMaster extends MovingObject {
     public final float area = width * height; //unit: metre square
 
     //box2d properties
-    Body body;
+    public Body body;
     BodyDef bodyDef;
 
     Body cannon;
@@ -47,14 +56,6 @@ public abstract class RoboMaster extends MovingObject {
         super(textureRegion);
         shapeRenderer = new ShapeRenderer();
     }
-
-    //    private double weight = 17.1;           //Kg
-    //    private int max_forward_speed = 3;      //m/s
-    //    private int max_cross_range_speed = 2;  //m/s
-    //    private float shooting_speed = 6;       //per second
-    //    private float cannon_range = 180;       //degree
-    //    private float bullet_speed = 25;        //m/s
-    //    private int max_carrying_bullet = 300;  //m/s
 
     //  roboMasterShape.setAsBox(0.28f,0.215f); FOR ROBOMASTER 2019
     public void createRoboMasterBody(float x, float y, World world) {

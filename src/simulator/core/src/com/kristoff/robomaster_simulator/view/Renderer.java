@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.kristoff.robomaster_simulator.core.Simulator;
 import com.kristoff.robomaster_simulator.io.GlobalInputEventHandler;
 import com.kristoff.robomaster_simulator.maps.Map;
+import com.kristoff.robomaster_simulator.simulations.MatrixSimulation;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.view.layers.*;
 import com.kristoff.robomaster_simulator.view.base.Assets;
@@ -23,36 +24,31 @@ public class Renderer implements Screen {
     public RoboMasters roboMasters;
     public Map map;
 
+    public MatrixSimulation matrixSimulation;
 
     public FloorLayer floorLayer;
     public PhysicsDebugLayer physicsDebugLayer;
-    public MatrixLayer matrixLayer;
+
     public RenderedLayer renderedLayer;
     public LidarPointCloudLayer lidarPointCloudLayer;
 
     public FrameRate frameRate;
 
-
-
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            simulator.physicalSimulation.step();
-        }
-    };
-
     public Renderer(final Simulator simulator){
         this.simulator = simulator;
         this.roboMasters = simulator.roboMasters;
+        this.matrixSimulation = simulator.matrixSimulation;
+
 
         view = new View(width, height);
         map = simulator.map;
+
 
         floorLayer = new FloorLayer(this);
         floorLayer.addListener(new GlobalInputEventHandler(this));
         renderedLayer = new RenderedLayer(this);
         physicsDebugLayer = new PhysicsDebugLayer(simulator);
-        matrixLayer = new MatrixLayer(this);
+
         lidarPointCloudLayer = new LidarPointCloudLayer(this);
         frameRate = new FrameRate();
 
@@ -84,29 +80,16 @@ public class Renderer implements Screen {
         floorLayer.act();
         floorLayer.draw();
 
-        physicalSimulate(delta);
-
-        matrixLayer.act();
-        matrixLayer.draw();
-
         lidarPointCloudLayer.act(delta);
         lidarPointCloudLayer.draw();
 
         renderedLayer.act();
         renderedLayer.draw();
+
         physicsDebugLayer.render(delta);
+
         frameRate.update();
         frameRate.render();
-    }
-
-    float accum = 0f;
-
-    private void physicalSimulate(float delta){
-        accum += Gdx.graphics.getDeltaTime();
-        while (accum >= 1/60f) {
-            accum -= 1/60f;
-            runnable.run();
-        }
     }
 
     /**

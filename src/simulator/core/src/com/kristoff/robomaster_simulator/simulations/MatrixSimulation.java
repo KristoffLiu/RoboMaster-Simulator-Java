@@ -5,13 +5,17 @@ import com.kristoff.robomaster_simulator.core.Simulator;
 import com.kristoff.robomaster_simulator.view.Renderer;
 import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
 
-public class MatrixLayer{
+public class MatrixSimulation {
     Simulator simulator;
+    PhysicalSimulation physicalSimulation;
     float timestate = 0f;
 
     public boolean[][] pointMatrix;
-    public MatrixLayer(Simulator simulator) {
+    public boolean[][] roboMasterMatrix;
+    public MatrixSimulation(Simulator simulator) {
         this.simulator = simulator;
+        this.physicalSimulation = simulator.physicalSimulation;
+
         pointMatrix = new boolean[8490][4890];
         addInnerBoundary();
         addBlocks();
@@ -49,6 +53,10 @@ public class MatrixLayer{
                 }
             }
         }
+    }
+
+    private void a(){
+
     }
 
     private void flushArea(){
