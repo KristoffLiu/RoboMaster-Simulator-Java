@@ -30,7 +30,7 @@ public class Simulator extends Game {
 	@Override
 	public void create() {
 		map = new Map("CompetitionMap");
-		roboMasters = new RoboMasters();
+		roboMasters.init();
 		matrixSimulation = new MatrixSimulation(this);
 		physicalSimulation = new PhysicalSimulation(this);
 		renderer = new Renderer(this);

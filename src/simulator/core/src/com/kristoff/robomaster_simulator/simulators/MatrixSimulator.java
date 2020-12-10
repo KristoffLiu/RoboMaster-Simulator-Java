@@ -1,40 +1,45 @@
-package com.kristoff.robomaster_simulator.simulations;
+package com.kristoff.robomaster_simulator.simulators;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
-import com.kristoff.robomaster_simulator.core.Simulator;
-import com.kristoff.robomaster_simulator.view.Renderer;
-import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
+import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.environment.Environment;
+import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
 
 import static java.lang.Math.*;
 
 public class MatrixSimulation {
-    Simulator simulator;
+    Environment environment;
     PhysicalSimulation physicalSimulation;
     float timestate = 0f;
 
     public boolean[][] pointMatrix;
-    public boolean[][] roboMasterMatrix;
-    public MatrixSimulation(Simulator simulator) {
-        this.simulator = simulator;
-        this.physicalSimulation = simulator.physicalSimulation;
+    public Array<boolean[][]> roboMasterMatrixes;
+
+    public MatrixSimulation(Environment environment) {
+        this.environment = environment;
+        this.physicalSimulation = environment.physicalSimulation;
 
         pointMatrix = new boolean[8490][4890];
 
         addInnerBoundary();
         addBlocks();
 
-        roboMasterMatrix = new boolean[8490][4890];
-        
+        for(int i = 0;i < 4; i++){
+            roboMasterMatrixes.add(new boolean[8490][4890]);
+        }
+    }
 
+    public void update(){
+        updateRoboMasters();
     }
 
     private void addInnerBoundary(){
         addRectangle(204,204,8080,4480);
     }
 
-    public void addBlocks(){
-        for(TextureMapObject textureMapObject : simulator.map.getBlocks()){
+    private void addBlocks(){
+        for(TextureMapObject textureMapObject : environment.map.getBlocks()){
             float x = textureMapObject.getX();
             float y = textureMapObject.getY();
             float width = textureMapObject.getTextureRegion().getRegionWidth();
@@ -77,10 +82,18 @@ public class MatrixSimulation {
             for(int i=Integer.parseInt(new java.text.DecimalFormat("0").format(a.x));i<b.x;i++){
                 basematric[i][(Integer.parseInt(new java.text.DecimalFormat("0").format(a.y)) + middletan)] = true;
             }
-        }else{
+        }
+        else{
             for(int i=Integer.parseInt(new java.text.DecimalFormat("0").format(b.x));i<a.x;i++){
                 basematric[i][(Integer.parseInt(new java.text.DecimalFormat("0").format(b.y)) + middletan)] = true;
             }
+        }
+    }
+
+    private void updateRoboMasters(){
+        roboMasterMatrix = new boolean[8490][4890];
+        for(RoboMaster roboMaster : environment.roboMasters.getAll()){
+            roboMaster.
         }
     }
 
@@ -99,10 +112,6 @@ public class MatrixSimulation {
         addLineByTwoPoint(b, c, basematric);
         addLineByTwoPoint(c, d, basematric);
         addLineByTwoPoint(d, a, basematric);
-    }
-
-    private void a(){
-
     }
 
     private void flushArea(){

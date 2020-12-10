@@ -1,15 +1,15 @@
-package com.kristoff.robomaster_simulator.simulations;
+package com.kristoff.robomaster_simulator.simulators;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.kristoff.robomaster_simulator.core.Simulator;
+import com.kristoff.robomaster_simulator.environment.Environment;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
 
 public class PhysicalSimulation {
-    Simulator simulator;
+    Environment environment;
     RoboMasters roboMasters;
 
     public World physicalWorld;
@@ -17,9 +17,9 @@ public class PhysicalSimulation {
 
     Runnable runnable;
 
-    public PhysicalSimulation(final Simulator simulator) {
-        this.simulator = simulator;
-        roboMasters = simulator.roboMasters;
+    public PhysicalSimulation(final Environment environment) {
+        this.environment = environment;
+        roboMasters = environment.roboMasters;
         box2DDebugRenderer = new Box2DDebugRenderer();
         physicalWorld = new World(new Vector2(), false);
 
@@ -57,7 +57,7 @@ public class PhysicalSimulation {
 
     float timeState;
     public void render(float delta){
-        box2DDebugRenderer.render(physicalWorld, this.simulator.renderer.view.getOrthographicCamera().combined);
+        box2DDebugRenderer.render(physicalWorld, this.environment.renderer.view.getOrthographicCamera().combined);
     }
 
     private void createBoundary(float width, float height){
@@ -115,7 +115,7 @@ public class PhysicalSimulation {
     }
 
     private void createStaticBlocks(){
-        for(TextureMapObject textureMapObject : this.simulator.map.getBlocks()){
+        for(TextureMapObject textureMapObject : this.environment.map.getBlocks()){
             float scale = 1f / 1000f;
             float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
             float halfHeight = textureMapObject.getTextureRegion().getRegionHeight() / 2f * scale;
@@ -133,7 +133,7 @@ public class PhysicalSimulation {
 
     private void deployTeamBlue(){
         int i = 0;
-        for(TextureMapObject textureMapObject : this.simulator.map.getBirthZones()){
+        for(TextureMapObject textureMapObject : this.environment.map.getBirthZones()){
             if(textureMapObject.getProperties().containsKey("blue")){
                 float scale = 1f / 1000f;
                 float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
@@ -142,7 +142,7 @@ public class PhysicalSimulation {
                 float y = textureMapObject.getY() * scale + halfHeight;
                 Vector2 centre = new Vector2();
                 float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-                this.simulator.roboMasters.getTeamBlue().get(i).createRoboMasterBody(x,y,this.physicalWorld);
+                this.environment.roboMasters.getTeamBlue().get(i).createRoboMasterBody(x,y,this.physicalWorld);
                 i ++;
             }
         }
@@ -150,7 +150,7 @@ public class PhysicalSimulation {
 
     private void deployTeamRed(){
         int i = 0;
-        for(TextureMapObject textureMapObject : this.simulator.map.getBirthZones()){
+        for(TextureMapObject textureMapObject : this.environment.map.getBirthZones()){
                 if(textureMapObject.getProperties().containsKey("red")){
                 float scale = 1f / 1000f;
                 float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
@@ -159,7 +159,7 @@ public class PhysicalSimulation {
                 float y = textureMapObject.getY() * scale + halfHeight;
                 Vector2 centre = new Vector2();
                 float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-                this.simulator.roboMasters.getTeamRed().get(i).createRoboMasterBody(x,y,this.physicalWorld);
+                this.environment.roboMasters.getTeamRed().get(i).createRoboMasterBody(x,y,this.physicalWorld);
                 i ++;
             }
         }

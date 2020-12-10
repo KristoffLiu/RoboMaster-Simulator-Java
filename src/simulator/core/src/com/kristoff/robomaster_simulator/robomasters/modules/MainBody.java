@@ -1,0 +1,43 @@
+package com.kristoff.robomaster_simulator.robomasters.modules;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.kristoff.robomaster_simulator.robomasters.types.RoboMaster;
+
+public class PhysicalBody {
+    RoboMaster thisRoboMaster;
+    public Body body;
+    BodyDef bodyDef;
+
+    public PhysicalBody(RoboMaster roboMaster){
+        this.thisRoboMaster = roboMaster;
+    }
+
+    //  roboMasterShape.setAsBox(0.28f,0.215f); FOR ROBOMASTER 2019
+    public void init(float x, float y, World world) {
+        PolygonShape roboMasterShape = new PolygonShape();
+
+        roboMasterShape.setAsBox(
+                thisRoboMaster.property.width / 2f,
+                thisRoboMaster.property.height / 2f);
+
+        bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(new Vector2(x, y));
+
+
+        body = world.createBody(bodyDef);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.friction = 1f;
+        fixtureDef.density = thisRoboMaster.property.mass / thisRoboMaster.property.area;
+        fixtureDef.shape = roboMasterShape;
+        fixtureDef.restitution = 1.0f;
+
+        body.createFixture(fixtureDef);
+
+        roboMasterShape.dispose();
+    }
+}
