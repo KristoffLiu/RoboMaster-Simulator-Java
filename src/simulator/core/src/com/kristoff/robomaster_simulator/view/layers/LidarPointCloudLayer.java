@@ -31,15 +31,9 @@ public class LidarPointCloudLayer extends VisualLayer {
         runnable = new Runnable() {
             @Override
             public void run() {
-                if(timestate > 1/30f){
-                    lidarPointCloudPointsArray = lidarPointCloudSimulate(
-                            environment.roboMasters.getTeamBlue().get(0).getLidarPosition().x,
-                            environment.roboMasters.getTeamBlue().get(0).getLidarPosition().y);
-                    timestate = 0f;
-                }
-                else{
-                    timestate += Gdx.graphics.getDeltaTime();
-                }
+                lidarPointCloudPointsArray = lidarPointCloudSimulate(
+                        environment.roboMasters.getTeamBlue().get(0).getLidarPosition().x,
+                        environment.roboMasters.getTeamBlue().get(0).getLidarPosition().y);
             }
         };
 
@@ -93,7 +87,13 @@ public class LidarPointCloudLayer extends VisualLayer {
     public void act (float delta) {
         float scale = 1f / 1000f;
         super.act(delta);
-        update(delta);
+        if(timestate > 1/15f){
+            update(delta);
+            timestate = 0f;
+        }
+        else{
+            timestate += Gdx.graphics.getDeltaTime();
+        }
     }
 
     @Override
@@ -124,7 +124,6 @@ public class LidarPointCloudLayer extends VisualLayer {
 
     float timestate = 0;
     public void update(float delta){
-        //flushArea();
         runnable.run();
     }
 
@@ -222,6 +221,6 @@ public class LidarPointCloudLayer extends VisualLayer {
     }
 
     public boolean isPointContained(int x, int y){
-        return environment.matrixLayer.pointMatrix[x][y];
+        return environment.matrixSimulation.pointMatrix[x][y];
     }
 }

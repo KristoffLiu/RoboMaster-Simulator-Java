@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.physicalsimulation;
+package com.kristoff.robomaster_simulator.simulations;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.core.Simulator;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.view.Renderer;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 
 public class PhysicalSimulation {
@@ -44,6 +43,10 @@ public class PhysicalSimulation {
 //                }
             }
         };
+    }
+
+    public void step(){
+//        roboMasters.getTeamBlue().get(0).
     }
 
     float step_delta = 0;

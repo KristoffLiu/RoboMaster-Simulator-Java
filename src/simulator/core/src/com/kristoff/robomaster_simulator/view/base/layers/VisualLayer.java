@@ -5,8 +5,15 @@ import com.kristoff.robomaster_simulator.view.Renderer;
 
 public class VisualLayer extends Layer {
 
+    Runnable runnable;
     public VisualLayer(Renderer renderer) {
         super(renderer.view.getViewport(), renderer);
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                drawAsync();
+            }
+        };
     }
 
     @Override
@@ -16,8 +23,11 @@ public class VisualLayer extends Layer {
 
     @Override
     public void draw () {
-        super.draw();
+        runnable.run();
+    }
 
+    public void drawAsync(){
+        super.draw();
     }
 
     public void setCamera(float x, float y, float z){

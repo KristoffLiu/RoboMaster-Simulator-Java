@@ -3,9 +3,9 @@ package com.kristoff.robomaster_simulator.core;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.kristoff.robomaster_simulator.io.GlobalInputEventHandler;
 import com.kristoff.robomaster_simulator.maps.Map;
-import com.kristoff.robomaster_simulator.physicalsimulation.PhysicalSimulation;
+import com.kristoff.robomaster_simulator.simulations.MatrixSimulation;
+import com.kristoff.robomaster_simulator.simulations.PhysicalSimulation;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.view.Renderer;
 
@@ -18,15 +18,11 @@ public class Simulator extends Game {
 
 	SimulatorConfiguration config = new SimulatorConfiguration();
 
+	public Map map;
 	public Renderer renderer;
 	public PhysicalSimulation physicalSimulation;
-	public Map map;
+	public MatrixSimulation matrixSimulation;
 	public RoboMasters roboMasters;
-
-
-	public Simulator(){
-
-	}
 
 	/**
 	 * Called when the game is first created.
@@ -35,6 +31,7 @@ public class Simulator extends Game {
 	public void create() {
 		map = new Map("CompetitionMap");
 		roboMasters = new RoboMasters();
+		matrixSimulation = new MatrixSimulation(this);
 		physicalSimulation = new PhysicalSimulation(this);
 		renderer = new Renderer(this);
 		setScreen(renderer);
@@ -61,7 +58,21 @@ public class Simulator extends Game {
 
 	@Override
 	public void render () {
+		act(Gdx.graphics.getDeltaTime());
 		super.render();
+	}
+
+	public void act(float delta){
+		physicalSimulation.step(delta);
+	}
+
+	float accum = 0f;
+	private void physicalSimulate(float delta){
+//		accum += Gdx.graphics.getDeltaTime();
+//		while (accum >= 1/60f) {
+//			accum -= 1/60f;
+//			runnable.run();
+//		}
 	}
 
 	public void launch(){
@@ -74,18 +85,7 @@ public class Simulator extends Game {
 		rendererConfig.foregroundFPS = this.config.renderedFrameRate;
 		rendererConfig.backgroundFPS = 120;
 
-		rendererConfig.useGL30 = true;
+		rendererConfig.useGL30 = false;
 		new LwjglApplication(new Simulator(), rendererConfig);
-
-//		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-//
-//		config.title = "RoboMaster Simulator - Java Platform";
-//
-//		float scaleFactor = 0.6f;
-//		config.width = (int) (1920 * scaleFactor);
-//		config.height = (int) (1080 * scaleFactor);
-//		config.useGL30 = true;
-//		config.foregroundFPS = 60;
-//		new LwjglApplication(new Simulator(), config);
 	}
 }
