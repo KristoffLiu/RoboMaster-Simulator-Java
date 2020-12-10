@@ -26,11 +26,11 @@ Gym
 
 根据以下安装教程网址安装
 
-https://blog.csdn.net/aozhipujian10997/article/details/86607389
+http://www.baidu.com/link?url=98azpRznooVGM77tcVexncV6GTszFKtiWaKqZ7VLiP5t5vMLnDllRQcyAmMaWSeRlfSBHn-kHVZOLKTjF5QcfvJktybfLdbwbxynzmTOjjG&wd=&eqid=ba83ce1d00001ee3000000035fd1b8ca
 
 RLlib
 
-    pip install gym
+    pip install ray[rllib]
 
 py4j
 
