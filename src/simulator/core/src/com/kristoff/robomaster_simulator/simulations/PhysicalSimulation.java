@@ -38,12 +38,23 @@ public class PhysicalSimulation {
         runnable = new Runnable() {
             @Override
             public void run() {
-                physicalWorld.step(1/60f,6,2);
-                for(RoboMaster roboMaster : simulator.roboMasters.getAll()){
-                    roboMaster.simulateFriction();
-                }
+                physicalWorld.step(step_delta,6,2);
+//                for(RoboMaster roboMaster : simulator.roboMasters.getAll()){
+//                    roboMaster.simulateFriction();
+//                }
             }
         };
+    }
+
+    float step_delta = 0;
+    public void step(float delta){
+        step_delta = delta;
+        runnable.run();
+    }
+
+    float timeState;
+    public void render(float delta){
+        box2DDebugRenderer.render(physicalWorld, this.simulator.renderer.view.getOrthographicCamera().combined);
     }
 
     private void createBoundary(float width, float height){
@@ -149,25 +160,6 @@ public class PhysicalSimulation {
                 i ++;
             }
         }
-    }
-
-    public void step(){
-        runnable.run();
-    }
-
-    float timeState;
-    public void render(float delta){
-        box2DDebugRenderer.render(physicalWorld, this.simulator.renderer.view.getOrthographicCamera().combined);
-//        if(timeState > 1f){
-//            timeState = 0f;
-////            environment.allRoboMasters.forEach(x -> x.shoot());
-//            for(RoboMaster roboMaster : environment.allRoboMasters){
-//                roboMaster.shoot();
-//            }
-//        }
-//        else{
-//            timeState += delta;
-//        }
     }
 
     public void updateMatrix(){

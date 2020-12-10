@@ -1,19 +1,18 @@
-package com.kristoff.robomaster_simulator.view.layers;
+package com.kristoff.robomaster_simulator.simulations;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.kristoff.robomaster_simulator.core.Simulator;
 import com.kristoff.robomaster_simulator.view.Renderer;
 import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
 
-public class MatrixLayer extends VisualLayer {
+public class MatrixLayer{
+    Simulator simulator;
     float timestate = 0f;
 
     public boolean[][] pointMatrix;
-    public MatrixLayer(Renderer renderer) {
-        super(renderer);
-
+    public MatrixLayer(Simulator simulator) {
+        this.simulator = simulator;
         pointMatrix = new boolean[8490][4890];
-
-
         addInnerBoundary();
         addBlocks();
     }
@@ -23,7 +22,7 @@ public class MatrixLayer extends VisualLayer {
     }
 
     public void addBlocks(){
-        for(TextureMapObject textureMapObject : environment.map.getBlocks()){
+        for(TextureMapObject textureMapObject : simulator.map.getBlocks()){
             float x = textureMapObject.getX();
             float y = textureMapObject.getY();
             float width = textureMapObject.getTextureRegion().getRegionWidth();
