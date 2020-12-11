@@ -33,14 +33,16 @@ public class Environment extends Game {
 	@Override
 	public void create() {
 		map = new Map("CompetitionMap");
-		simulatorThread = new SimulatorsThread();
+		RoboMasters.init();
 		physicalSimulator = new PhysicalSimulator(this);
 		matrixSimulator = new MatrixSimulator(this);
 		renderer = new Renderer(this);
 		setScreen(renderer);
 
 		isLoaded = true;
-		simulatorThread.start();
+		//simulatorThread.start();
+		physicalSimulator.start();
+		matrixSimulator.start();
 	}
 
 	//Changes the current screen to the one passed in

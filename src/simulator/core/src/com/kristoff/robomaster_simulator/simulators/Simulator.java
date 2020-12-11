@@ -1,30 +1,11 @@
 package com.kristoff.robomaster_simulator.simulators;
 
-public class Simulator implements SimulatorInterface{
-    Runnable step;
+import com.kristoff.robomaster_simulator.environment.BackendThread;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 
-    public Simulator(){
-        step = new Runnable() {
-            @Override
-            public void run() {
-                step();
-            }
-        };
-    }
-
+public class Simulator extends BackendThread implements SimulatorInterface{
+    @Override
     public void step(){
 
-    }
-
-    public void step(float delta){
-
-    }
-
-    public void stepAsync(){
-        step.run();
-    }
-
-    public void stepAsync(float delta){
-        step.run();
     }
 }

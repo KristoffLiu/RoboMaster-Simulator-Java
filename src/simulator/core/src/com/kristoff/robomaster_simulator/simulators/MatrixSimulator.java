@@ -15,7 +15,7 @@ public class MatrixSimulator extends Simulator{
 
     Environment environment;
     PhysicalSimulator physicalSimulator;
-    float timestate = 0f;
+
 
     public MatrixPointStatus[][] pointMatrix;
     public MatrixPointStatus[][] staticObjectPointMatrix;
@@ -24,6 +24,9 @@ public class MatrixSimulator extends Simulator{
 
     public MatrixSimulator(Environment environment) {
         current = this;
+        delta = 1/20f;
+        isStep = true;
+
         this.environment = environment;
         this.physicalSimulator = environment.physicalSimulator;
 
@@ -51,6 +54,7 @@ public class MatrixSimulator extends Simulator{
 
     public void step(){
         runnable.run();
+        RoboMasters.stepObservation();
     }
 
     private void addInnerBoundary(){

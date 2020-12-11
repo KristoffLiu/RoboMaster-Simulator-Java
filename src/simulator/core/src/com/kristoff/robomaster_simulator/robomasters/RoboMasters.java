@@ -5,6 +5,9 @@ import com.kristoff.robomaster_simulator.robomasters.modules.simulations.RoboMas
 import com.kristoff.robomaster_simulator.robomasters.types.AlexanderMasterII;
 import com.kristoff.robomaster_simulator.simulators.MatrixSimulator;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class RoboMasters extends Array<RoboMaster> {
     public static RoboMasters all       = new RoboMasters();
     public static RoboMasters teamBlue  = new RoboMasters();
@@ -34,31 +37,59 @@ public class RoboMasters extends Array<RoboMaster> {
     }
 
     public static Array<RoboMasterPoint> getCurrentPoints(){
-        synchronized (all){
-            Array<RoboMasterPoint> currentPoints = new Array<>();
-            for(RoboMaster roboMaster : all){
-                currentPoints.addAll(roboMaster.matrix.current);
+        Lock lock = new ReentrantLock();
+        if(lock.tryLock()) {
+            try{
+                synchronized (all){
+                    Array<RoboMasterPoint> currentPoints = new Array<>();
+                    all.forEach(x->currentPoints.addAll(x.matrix.current));
+                    return currentPoints;
+                }
+            }catch(Exception ex){
+
+            }finally{
+                lock.unlock();   //释放锁
             }
-            return currentPoints;
+        }else {
+            return new Array<>();
         }
+        return new Array<>();
     }
 
     public static Array<RoboMasterPoint> getPreviousPoints(){
-        synchronized (all){
-            Array<RoboMasterPoint> previousPoints = new Array<>();
-            for(RoboMaster roboMaster : all){
-                previousPoints.addAll(roboMaster.matrix.previous);
+        Lock lock = new ReentrantLock();
+        if(lock.tryLock()) {
+            try{
+                synchronized (all){
+                    Array<RoboMasterPoint> previousPoints = new Array<>();
+                    all.forEach(x->previousPoints.addAll(x.matrix.previous));
+                    return previousPoints;
+                }
+            }catch(Exception ex){
+
+            }finally{
+                lock.unlock();   //释放锁
             }
-            return previousPoints;
+        }else {
+            return new Array<>();
         }
+        return new Array<>();
     }
 
     public static void stepMatrix(){
-        //runnable.run();
-        synchronized (all){
-            for(RoboMaster roboMaster : all){
-                roboMaster.matrix.step();
+        Lock lock = new ReentrantLock();
+        if(lock.tryLock()) {
+            try{
+                synchronized (all){
+                    all.forEach(x->x.matrix.step());
+                }
+            }catch(Exception ex){
+
+            }finally{
+                lock.unlock();   //释放锁
             }
+        }else {
+            //如果不能获取锁，则直接做其他事情
         }
     }
 

@@ -21,6 +21,7 @@ public class PhysicalSimulator extends Simulator{
     public PhysicalSimulator(final Environment environment) {
         this.environment = environment;
         this.current = this;
+        this.isStep = true;
 
         physicalWorld = new World(new Vector2(), false);
 
@@ -28,8 +29,7 @@ public class PhysicalSimulator extends Simulator{
         deployTeamRed();
         //create world boundary
         this.createBoundary(0.205f, 0.205f,8.08f, 4.48f);
-
-        createStaticBlocks();
+        this.createStaticBlocks();
 
 
         for(RoboMaster roboMaster : RoboMasters.teamBlue){
@@ -38,19 +38,20 @@ public class PhysicalSimulator extends Simulator{
 
         box2DDebugRenderer = new Box2DDebugRenderer();
 
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                physicalWorld.step(1/60f,6,2);
+//        runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                physicalWorld.step(1/60f,6,2);
 //                for(RoboMaster roboMaster : simulator.roboMasters.getAll()){
 //                    roboMaster.simulateFriction();
 //                }
-            }
-        };
+//            }
+//        };
     }
 
+    @Override
     public void step(){
-//        roboMasters.getTeamBlue().get(0).
+        physicalWorld.step(1/60f,6,2);
     }
 
     float step_delta = 0;
@@ -163,24 +164,6 @@ public class PhysicalSimulator extends Simulator{
                 i ++;
             }
         }
-    }
-
-    public void updateMatrix(){
-        boolean[][] PointMatrix = new boolean[8490][4890];
-        Array<Body> bodies = new Array<>();
-//        for(Body body : bodies){
-//            for(Fixture fixture : body.getFixtureList()){
-//                Shape shape = fixture.getShape();
-//                if (fixture.getShape() instanceof PolygonShape) {
-//                    ((PolygonShape)shape).
-//                }
-//            }
-//        }
-    }
-
-
-    public void simulateFriction(){
-
     }
 
 }
