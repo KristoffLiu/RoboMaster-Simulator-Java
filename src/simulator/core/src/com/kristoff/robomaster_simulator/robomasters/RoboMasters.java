@@ -5,10 +5,11 @@ import com.kristoff.robomaster_simulator.robomasters.modules.simulations.RoboMas
 import com.kristoff.robomaster_simulator.robomasters.types.AlexanderMasterII;
 import com.kristoff.robomaster_simulator.simulators.MatrixSimulator;
 
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class RoboMasters extends Array<RoboMaster> {
+public class RoboMasters extends CopyOnWriteArrayList<RoboMaster> {
     public static RoboMasters all       = new RoboMasters();
     public static RoboMasters teamBlue  = new RoboMasters();
     public static RoboMasters teamRed   = new RoboMasters();
@@ -16,7 +17,7 @@ public class RoboMasters extends Array<RoboMaster> {
     static Runnable runnable;
 
     public static void init(){
-        if(all.size == 0){
+        if(all.size() == 0){
             for(int i = 0; i <= 1; i++){
                 new AlexanderMasterII(teamBlue);
             }

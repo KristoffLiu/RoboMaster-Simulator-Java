@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 
 public class Cannon {
     RoboMaster thisRoboMaster;
@@ -58,5 +59,15 @@ public class Cannon {
     public void cannonRotateCCW() {
         cannonJoint.setMotorSpeed(4f);
         //cannon.applyForce(Force.getForce(-10f,cannon.getAngle()),cannon.getPosition(),false);
+    }
+
+    public void draw(){
+        for(RoboMaster roboMaster : RoboMasters.all){
+            //code
+        }
+
+        RoboMasters.all.forEach(x->{
+            //code
+        });
     }
 }

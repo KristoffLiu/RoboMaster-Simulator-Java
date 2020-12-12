@@ -24,7 +24,7 @@ public class MatrixSimulator extends Simulator{
 
     public MatrixSimulator(Environment environment) {
         current = this;
-        delta = 1/20f;
+        delta = 1/60f;
         isStep = true;
 
         this.environment = environment;

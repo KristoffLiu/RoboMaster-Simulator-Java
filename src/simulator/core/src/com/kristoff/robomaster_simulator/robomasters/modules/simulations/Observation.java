@@ -3,30 +3,34 @@ package com.kristoff.robomaster_simulator.robomasters.modules.simulations;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.environment.BackendThread;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.simulators.MatrixSimulator;
 
-public class Observation {
+public class Observation extends BackendThread {
     RoboMaster thisRoboMaster;
     public Array<RoboMasterPoint> other;
 
     Runnable runnable;
 
     public Observation(RoboMaster roboMaster){
+        isStep = true;
+        delta = 1/60f;
         other = new Array<>();
         runnable = new Runnable() {
             @Override
             public void run() {
-                other = lidarPointCloudSimulate(
-                        RoboMasters.teamBlue.get(0).getLidarPosition().x,
-                        RoboMasters.teamBlue.get(0).getLidarPosition().y);
+
             }
         };
     }
 
+    @Override
     public void step(){
-        runnable.run();
+        other = lidarPointCloudSimulate(
+                RoboMasters.teamBlue.get(0).getLidarPosition().x,
+                RoboMasters.teamBlue.get(0).getLidarPosition().y);
     }
 
     public Array<RoboMasterPoint> lidarPointCloudSimulate(float c_x, float c_y){

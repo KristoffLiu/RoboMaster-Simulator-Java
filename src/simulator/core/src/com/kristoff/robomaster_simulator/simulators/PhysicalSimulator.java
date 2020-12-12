@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.environment.Environment;
+import com.kristoff.robomaster_simulator.robomasters.Dynamics;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 
@@ -52,6 +53,9 @@ public class PhysicalSimulator extends Simulator{
     @Override
     public void step(){
         physicalWorld.step(1/60f,6,2);
+        for(RoboMaster roboMaster : RoboMasters.all){
+            roboMaster.simulateFriction();
+        }
     }
 
     float step_delta = 0;
@@ -144,6 +148,9 @@ public class PhysicalSimulator extends Simulator{
                 Vector2 centre = new Vector2();
                 float rotation = (float) Math.toRadians(textureMapObject.getRotation());
                 RoboMasters.teamBlue.get(i).deploy(x,y,this.physicalWorld);
+                RoboMasters.teamBlue.get(i).dynamics = new Dynamics(RoboMasters.teamBlue.get(i));
+                RoboMasters.teamBlue.get(i).dynamics.start();
+                RoboMasters.teamBlue.get(i).observation.start();
                 i ++;
             }
         }
@@ -161,6 +168,9 @@ public class PhysicalSimulator extends Simulator{
                 Vector2 centre = new Vector2();
                 float rotation = (float) Math.toRadians(textureMapObject.getRotation());
                 RoboMasters.teamRed.get(i).deploy(x,y,this.physicalWorld);
+                RoboMasters.teamRed.get(i).dynamics = new Dynamics(RoboMasters.teamRed.get(i));
+                RoboMasters.teamRed.get(i).dynamics.start();
+                RoboMasters.teamRed.get(i).observation.start();
                 i ++;
             }
         }

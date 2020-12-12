@@ -24,6 +24,8 @@ public class MainBody {
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(new Vector2(x, y));
+        bodyDef.angularDamping = 0.9f;
+        bodyDef.linearDamping = 0.9f;
 
         body = world.createBody(bodyDef);
 
@@ -31,7 +33,7 @@ public class MainBody {
         fixtureDef.friction = 1f;
         fixtureDef.density = thisRoboMaster.property.mass / thisRoboMaster.property.area;
         fixtureDef.shape = roboMasterShape;
-        fixtureDef.restitution = 1.0f;
+        fixtureDef.restitution = 0.001f;
 
         body.createFixture(fixtureDef);
 

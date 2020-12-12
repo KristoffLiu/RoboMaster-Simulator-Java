@@ -47,7 +47,6 @@ public class RoboMasterPointMatrix {
 
     public void step(){
         runnable.run();
-
     }
 
     private void updateMatrix(double angle, Vector2 center, int width, int height, Array<RoboMasterPoint> matrix){
@@ -74,14 +73,28 @@ public class RoboMasterPointMatrix {
         if(thisRoboMaster.team == RoboMasters.teamRed){
             pointStatus = MatrixSimulator.MatrixPointStatus.TeamRed;
         }
-        if(a.x < b.x){
-            for(int i = 0 ; i < b.x - a.x; i++ ){
-                matrix.add(new RoboMasterPoint((int)a.x + i, (int)(a.y + gradient * i),pointStatus));
+        if( Math.abs(a.x - b.x) >= Math.abs(a.y - b.y)){
+            if(a.x < b.x){
+                for(int i = 0 ; i < b.x - a.x; i++ ){
+                    matrix.add(new RoboMasterPoint((int)a.x + i, (int)(a.y + gradient * i),pointStatus));
+                }
+            }
+            else{
+                for(int i = 0 ; i < a.x - b.x; i++ ){
+                    matrix.add(new RoboMasterPoint((int)b.x + i, (int)(b.y + gradient * i),pointStatus));
+                }
             }
         }
-        else{
-            for(int i = 0 ; i < a.x - b.x; i++ ){
-                matrix.add(new RoboMasterPoint((int)b.x + i, (int)(b.y + gradient * i),pointStatus));
+        else {
+            if(a.y < b.y){
+                for(int i = 0 ; i < b.y - a.y; i++ ){
+                    matrix.add(new RoboMasterPoint((int)(a.x + i / gradient), (int)(a.y+i),pointStatus));
+                }
+            }
+            else{
+                for(int i = 0 ; i < a.y - b.y; i++ ){
+                    matrix.add(new RoboMasterPoint((int)(b.x + i / gradient), (int)(b.y+i),pointStatus));
+                }
             }
         }
     }

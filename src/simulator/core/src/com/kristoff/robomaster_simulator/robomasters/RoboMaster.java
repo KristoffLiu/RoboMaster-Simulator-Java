@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.kristoff.robomaster_simulator.environment.BackendThread;
 import com.kristoff.robomaster_simulator.robomasters.modules.properties.Property;
 import com.kristoff.robomaster_simulator.robomasters.modules.renderer.RoboMasterActor;
 import com.kristoff.robomaster_simulator.robomasters.modules.simulations.ElectronicSpeedController;
@@ -12,6 +13,7 @@ import com.kristoff.robomaster_simulator.robomasters.modules.MainBody;
 import com.kristoff.robomaster_simulator.robomasters.modules.simulations.Observation;
 import com.kristoff.robomaster_simulator.robomasters.modules.simulations.RoboMasterPointMatrix;
 import com.kristoff.robomaster_simulator.robomasters.modules.weapons.Cannon;
+import com.kristoff.robomaster_simulator.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.utils.VectorHelper;
 
 /***
@@ -23,7 +25,7 @@ import com.kristoff.robomaster_simulator.utils.VectorHelper;
  * //    private float bullet_speed = 25;        //m/s
  * //    private int max_carrying_bullet = 300;  //m/s
  */
-public abstract class RoboMaster{
+public abstract class RoboMaster {
     int PIN;
     World physicalWorld;
 
@@ -36,6 +38,7 @@ public abstract class RoboMaster{
     public Cannon cannon;
     public RoboMasterPointMatrix matrix;
     public Observation observation;
+    public Dynamics dynamics;
 
     ElectronicSpeedController ESC;
 
@@ -43,9 +46,9 @@ public abstract class RoboMaster{
         this.team = roboMasters;
         this.team.add(this);
 
-        actor = new RoboMasterActor(textureRegion,this);
         property = new Property();
         mainBody = new MainBody(this);
+        actor = new RoboMasterActor(textureRegion,this);
         cannon = new Cannon(this);
         matrix = new RoboMasterPointMatrix(this);
         observation = new Observation(this);
@@ -75,7 +78,7 @@ public abstract class RoboMaster{
         bd.bullet = true;// 精确检测
         bd.position.set(this.cannon.body.getPosition().x,this.cannon.body.getPosition().y);
 
-        com.badlogic.gdx.physics.box2d.Body m_bullet = physicalWorld.createBody(bd);
+        com.badlogic.gdx.physics.box2d.Body m_bullet = PhysicalSimulator.current.physicalWorld.createBody(bd);
         m_bullet.createFixture(fd);
 
         //m_bullet.setLinearVelocity(new Vector2(400, 0));
@@ -95,9 +98,12 @@ public abstract class RoboMaster{
     }
 
     public void moveForward() {
-        float force = 250f;
+        float force = 3f;
         float worldAngle = getFacingAngle();
-        this.mainBody.body.applyForce(VectorHelper.getVector(force, worldAngle), getPosition(), false);
+        //this.mainBody.body.applyForce(VectorHelper.getVector(force, worldAngle), getPosition(), false);
+        //this.mainBody.body.applyLinearImpulse(VectorHelper.getVector(force, worldAngle), getPosition(), false);
+        this.mainBody.body.setLinearDamping(0f);
+        this.mainBody.body.setLinearVelocity(VectorHelper.getVector(force, worldAngle));
     }
 
     public void moveLeft() {

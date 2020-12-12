@@ -13,8 +13,8 @@ public class RoboMasterActor extends MovingObject {
         this.thisRoboMaster = roboMaster;
     }
 
-
-    public void act() {
+    @Override
+    public void act(float delta) {
         float scale = 1f / 1000f;
         this.setWidth(0.6f);
         this.setHeight(0.45f);
