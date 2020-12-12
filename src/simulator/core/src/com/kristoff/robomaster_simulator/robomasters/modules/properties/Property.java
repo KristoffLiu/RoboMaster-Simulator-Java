@@ -9,12 +9,12 @@ public class Property {
 
     //mechanical properties;
     float acceleration;
-    float velocity;
+    public float velocity;
 
     //Competition properties;
     //RoboMasterSate roboMasterState;
-    float health;
-    int numOfBulletsOwned;
-    int numOfBulletsLeft;
+    public float health;
+    public int numOfBulletsOwned;
+    public int numOfBulletsLeft;
     int numOfBulletsShot;
 }
