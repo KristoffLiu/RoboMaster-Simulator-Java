@@ -12,7 +12,7 @@ import com.kristoff.robomaster_simulator.view.View;
 /**
  * 输入事件监听器（包括触屏, 鼠标点击, 键盘按键 的输入）
  */
-public class GlobalInputEventHandler extends InputListener {
+public class GlobalInputEventHandler extends InputListener {w
     float MouseMovingVelocityFactor = 20;
     Renderer renderer;
     View view;
