@@ -7,6 +7,6 @@ public class ChassisLocked extends Buff{
     public ChassisLocked(RoboMaster Robomaster) {
         super(Robomaster);
 
-        Robomaster.property.velocity = 0;
+        Robomaster.property.movable = false;
     }
 }

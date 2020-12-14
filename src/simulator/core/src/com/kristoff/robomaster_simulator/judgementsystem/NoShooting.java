@@ -6,5 +6,7 @@ public class NoShooting extends Buff{
     public NoShooting(RoboMaster Robomaster) {
         super(Robomaster);
 
+        Robomaster.property.shootable = false;
+
     }
 }
