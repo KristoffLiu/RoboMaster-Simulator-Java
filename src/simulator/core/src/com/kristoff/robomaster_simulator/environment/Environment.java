@@ -3,11 +3,6 @@ package com.kristoff.robomaster_simulator.environment;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.kristoff.robomaster_simulator.maps.Map;
-import com.kristoff.robomaster_simulator.simulators.MatrixSimulator;
-import com.kristoff.robomaster_simulator.simulators.PhysicalSimulator;
-import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.simulators.SimulatorsThread;
 import com.kristoff.robomaster_simulator.view.Renderer;
 
 public class Environment extends Game {
@@ -19,11 +14,13 @@ public class Environment extends Game {
 
 	EnvironmentConfiguration config = new EnvironmentConfiguration();
 
-	public Map map;
+//	public Map map;
+//	public PhysicalSimulator physicalSimulator;
+//	public MatrixSimulator matrixSimulator;
+//	public SimulatorsThread simulatorThread;
+
+	public Systems systems;
 	public Renderer renderer;
-	public PhysicalSimulator physicalSimulator;
-	public MatrixSimulator matrixSimulator;
-	public SimulatorsThread simulatorThread;
 
 	boolean isLoaded = false;
 
@@ -32,17 +29,12 @@ public class Environment extends Game {
 	 */
 	@Override
 	public void create() {
-		map = new Map("CompetitionMap");
-		RoboMasters.init();
-		physicalSimulator = new PhysicalSimulator(this);
-		matrixSimulator = new MatrixSimulator(this);
+		systems = new Systems();
 		renderer = new Renderer(this);
 		setScreen(renderer);
 
 		isLoaded = true;
-		//simulatorThread.start();
-		physicalSimulator.start();
-		matrixSimulator.start();
+		Systems.start();
 	}
 
 	//Changes the current screen to the one passed in

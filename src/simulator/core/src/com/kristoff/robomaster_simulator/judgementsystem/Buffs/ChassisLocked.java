@@ -1,6 +1,6 @@
 package com.kristoff.robomaster_simulator.judgementsystem.Buffs;
 
-import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 
 public class ChassisLocked extends Buff{
 

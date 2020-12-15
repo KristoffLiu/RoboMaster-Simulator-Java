@@ -2,6 +2,7 @@ package com.kristoff.robomaster_simulator.view.layers;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.kristoff.robomaster_simulator.environment.Environment;
+import com.kristoff.robomaster_simulator.environment.Systems;
 
 public class PhysicsDebugLayer {
     Environment environment;
@@ -11,7 +12,7 @@ public class PhysicsDebugLayer {
 
     public PhysicsDebugLayer(Environment environment) {
         this.environment = environment;
-        physicalWorld = environment.physicalSimulator.physicalWorld;
+        physicalWorld = Systems.physicalSimulator.physicalWorld;
         box2DDebugRenderer = new Box2DDebugRenderer();
     }
 
