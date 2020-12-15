@@ -1,14 +1,15 @@
-package com.kristoff.robomaster_simulator.judgementsystem;
+package com.kristoff.robomaster_simulator.judgementsystem.Buffs;
 
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 
-public class BlueHeal extends Buff{
+public class RedHeal extends Buff{
 
-    public BlueHeal(RoboMaster Robomaster) {
+    public RedHeal(RoboMaster Robomaster) {
         super(Robomaster);
-        for(RoboMaster a : RoboMasters.teamBlue){
+        for(RoboMaster a : RoboMasters.teamRed){
             a.property.health += 200;
         }
     }
 }
+

@@ -1,7 +1,6 @@
 package com.kristoff.robomaster_simulator.robomasters.modules.judgement;
 
 import com.badlogic.gdx.math.Vector2;
-import com.kristoff.robomaster_simulator.judgementsystem.BlueAddBullet;
 
 public class BuffZone {
     private Vector2 leftUp;
@@ -31,7 +30,7 @@ public class BuffZone {
         ZoneID = ID;
     }
 
-    
+
 
 
 }

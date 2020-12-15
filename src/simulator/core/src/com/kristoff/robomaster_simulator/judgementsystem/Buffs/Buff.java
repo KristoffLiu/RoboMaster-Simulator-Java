@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.judgementsystem;
+package com.kristoff.robomaster_simulator.judgementsystem.Buffs;
 
 import com.badlogic.gdx.tools.hiero.unicodefont.effects.Effect;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
