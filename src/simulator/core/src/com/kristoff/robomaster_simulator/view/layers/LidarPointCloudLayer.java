@@ -2,13 +2,11 @@ package com.kristoff.robomaster_simulator.view.layers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.robomasters.modules.simulations.RoboMasterPoint;
+import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.simulations.RoboMasterPoint;
 import com.kristoff.robomaster_simulator.view.Renderer;
-import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
 
 import java.awt.*;
