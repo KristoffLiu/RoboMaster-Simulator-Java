@@ -1,10 +1,10 @@
-package com.kristoff.robomaster_simulator.systems.robomasters.modules.simulations;
+package com.kristoff.robomaster_simulator.systems.matrixsimulation;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.systems.simulators.MatrixSimulator;
 
 import static java.lang.Math.*;
 
@@ -24,7 +24,7 @@ public class RoboMasterPointMatrix {
         runnable = new Runnable() {
             @Override
             public void run() {
-                if(thisRoboMaster != RoboMasters.teamBlue.get(0)){
+                if(thisRoboMaster != Systems.roboMasters.teamBlue.get(0)){
                     previous = current;
                     current = new Array<>();
                     double angle = thisRoboMaster.mainBody.body.getTransform().getRotation();
@@ -70,7 +70,7 @@ public class RoboMasterPointMatrix {
     private void addLineByTwoPoint(Vector2 a, Vector2 b, Array<RoboMasterPoint> matrix){
         float gradient = (a.y - b.y)/(a.x - b.x);
         MatrixSimulator.MatrixPointStatus pointStatus = MatrixSimulator.MatrixPointStatus.TeamBlue;
-        if(thisRoboMaster.team == RoboMasters.teamRed){
+        if(thisRoboMaster.team == Systems.roboMasters.teamRed){
             pointStatus = MatrixSimulator.MatrixPointStatus.TeamRed;
         }
         if( Math.abs(a.x - b.x) >= Math.abs(a.y - b.y)){

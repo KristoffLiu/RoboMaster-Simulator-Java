@@ -1,19 +1,24 @@
 package com.kristoff.robomaster_simulator.systems.robomasters;
 
 import com.badlogic.gdx.utils.Array;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.simulations.RoboMasterPoint;
+import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
 import com.kristoff.robomaster_simulator.systems.robomasters.types.AlexanderMasterII;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class RoboMasters extends CopyOnWriteArrayList<RoboMaster> {
-    public static RoboMasters all       = new RoboMasters();
-    public static RoboMasters teamBlue  = new RoboMasters();
-    public static RoboMasters teamRed   = new RoboMasters();
+public class RoboMasters{
+    public static RoboMasterList  all       = new RoboMasterList();
+    public static RoboMasterList teamBlue   = new RoboMasterList();
+    public static RoboMasterList teamRed    = new RoboMasterList();
 
     static Runnable runnable;
+
+    public RoboMasters(){
+        init();
+    }
 
     public static void init(){
         if(all.size() == 0){
@@ -36,7 +41,11 @@ public class RoboMasters extends CopyOnWriteArrayList<RoboMaster> {
         };
     }
 
-    public static Array<RoboMasterPoint> getCurrentPoints(){
+    public void start(){
+        this.stepObservation();
+    }
+
+    public Array<RoboMasterPoint> getCurrentPoints(){
         Lock lock = new ReentrantLock();
         if(lock.tryLock()) {
             try{
@@ -56,7 +65,7 @@ public class RoboMasters extends CopyOnWriteArrayList<RoboMaster> {
         return new Array<>();
     }
 
-    public static Array<RoboMasterPoint> getPreviousPoints(){
+    public Array<RoboMasterPoint> getPreviousPoints(){
         Lock lock = new ReentrantLock();
         if(lock.tryLock()) {
             try{
@@ -76,7 +85,7 @@ public class RoboMasters extends CopyOnWriteArrayList<RoboMaster> {
         return new Array<>();
     }
 
-    public static void stepMatrix(){
+    public void stepMatrix(){
         Lock lock = new ReentrantLock();
         if(lock.tryLock()) {
             try{
@@ -93,10 +102,10 @@ public class RoboMasters extends CopyOnWriteArrayList<RoboMaster> {
         }
     }
 
-    public static void stepObservation(){
-//        for(RoboMaster roboMaster : all){
-//            roboMaster.observation.step();
-//        }
-        teamBlue.get(0).observation.step();
+    public void stepObservation(){
+        for(RoboMaster roboMaster : all){
+            roboMaster.observation.step();
+        }
+        //teamBlue.get(0).observation.step();
     }
 }

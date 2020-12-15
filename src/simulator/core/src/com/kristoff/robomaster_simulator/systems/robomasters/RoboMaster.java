@@ -5,13 +5,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.properties.Property;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.renderer.RoboMasterActor;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.simulations.ElectronicSpeedController;
+import com.kristoff.robomaster_simulator.systems.robomasters.judgement.JudgeModule;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.Dynamics;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.Property;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.RoboMasterRenderer;
 import com.kristoff.robomaster_simulator.systems.robomasters.modules.MainBody;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.simulations.Observation;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.simulations.RoboMasterPointMatrix;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.weapons.Cannon;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.Observation;
+import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPointMatrix;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.Weapon;
 import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.utils.VectorHelper;
 
@@ -30,27 +31,30 @@ public abstract class RoboMaster {
 
     //box2d properties
 
-    public RoboMasters team;
-    public RoboMasterActor actor;
-    public Property property;
-    public MainBody mainBody;
-    public Cannon cannon;
-    public RoboMasterPointMatrix matrix;
-    public Observation observation;
-    public Dynamics dynamics;
+    public RoboMasterList team;
 
-    ElectronicSpeedController ESC;
+    public Property property;               //基本属性 Basic Property
+    public MainBody mainBody;               //主体的2d物理建模
+    public Weapon weapon;                   //武器 Weapon
+    public RoboMasterRenderer renderer;     //渲染器
+    public RoboMasterPointMatrix matrix;    //点阵发生器
+    public Observation observation;         //激光雷达Lidar发生器
+    public Dynamics dynamics;               //动力系统
+    public JudgeModule judgeModule;         //裁判系统
 
-    public RoboMaster(TextureRegion textureRegion, RoboMasters roboMasters) {
-        this.team = roboMasters;
+
+    public RoboMaster(TextureRegion textureRegion, RoboMasterList roboMasterList) {
+        this.team = roboMasterList;
         this.team.add(this);
 
         property = new Property();
         mainBody = new MainBody(this);
-        actor = new RoboMasterActor(textureRegion,this);
-        cannon = new Cannon(this);
+        renderer = new RoboMasterRenderer(textureRegion,this);
+        weapon = new Weapon(this);
         matrix = new RoboMasterPointMatrix(this);
         observation = new Observation(this);
+        judgeModule = new JudgeModule(this);
+
 
         shapeRenderer = new ShapeRenderer();
     }
@@ -75,7 +79,7 @@ public abstract class RoboMaster {
         BodyDef bd = new BodyDef();
         bd.type = BodyDef.BodyType.DynamicBody;
         bd.bullet = true;// 精确检测
-        bd.position.set(this.cannon.body.getPosition().x,this.cannon.body.getPosition().y);
+        bd.position.set(this.weapon.body.getPosition().x,this.weapon.body.getPosition().y);
 
         com.badlogic.gdx.physics.box2d.Body m_bullet = PhysicalSimulator.current.physicalWorld.createBody(bd);
         m_bullet.createFixture(fd);
@@ -93,7 +97,7 @@ public abstract class RoboMaster {
     }
 
     public float getCannonAngle() {
-        return (float) (- this.cannon.body.getAngle() - Math.PI / 2f);
+        return (float) (- this.weapon.body.getAngle() - Math.PI / 2f);
     }
 
     public void moveForward() {
@@ -154,7 +158,7 @@ public abstract class RoboMaster {
 
     public void transformRotation(float degree) {
         this.mainBody.body.setTransform(this.mainBody.body.getPosition(), degree);
-        this.cannon.body.setTransform(this.cannon.body.getPosition(), degree);
+        this.weapon.body.setTransform(this.weapon.body.getPosition(), degree);
     }
 
     public Vector2 getLinearVelocity() {
@@ -208,6 +212,6 @@ public abstract class RoboMaster {
 
     public void deploy(float x, float y, World physicalWorld){
         mainBody.init(x,y,physicalWorld);
-        cannon.init(x,y,physicalWorld);
+        weapon.init(x,y,physicalWorld);
     }
 }

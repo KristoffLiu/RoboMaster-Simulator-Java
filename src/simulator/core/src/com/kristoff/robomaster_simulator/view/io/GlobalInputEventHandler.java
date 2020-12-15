@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.view.Renderer;
 import com.kristoff.robomaster_simulator.view.View;
@@ -41,37 +42,37 @@ public class GlobalInputEventHandler extends InputListener {
                 isLeftAltKeyDown = true;
                 break;
             case Input.Keys.Z:
-                RoboMasters.teamBlue.get(0).cannon.cannonRotateCCW();
+                Systems.roboMasters.teamBlue.get(0).weapon.cannonRotateCCW();
                 break;
             case Input.Keys.C:
-                RoboMasters.teamBlue.get(0).cannon.cannonRotateCW();
+                Systems.roboMasters.teamBlue.get(0).weapon.cannonRotateCW();
                 break;
 
 
             case Input.Keys.Q:
-                RoboMasters.teamBlue.get(0).dynamics.rotateCCW();
+                Systems.roboMasters.teamBlue.get(0).dynamics.rotateCCW();
                 break;
             case Input.Keys.E:
-                RoboMasters.teamBlue.get(0).dynamics.rotateCW();
+                Systems.roboMasters.teamBlue.get(0).dynamics.rotateCW();
                 break;
             case Input.Keys.W:
-                RoboMasters.teamBlue.get(0).dynamics.moveForward();
+                Systems.roboMasters.teamBlue.get(0).dynamics.moveForward();
                 break;
             case Input.Keys.A:
-                RoboMasters.teamBlue.get(0).dynamics.moveLeft();
+                Systems.roboMasters.teamBlue.get(0).dynamics.moveLeft();
                 break;
             case Input.Keys.D:
-                RoboMasters.teamBlue.get(0).dynamics.moveRight();
+                Systems.roboMasters.teamBlue.get(0).dynamics.moveRight();
                 break;
             case Input.Keys.S:
-                RoboMasters.teamBlue.get(0).dynamics.moveBehind();
+                Systems.roboMasters.teamBlue.get(0).dynamics.moveBehind();
                 break;
 
             case Input.Keys.L:
-                RoboMasters.teamBlue.get(0).slowDown();
+                Systems.roboMasters.teamBlue.get(0).slowDown();
                 break;
             case Input.Keys.J:
-                RoboMasters.teamBlue.get(0).shoot();
+                Systems.roboMasters.teamBlue.get(0).shoot();
                 break;
         }
         return false;
@@ -90,13 +91,13 @@ public class GlobalInputEventHandler extends InputListener {
 
             case Input.Keys.Q:
             case Input.Keys.E:
-                RoboMasters.teamBlue.get(0).dynamics.stopRotating();
+                Systems.roboMasters.teamBlue.get(0).dynamics.stopRotating();
                 break;
             case Input.Keys.W:
             case Input.Keys.A:
             case Input.Keys.D:
             case Input.Keys.S:
-                RoboMasters.teamBlue.get(0).dynamics.stopMoving();
+                Systems.roboMasters.teamBlue.get(0).dynamics.stopMoving();
                 break;
         }
         return true;

@@ -1,8 +1,9 @@
-package com.kristoff.robomaster_simulator.systems.robomasters;
+package com.kristoff.robomaster_simulator.systems.robomasters.modules;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.kristoff.robomaster_simulator.environment.BackendThread;
+import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.utils.VectorHelper;
 
 public class Dynamics extends BackendThread {

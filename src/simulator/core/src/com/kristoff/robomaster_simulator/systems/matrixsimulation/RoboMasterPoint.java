@@ -1,6 +1,6 @@
-package com.kristoff.robomaster_simulator.systems.robomasters.modules.simulations;
+package com.kristoff.robomaster_simulator.systems.matrixsimulation;
 
-import com.kristoff.robomaster_simulator.systems.simulators.MatrixSimulator;
+import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
 
 public class RoboMasterPoint {
     public int x;

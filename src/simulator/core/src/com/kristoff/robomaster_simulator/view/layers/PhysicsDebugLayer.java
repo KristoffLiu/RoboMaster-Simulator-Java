@@ -2,7 +2,7 @@ package com.kristoff.robomaster_simulator.view.layers;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.kristoff.robomaster_simulator.environment.Environment;
-import com.kristoff.robomaster_simulator.environment.Systems;
+import com.kristoff.robomaster_simulator.systems.Systems;
 
 public class PhysicsDebugLayer {
     Environment environment;

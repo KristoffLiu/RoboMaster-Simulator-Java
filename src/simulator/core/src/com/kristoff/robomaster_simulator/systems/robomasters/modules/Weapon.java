@@ -1,13 +1,14 @@
-package com.kristoff.robomaster_simulator.systems.robomasters.modules.weapons;
+package com.kristoff.robomaster_simulator.systems.robomasters.modules;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
 
-public class Cannon {
+public class Weapon {
     RoboMaster thisRoboMaster;
     public Body body;
     BodyDef bodyDef;
@@ -15,7 +16,7 @@ public class Cannon {
     RevoluteJoint cannonJoint;
     RevoluteJointDef cannonJointDef;
 
-    public Cannon(RoboMaster roboMaster){
+    public Weapon(RoboMaster roboMaster){
         this.thisRoboMaster = roboMaster;
     }
 
@@ -62,11 +63,11 @@ public class Cannon {
     }
 
     public void draw(){
-        for(RoboMaster roboMaster : RoboMasters.all){
+        for(RoboMaster roboMaster : Systems.roboMasters.all){
             //code
         }
 
-        RoboMasters.all.forEach(x->{
+        Systems.roboMasters.all.forEach(x->{
             //code
         });
     }

@@ -3,9 +3,8 @@ package com.kristoff.robomaster_simulator.systems.simulators;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.kristoff.robomaster_simulator.environment.Environment;
-import com.kristoff.robomaster_simulator.environment.Systems;
-import com.kristoff.robomaster_simulator.systems.robomasters.Dynamics;
+import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.Dynamics;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 
@@ -31,7 +30,7 @@ public class PhysicalSimulator extends Simulator{
         this.createStaticBlocks();
 
 
-        for(RoboMaster roboMaster : RoboMasters.teamBlue){
+        for(RoboMaster roboMaster : Systems.roboMasters.teamBlue){
             roboMaster.transformRotation((float) (Math.PI));
         }
 
@@ -51,7 +50,7 @@ public class PhysicalSimulator extends Simulator{
     @Override
     public void step(){
         physicalWorld.step(1/60f,6,2);
-        for(RoboMaster roboMaster : RoboMasters.all){
+        for(RoboMaster roboMaster : Systems.roboMasters.all){
             roboMaster.simulateFriction();
         }
     }
@@ -138,12 +137,10 @@ public class PhysicalSimulator extends Simulator{
                 float halfHeight = textureMapObject.getTextureRegion().getRegionHeight() / 2f * scale;
                 float x = textureMapObject.getX() * scale + halfWidth;
                 float y = textureMapObject.getY() * scale + halfHeight;
-                Vector2 centre = new Vector2();
-                float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-                RoboMasters.teamBlue.get(i).deploy(x,y,this.physicalWorld);
-                RoboMasters.teamBlue.get(i).dynamics = new Dynamics(RoboMasters.teamBlue.get(i));
-                RoboMasters.teamBlue.get(i).dynamics.start();
-                RoboMasters.teamBlue.get(i).observation.start();
+                Systems.roboMasters.teamBlue.get(i).deploy(x,y,this.physicalWorld);
+                Systems.roboMasters.teamBlue.get(i).dynamics = new Dynamics(Systems.roboMasters.teamBlue.get(i));
+                Systems.roboMasters.teamBlue.get(i).dynamics.start();
+                Systems.roboMasters.teamBlue.get(i).observation.start();
                 i ++;
             }
         }
@@ -158,12 +155,10 @@ public class PhysicalSimulator extends Simulator{
                 float halfHeight = textureMapObject.getTextureRegion().getRegionHeight() / 2f * scale;
                 float x = textureMapObject.getX() * scale + halfWidth;
                 float y = textureMapObject.getY() * scale + halfHeight;
-                Vector2 centre = new Vector2();
-                float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-                RoboMasters.teamRed.get(i).deploy(x,y,this.physicalWorld);
-                RoboMasters.teamRed.get(i).dynamics = new Dynamics(RoboMasters.teamRed.get(i));
-                RoboMasters.teamRed.get(i).dynamics.start();
-                RoboMasters.teamRed.get(i).observation.start();
+                Systems.roboMasters.teamRed.get(i).deploy(x,y,this.physicalWorld);
+                Systems.roboMasters.teamRed.get(i).dynamics = new Dynamics(Systems.roboMasters.teamRed.get(i));
+                Systems.roboMasters.teamRed.get(i).dynamics.start();
+                Systems.roboMasters.teamRed.get(i).observation.start();
                 i ++;
             }
         }

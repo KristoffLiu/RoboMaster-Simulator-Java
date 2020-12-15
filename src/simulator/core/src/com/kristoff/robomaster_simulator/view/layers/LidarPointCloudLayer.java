@@ -3,8 +3,9 @@ package com.kristoff.robomaster_simulator.view.layers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.simulations.RoboMasterPoint;
+import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
 import com.kristoff.robomaster_simulator.view.Renderer;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
@@ -26,7 +27,7 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer2 = new ShapeRenderer();
         //circleRenderer = new ShapeRenderer();
 
-        lidarPointCloudPointsArray = RoboMasters.teamBlue.get(0).observation.other;
+        lidarPointCloudPointsArray = Systems.roboMasters.teamBlue.get(0).observation.other;
 
         renderLidarPoints = new Runnable() {
             @Override
@@ -95,7 +96,7 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer2.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer2.setAutoShapeType(true);
         shapeRenderer2.begin(ShapeRenderer.ShapeType.Line);
-        for(RoboMaster roboMaster : RoboMasters.all){
+        for(RoboMaster roboMaster : Systems.roboMasters.all){
             shapeRenderer2.setColor(1.0f,0,0,1.0f);
             shapeRenderer2.line(
                     roboMaster.getLidarPosition().x,
@@ -119,6 +120,6 @@ public class LidarPointCloudLayer extends VisualLayer {
     }
 
     public Array<RoboMasterPoint> getLidarPointCloudPointsArray(){
-        return RoboMasters.teamBlue.get(0).observation.other;
+        return Systems.roboMasters.teamBlue.get(0).observation.other;
     }
 }

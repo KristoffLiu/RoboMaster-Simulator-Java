@@ -1,12 +1,12 @@
-package com.kristoff.robomaster_simulator.systems.simulators;
+package com.kristoff.robomaster_simulator.systems.matrixsimulation;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.kristoff.robomaster_simulator.environment.Environment;
-import com.kristoff.robomaster_simulator.environment.Systems;
+import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.simulations.RoboMasterPoint;
+import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
+import com.kristoff.robomaster_simulator.systems.simulators.Simulator;
 
-public class MatrixSimulator extends Simulator{
+public class MatrixSimulator extends Simulator {
     PhysicalSimulator physicalSimulator;
 
     public MatrixPointStatus[][] pointMatrix;
@@ -31,11 +31,11 @@ public class MatrixSimulator extends Simulator{
         runnable = new Runnable() {
             @Override
             public void run() {
-                for(RoboMasterPoint point : RoboMasters.getPreviousPoints()){
+                for(RoboMasterPoint point : Systems.roboMasters.getPreviousPoints()){
                     pointMatrix[point.x][point.y] = MatrixPointStatus.Empty;
                 }
-                RoboMasters.stepMatrix();
-                for(RoboMasterPoint point : RoboMasters.getCurrentPoints()){
+                Systems.roboMasters.stepMatrix();
+                for(RoboMasterPoint point : Systems.roboMasters.getCurrentPoints()){
                     pointMatrix[point.x][point.y] = point.status;
                 }
             }
@@ -44,7 +44,6 @@ public class MatrixSimulator extends Simulator{
 
     public void step(){
         runnable.run();
-        RoboMasters.stepObservation();
     }
 
     private void addInnerBoundary(){

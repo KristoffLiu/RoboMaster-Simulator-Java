@@ -1,14 +1,14 @@
-package com.kristoff.robomaster_simulator.systems.robomasters.modules.renderer;
+package com.kristoff.robomaster_simulator.systems.robomasters.modules;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.view.base.actors.MovingObject;
 
-public class RoboMasterActor extends MovingObject {
+public class RoboMasterRenderer extends MovingObject {
     RoboMaster thisRoboMaster;
 
-    public RoboMasterActor(TextureRegion textureRegion, RoboMaster roboMaster) {
+    public RoboMasterRenderer(TextureRegion textureRegion, RoboMaster roboMaster) {
         super(textureRegion);
         this.thisRoboMaster = roboMaster;
     }

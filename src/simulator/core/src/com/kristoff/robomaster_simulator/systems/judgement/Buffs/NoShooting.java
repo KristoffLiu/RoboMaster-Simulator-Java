@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.judgementsystem.Buffs;
+package com.kristoff.robomaster_simulator.systems.judgement.Buffs;
 
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 
