@@ -4,9 +4,15 @@ import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 
 public class ChassisLocked extends Buff{
 
+    RoboMaster thisRoboMaster;
+
     public ChassisLocked(RoboMaster Robomaster) {
         super(Robomaster);
-
-        Robomaster.property.movable = false;
+        this.thisRoboMaster = Robomaster;
+        act();
     }
+
+        public void act(){
+            thisRoboMaster.property.movable = false;
+        }
 }

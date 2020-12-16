@@ -15,6 +15,7 @@ public class JudgeModule extends BackendThread {
     float judgeFrequency = 1/60f;
 
     float health;
+    int bullet;
     boolean isDead;
 
 
@@ -29,6 +30,9 @@ public class JudgeModule extends BackendThread {
 
     public void initData(){
         this.health = thisRoboMaster.property.health;
+        this.bullet = thisRoboMaster.property.numOfBulletsOwned;
+        this.isDead = false;
+
     }
 
     @Override
@@ -73,6 +77,16 @@ public class JudgeModule extends BackendThread {
             }
         });
     }
+
+    public void bulletHitDamage(String plateName){
+        switch (plateName) {
+            case "front" -> healthChange(-20);
+            case "right", "left" -> healthChange(-40);
+            case "back" -> healthChange(-60);
+        }
+    }
+
+
 
 
 
