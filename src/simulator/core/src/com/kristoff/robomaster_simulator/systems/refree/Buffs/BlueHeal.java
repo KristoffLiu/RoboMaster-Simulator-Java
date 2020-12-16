@@ -1,8 +1,7 @@
-package com.kristoff.robomaster_simulator.systems.judgement.Buffs;
+package com.kristoff.robomaster_simulator.systems.refree.Buffs;
 
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
 
 public class BlueHeal extends Buff{
 

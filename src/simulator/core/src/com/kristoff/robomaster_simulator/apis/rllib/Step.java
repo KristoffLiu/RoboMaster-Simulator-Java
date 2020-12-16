@@ -1,5 +1,7 @@
 package com.kristoff.robomaster_simulator.apis.rllib;
 
+import com.badlogic.gdx.utils.Null;
+
 import java.util.HashMap;
 
 public class Step {
@@ -12,7 +14,7 @@ public class Step {
 
     }
 
-    public Step(Observation observation, double reward, boolean done, HashMap info){
+    public Step(Observation observation, double reward, @Null boolean done, @Null HashMap info){
         this.observation = observation;
         this.reward = reward;
         this.done = done;

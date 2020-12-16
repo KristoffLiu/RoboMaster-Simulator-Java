@@ -1,7 +1,6 @@
-package com.kristoff.robomaster_simulator.systems.judgement;
+package com.kristoff.robomaster_simulator.systems.refree;
 
 import com.kristoff.robomaster_simulator.environment.BackendThread;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 
 public class Refree extends BackendThread {
     public Refree(){

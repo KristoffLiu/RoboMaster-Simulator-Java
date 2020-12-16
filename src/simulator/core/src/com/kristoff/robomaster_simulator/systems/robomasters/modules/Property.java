@@ -8,8 +8,8 @@ public class Property {
     public float area = width * height; //unit: metre square
 
     //mechanical properties;
-    float acceleration;
-    public float velocity;
+    float acceleration      ;
+    public float velocity   ;
 
     //Competition properties;
     //RoboMasterSate roboMasterState;
