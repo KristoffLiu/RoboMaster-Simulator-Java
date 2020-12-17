@@ -83,6 +83,13 @@ public class JudgeModule extends BackendThread {
             case "front" -> healthChange(-20);
             case "right", "left" -> healthChange(-40);
             case "back" -> healthChange(-60);
+            case "hit" -> healthChange(-10);
+            case "30 > bullet speed > 25" -> healthChange(-200);
+            case "35 > bullet speed >= 30" -> healthChange(-1000);
+            case "bullet speed >= 35" -> healthChange(-2000);
+
+
+
         }
     }
 
