@@ -1,9 +1,8 @@
-package com.kristoff.robomaster_simulator.core.environment;
+package com.kristoff.robomaster_simulator.envs.environment;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public class EnvironmentConfiguration {
-    public EnvironmentMode mode                 = EnvironmentMode.debug;
     LwjglApplicationConfiguration rendererConfig = new LwjglApplicationConfiguration();
 
     public boolean isRendering                  = true;
@@ -13,6 +12,4 @@ public class EnvironmentConfiguration {
     public int width                            = 1920;
     public int height                           = 1080;
     public float scaleFactor                    = 0.6f;
-
-
 }

@@ -1,11 +1,10 @@
 package com.kristoff.robomaster_simulator;
 
-import com.kristoff.robomaster_simulator.core.environment.Environment;
-import com.kristoff.robomaster_simulator.core.environment.EnvironmentConfiguration;
-import com.kristoff.robomaster_simulator.core.environment.EnvironmentMode;
+import com.kristoff.robomaster_simulator.envs.launchers.LauncherBase;
 
-public class Launcher {
+public class Launcher extends LauncherBase {
     public static void main (String[] arg) {
-        new Environment();
+        current = new Launcher();
+        current.init();
     }
 }

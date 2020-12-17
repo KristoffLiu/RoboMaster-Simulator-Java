@@ -3,24 +3,24 @@ package com.kristoff.robomaster_simulator.view.layers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.kristoff.robomaster_simulator.view.Renderer;
+import com.kristoff.robomaster_simulator.view.EnvRenderer;
 import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
 
 public class FloorLayer extends VisualLayer {
-    Renderer renderer;
+    EnvRenderer envRenderer;
 
     private TiledMap map;
     private TmxMapLoader loader;
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 
-    public FloorLayer(Renderer renderer) {
-        super(renderer);
+    public FloorLayer(EnvRenderer envRenderer) {
+        super(envRenderer);
 
-        this.renderer = renderer;
+        this.envRenderer = envRenderer;
 
-        renderer.view.getOrthographicCamera().position.x = renderer.width / 2f;
-        renderer.view.getOrthographicCamera().position.y = renderer.height / 2f;
-        renderer.view.getOrthographicCamera().zoom = 1f;
+        envRenderer.view.getOrthographicCamera().position.x = envRenderer.width / 2f;
+        envRenderer.view.getOrthographicCamera().position.y = envRenderer.height / 2f;
+        envRenderer.view.getOrthographicCamera().zoom = 1f;
     }
 
     public void resize(int width, int height) {
@@ -35,7 +35,7 @@ public class FloorLayer extends VisualLayer {
     @Override
     public void draw () {
         super.draw();
-        renderer.map.render();
+        envRenderer.map.render();
     }
 
 

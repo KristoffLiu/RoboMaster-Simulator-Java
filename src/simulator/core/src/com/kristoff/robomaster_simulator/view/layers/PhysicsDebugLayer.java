@@ -1,7 +1,7 @@
 package com.kristoff.robomaster_simulator.view.layers;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.kristoff.robomaster_simulator.core.environment.Environment;
+import com.kristoff.robomaster_simulator.envs.environment.Environment;
 import com.kristoff.robomaster_simulator.systems.Systems;
 
 public class PhysicsDebugLayer {
@@ -18,6 +18,6 @@ public class PhysicsDebugLayer {
 
     float timeState;
     public void render(float delta){
-        box2DDebugRenderer.render(physicalWorld, environment.renderer.view.getOrthographicCamera().combined);
+        box2DDebugRenderer.render(physicalWorld, environment.envRenderer.view.getOrthographicCamera().combined);
     }
 }

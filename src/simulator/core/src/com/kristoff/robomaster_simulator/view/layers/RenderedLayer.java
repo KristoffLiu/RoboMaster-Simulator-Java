@@ -2,16 +2,15 @@ package com.kristoff.robomaster_simulator.view.layers;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.view.Renderer;
+import com.kristoff.robomaster_simulator.view.EnvRenderer;
 import com.kristoff.robomaster_simulator.view.base.actors.CustomActor;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
 
 public class RenderedLayer extends VisualLayer {
 
-    public RenderedLayer(Renderer renderer) {
-        super(renderer);
+    public RenderedLayer(EnvRenderer envRenderer) {
+        super(envRenderer);
         addBirthZones();
         addBlocks();
         addBuffZones();

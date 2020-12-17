@@ -6,8 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.view.Renderer;
+import com.kristoff.robomaster_simulator.view.EnvRenderer;
 import com.kristoff.robomaster_simulator.view.View;
 
 /**
@@ -15,16 +14,16 @@ import com.kristoff.robomaster_simulator.view.View;
  */
 public class GlobalInputEventHandler extends InputListener {
     float MouseMovingVelocityFactor = 20;
-    Renderer renderer;
+    EnvRenderer envRenderer;
     View view;
     final String TAG = "GlobalInputEventHandler";
 
     boolean isLeftControlKeyDown = false;
     boolean isLeftAltKeyDown = false;
 
-    public GlobalInputEventHandler(Renderer renderer){
-        this.renderer = renderer;
-        this.view = renderer.view;
+    public GlobalInputEventHandler(EnvRenderer envRenderer){
+        this.envRenderer = envRenderer;
+        this.view = envRenderer.view;
     }
 
 

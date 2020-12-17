@@ -1,13 +1,13 @@
 package com.kristoff.robomaster_simulator.view.base.layers;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.kristoff.robomaster_simulator.view.Renderer;
+import com.kristoff.robomaster_simulator.view.EnvRenderer;
 
 public class VisualLayer extends Layer {
 
     Runnable runnable;
-    public VisualLayer(Renderer renderer) {
-        super(renderer.view.getViewport(), renderer);
+    public VisualLayer(EnvRenderer envRenderer) {
+        super(envRenderer.view.getViewport(), envRenderer);
         runnable = new Runnable() {
             @Override
             public void run() {

@@ -7,10 +7,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.kristoff.robomaster_simulator.view.Renderer;
+import com.kristoff.robomaster_simulator.view.EnvRenderer;
 
 public class Map {
-    Renderer renderer;
+    EnvRenderer envRenderer;
     private final float scale = 1f/1000f;
 
     private TiledMap map;
@@ -70,8 +70,8 @@ public class Map {
 
     public void render(){
         try{
-            if(this.renderer != null){
-                orthogonalTiledMapRenderer.setView(renderer.view.getOrthographicCamera());
+            if(this.envRenderer != null){
+                orthogonalTiledMapRenderer.setView(envRenderer.view.getOrthographicCamera());
                 orthogonalTiledMapRenderer.render();
             }
 

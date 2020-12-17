@@ -46,6 +46,30 @@ public class MatrixSimulator extends Simulator {
         runnable.run();
     }
 
+    public enum MatrixPointStatus {
+        Empty,
+        StaticObject,
+        TeamRed,
+        TeamBlue
+    }
+
+    public static boolean isPointNotEmpty(int x, int y){
+        if(Systems.matrixSimulator.pointMatrix[x][y] == MatrixPointStatus.Empty || Systems.matrixSimulator.pointMatrix[x][y] == null){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public static RoboMasterPoint getPoint(int x, int y){
+        return new RoboMasterPoint(x,y,Systems.matrixSimulator.pointMatrix[x][y]);
+    }
+
+    public MatrixPointStatus[][] getMatrix() {
+        return pointMatrix;
+    }
+
     private void addInnerBoundary(){
         addRectangle(204,204,8080,4480);
     }
@@ -78,25 +102,5 @@ public class MatrixSimulator extends Simulator {
                 }
             }
         }
-    }
-
-    public enum MatrixPointStatus {
-        Empty,
-        StaticObject,
-        TeamRed,
-        TeamBlue
-    }
-
-    public static boolean isPointNotEmpty(int x, int y){
-        if(Systems.matrixSimulator.pointMatrix[x][y] == MatrixPointStatus.Empty || Systems.matrixSimulator.pointMatrix[x][y] == null){
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-
-    public static RoboMasterPoint getPoint(int x, int y){
-        return new RoboMasterPoint(x,y,Systems.matrixSimulator.pointMatrix[x][y]);
     }
 }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.kristoff.robomaster_simulator.core.environment.Environment;
+import com.kristoff.robomaster_simulator.envs.environment.Environment;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.view.io.GlobalInputEventHandler;
 import com.kristoff.robomaster_simulator.systems.maps.Map;
@@ -14,7 +14,7 @@ import com.kristoff.robomaster_simulator.view.layers.*;
 import com.kristoff.robomaster_simulator.view.base.Assets;
 
 
-public class Renderer implements Screen {
+public class EnvRenderer implements Screen {
     Environment environment;
     Assets assets = new Assets();
 
@@ -35,7 +35,7 @@ public class Renderer implements Screen {
 
     public FrameRate frameRate;
 
-    public Renderer(final Environment environment){
+    public EnvRenderer(final Environment environment){
         this.environment = environment;
         this.matrixSimulator = Systems.matrixSimulator;
 

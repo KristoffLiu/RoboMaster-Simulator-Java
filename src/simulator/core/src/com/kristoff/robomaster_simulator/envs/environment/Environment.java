@@ -1,10 +1,10 @@
-package com.kristoff.robomaster_simulator.core.environment;
+package com.kristoff.robomaster_simulator.envs.environment;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.view.Renderer;
+import com.kristoff.robomaster_simulator.view.EnvRenderer;
 
 public class Environment extends Game {
 
@@ -16,7 +16,7 @@ public class Environment extends Game {
 	public static EnvironmentConfiguration config = new EnvironmentConfiguration();
 
 	public Systems systems;
-	public Renderer renderer;
+	public EnvRenderer envRenderer;
 
 	boolean isLoaded = false;
 
@@ -26,20 +26,6 @@ public class Environment extends Game {
 
 	public Environment(EnvironmentConfiguration config){
 		this.config = config;
-		switch (this.config.mode){
-			case debug:
-				this.debug();
-				break;
-			case individual:
-				break;
-			case rllib:
-				break;
-			case ros_realmachinedebugging:
-				//this.
-				break;
-			default:
-				break;
-		}
 	}
 
 	/**
@@ -48,8 +34,8 @@ public class Environment extends Game {
 	@Override
 	public void create() {
 		systems = new Systems();
-		renderer = new Renderer(this);
-		setScreen(renderer);
+		envRenderer = new EnvRenderer(this);
+		setScreen(envRenderer);
 
 		isLoaded = true;
 		Systems.start();
@@ -68,9 +54,9 @@ public class Environment extends Game {
 		super.dispose();
 
 		// When the game finished, dispose everything
-		if (renderer != null) {
-			renderer.dispose();
-			renderer = null;
+		if (envRenderer != null) {
+			envRenderer.dispose();
+			envRenderer = null;
 		}
 	}
 

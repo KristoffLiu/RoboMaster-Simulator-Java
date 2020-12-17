@@ -183,7 +183,6 @@ public abstract class RoboMaster {
             if (directionAngle > 2 * Math.PI) {
                 directionAngle = (float) (directionAngle % (2 * Math.PI));
             }
-            Gdx.app.log("", String.valueOf(directionAngle));
             this.drive(VectorHelper.getVector(friction, directionAngle),
                     VectorHelper.getVector(friction, directionAngle),
                     VectorHelper.getVector(friction, directionAngle),
@@ -205,7 +204,6 @@ public abstract class RoboMaster {
             if (directionAngle > 2 * Math.PI) {
                 directionAngle = (float) (directionAngle % (2 * Math.PI));
             }
-            Gdx.app.log("", String.valueOf(directionAngle));
             this.mainBody.body.setLinearVelocity(new Vector2());
         }
     }

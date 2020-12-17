@@ -4,9 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
-import com.kristoff.robomaster_simulator.view.Renderer;
+import com.kristoff.robomaster_simulator.view.EnvRenderer;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
 
@@ -21,7 +20,7 @@ public class LidarPointCloudLayer extends VisualLayer {
 
     //ShapeRenderer circleRenderer;
     public Array<RoboMasterPoint> lidarPointCloudPointsArray;
-    public LidarPointCloudLayer(Renderer env) {
+    public LidarPointCloudLayer(EnvRenderer env) {
         super(env);
         shapeRenderer = new ShapeRenderer();
         shapeRenderer2 = new ShapeRenderer();
