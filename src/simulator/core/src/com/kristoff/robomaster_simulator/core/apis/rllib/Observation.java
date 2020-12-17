@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.apis.rllib;
+package com.kristoff.robomaster_simulator.core.apis.rllib;
 
 public class Observation {
 

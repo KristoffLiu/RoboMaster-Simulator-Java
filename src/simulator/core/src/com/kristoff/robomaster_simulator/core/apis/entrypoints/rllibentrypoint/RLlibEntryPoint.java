@@ -1,6 +1,6 @@
-package com.kristoff.robomaster_simulator.apis.entrypoints.rllibentrypoint;
+package com.kristoff.robomaster_simulator.core.apis.entrypoints.rllibentrypoint;
 
-import com.kristoff.robomaster_simulator.apis.rllib.RLlibEnvironment;
+import com.kristoff.robomaster_simulator.core.apis.rllib.RLlibEnvironment;
 import py4j.GatewayServer;
 
 public class RLlibEntryPoint {

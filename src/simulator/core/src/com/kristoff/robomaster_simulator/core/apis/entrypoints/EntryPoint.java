@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.apis.entrypoints;
+package com.kristoff.robomaster_simulator.core.apis.entrypoints;
 
 public class EntryPoint {
     

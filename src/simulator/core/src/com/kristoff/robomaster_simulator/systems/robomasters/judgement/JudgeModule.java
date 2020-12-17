@@ -1,6 +1,6 @@
 package com.kristoff.robomaster_simulator.systems.robomasters.judgement;
 
-import com.kristoff.robomaster_simulator.environment.BackendThread;
+import com.kristoff.robomaster_simulator.utils.BackendThread;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 
 public class JudgeModule extends BackendThread {

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.kristoff.robomaster_simulator.environment.Environment;
+import com.kristoff.robomaster_simulator.core.environment.Environment;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.view.io.GlobalInputEventHandler;
 import com.kristoff.robomaster_simulator.systems.maps.Map;
@@ -39,10 +39,8 @@ public class Renderer implements Screen {
         this.environment = environment;
         this.matrixSimulator = Systems.matrixSimulator;
 
-
         view = new View(width, height);
         map = Systems.map;
-
 
         floorLayer = new FloorLayer(this);
         floorLayer.addListener(new GlobalInputEventHandler(this));

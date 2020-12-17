@@ -1,6 +1,6 @@
-package com.kristoff.robomaster_simulator.apis.rllib;
+package com.kristoff.robomaster_simulator.core.apis.rllib;
 
-import com.kristoff.robomaster_simulator.environment.Environment;
+import com.kristoff.robomaster_simulator.core.environment.Environment;
 
 public class RLlibEnvironment implements RLlibEnvironmentInterface{
     Environment environment;

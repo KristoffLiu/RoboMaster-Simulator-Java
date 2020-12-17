@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.environment;
+package com.kristoff.robomaster_simulator.utils;
 
 public class BackendThread extends Thread {
     protected float delta = 1/60f;

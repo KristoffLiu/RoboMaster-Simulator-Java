@@ -2,11 +2,10 @@ package com.kristoff.robomaster_simulator.systems.robomasters.modules;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.kristoff.robomaster_simulator.environment.BackendThread;
+import com.kristoff.robomaster_simulator.utils.BackendThread;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
 
 public class Observation extends BackendThread {

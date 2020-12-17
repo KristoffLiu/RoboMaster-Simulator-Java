@@ -1,21 +1,18 @@
-package com.kristoff.robomaster_simulator.environment;
+package com.kristoff.robomaster_simulator.core.environment;
+
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public class EnvironmentConfiguration {
+    public EnvironmentMode mode                 = EnvironmentMode.debug;
+    LwjglApplicationConfiguration rendererConfig = new LwjglApplicationConfiguration();
 
-    public float physicalWorldStep = 1 / 60f;
+    public boolean isRendering                  = true;
+    public float physicalWorldStep              = 1 / 60f;
+    public int renderedFrameRate                = 120;
 
-    public boolean isRendering = true;
-    public int renderedFrameRate = 120;
-    public EnvironmentMode mode = EnvironmentMode.debug;
+    public int width                            = 1920;
+    public int height                           = 1080;
+    public float scaleFactor                    = 0.6f;
 
-    public int width = 1920;
-    public int height = 1080;
-    public float scaleFactor = 0.6f;
 
-    public enum EnvironmentMode{
-        debug,
-        individual,
-        rllib,
-        ros_realmachinedebugging
-    }
 }
