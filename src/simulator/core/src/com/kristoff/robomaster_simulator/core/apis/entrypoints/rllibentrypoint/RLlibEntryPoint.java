@@ -11,4 +11,8 @@ public class RLlibEntryPoint {
         gatewayServer.start();
         System.out.println("Gateway Server Started");
     }
+
+    public RLlibEnvironment getEnv(){
+        return env;
+    }
 }
