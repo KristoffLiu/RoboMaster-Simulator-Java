@@ -21,4 +21,5 @@ public class Property {
 
     public boolean movable = true;
     public boolean shootable = true;
+    public boolean isAlive = false;
 }
