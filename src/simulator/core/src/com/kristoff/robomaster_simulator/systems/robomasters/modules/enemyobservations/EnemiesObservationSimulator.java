@@ -36,7 +36,7 @@ public class EnemiesObservationSimulator extends BackendThread {
         this.thisRoboMaster = roboMaster;
         mode = Mode.self_observation;
         isStep = true;
-        delta = 1f;
+        delta = 1/60f;
         for(int i=0; i<8490; i++){
             for(int j=0; j<4890; j++){
                 emptyMatrix[i][j] = 0;
@@ -57,7 +57,7 @@ public class EnemiesObservationSimulator extends BackendThread {
     public void step(){
         switch (mode){
             case self_observation -> {
-                safeZone.clear();
+                CopyOnWriteArrayList<Position> arrayList = new CopyOnWriteArrayList<>();
                 for(int i=0; i<8490; i++){
                     for(int j=0; j<4890; j++){
                         eoMatrix[i][j] = 0;
@@ -68,10 +68,11 @@ public class EnemiesObservationSimulator extends BackendThread {
                 for(int i=0; i<8490; i+=20){
                     for(int j=0; j<4890; j+=20){
                         if(RoboMasters.teamBlue.get(0).enemiesObservationSimulator.eoMatrix[i][j] != 0) {
-                            safeZone.add(new Position(i,j));
+                            arrayList.add(new Position(i,j));
                         }
                     }
                 }
+                safeZone = arrayList;
             }
             case global_observation -> {
                 if(thisRoboMaster.team == RoboMasters.teamBlue)

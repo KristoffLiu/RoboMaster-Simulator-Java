@@ -16,6 +16,7 @@ public class RosRMEntryPoint extends EntryPoint {
         config = new EnvironmentConfiguration();
         config.mode = EnvironmentMode.rosrm;
         env = new RosRMEnv(config);
+        env.launch();
     }
 
     public static void main(String[] args) {

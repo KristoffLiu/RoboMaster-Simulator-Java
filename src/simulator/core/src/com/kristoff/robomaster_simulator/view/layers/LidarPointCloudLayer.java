@@ -15,6 +15,7 @@ import java.awt.*;
 public class LidarPointCloudLayer extends VisualLayer {
     ShapeRenderer shapeRenderer;
     ShapeRenderer shapeRenderer2;
+    ShapeRenderer shapeRenderer3;
 
     Runnable renderLidarPoints;
 
@@ -25,6 +26,7 @@ public class LidarPointCloudLayer extends VisualLayer {
         super(env);
         shapeRenderer = new ShapeRenderer();
         shapeRenderer2 = new ShapeRenderer();
+        shapeRenderer3 = new ShapeRenderer();
         //circleRenderer = new ShapeRenderer();
 
         lidarPointCloudPointsArray = Systems.roboMasters.teamBlue.get(0).lidarObservation.other;
@@ -156,17 +158,19 @@ public class LidarPointCloudLayer extends VisualLayer {
 
 
 
-        shapeRenderer.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
-        shapeRenderer.setAutoShapeType(true);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer3.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
+        shapeRenderer3.setAutoShapeType(true);
+        shapeRenderer3.begin(ShapeRenderer.ShapeType.Filled);
         for(Position position : RoboMasters.teamBlue.get(0).enemiesObservationSimulator.getSafeZone()){
-            shapeRenderer.setColor(1.0f,0f,0f,1.0f);
-            shapeRenderer.circle(
-                    position.x / 1000f,
-                    position.y / 1000f,
+            int x = position.x;
+            int y = position.y;
+            shapeRenderer3.setColor(1.0f,0f,0f,1.0f);
+            shapeRenderer3.circle(
+                    x / 1000f,
+                    y / 1000f,
                     0.04f,10);
         }
-        shapeRenderer.end();
+        shapeRenderer3.end();
     }
 
     float timestate = 0;
