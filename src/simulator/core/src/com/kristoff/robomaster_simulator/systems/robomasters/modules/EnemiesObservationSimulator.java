@@ -6,11 +6,11 @@ import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasterList;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.utils.BackendThread;
 
-public class EnemyObservationsSimulator extends BackendThread {
+public class EnemiesObservationSimulator extends BackendThread {
     RoboMaster thisRoboMaster;
     Mode mode;
 
-    public EnemyObservationsSimulator(RoboMaster roboMaster){
+    public EnemiesObservationSimulator(RoboMaster roboMaster){
         this.thisRoboMaster = roboMaster;
         mode = Mode.global_observation;
         isStep = true;
