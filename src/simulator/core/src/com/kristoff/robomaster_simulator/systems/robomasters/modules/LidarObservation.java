@@ -15,10 +15,29 @@ public class LidarObservation extends BackendThread {
     public Array<RoboMasterPoint> other;
     public MatrixSimulator.MatrixPointStatus[][] other_array;
 
+    MatrixSimulator.MatrixPointStatus pointStatus;
+
     public LidarObservation(RoboMaster roboMaster){
+        this.thisRoboMaster = roboMaster;
         mode = RoboMasters.lidarMode;
         isStep = true;
         delta = 1/60f;
+
+        switch (thisRoboMaster.No){
+            case 0 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Blue1;
+            }
+            case 1 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Blue2;
+            }
+            case 2 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Red1;
+            }
+            case 3 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Red2;
+            }
+        }
+
         switch (mode){
             case list -> {
                 other = new Array<>();
@@ -74,13 +93,13 @@ public class LidarObservation extends BackendThread {
             if(degree == 0 || degree == 180){
                 for(y = 0;y <4800; y++){
                     if(degree == 0){
-                        if(isPointNotEmpty(centre_x, centre_y + y)){
+                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x, centre_y + y,pointStatus)){
                             pointsArray.add(getPointFromMatrix(centre_x, centre_y + y));
                             break;
                         }
                     }
                     else {
-                        if(isPointNotEmpty(centre_x, centre_y - y)){
+                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x, centre_y - y,pointStatus)){
                             pointsArray.add(getPointFromMatrix(centre_x, centre_y - y));
                             break;
                         }
@@ -90,13 +109,13 @@ public class LidarObservation extends BackendThread {
             else if(degree == 90 || degree == 270){
                 for(x = 0;x <8400; x++){
                     if(degree == 90){
-                        if(isPointNotEmpty(centre_x + x, centre_y)){
+                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x + x, centre_y,pointStatus)){
                             pointsArray.add(getPointFromMatrix(centre_x + x, centre_y));
                             break;
                         }
                     }
                     else {
-                        if(isPointNotEmpty(centre_x - x, centre_y)){
+                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x - x, centre_y,pointStatus)){
                             pointsArray.add(getPointFromMatrix(centre_x - x, centre_y));
                             break;
                         }
@@ -118,7 +137,7 @@ public class LidarObservation extends BackendThread {
                     else{
                         offset_x = - offset_x;
                     }
-                    if(isPointNotEmpty(centre_x + offset_x, centre_y + offset_y)){
+                    if(Systems.matrixSimulator.isPointNotEmpty(centre_x + offset_x, centre_y + offset_y,pointStatus)){
                         pointsArray.add(getPointFromMatrix(centre_x + offset_x, centre_y + offset_y));
                         break;
                     }
@@ -138,7 +157,7 @@ public class LidarObservation extends BackendThread {
                     else if(degree <= 315){
                         offset_x = - offset_x;
                     }
-                    if(isPointNotEmpty(centre_x + offset_x, centre_y + offset_y)){
+                    if(Systems.matrixSimulator.isPointNotEmpty(centre_x + offset_x, centre_y + offset_y,pointStatus)){
                         pointsArray.add(getPointFromMatrix(centre_x + offset_x, centre_y + offset_y));
                         break;
                     }
@@ -239,7 +258,7 @@ public class LidarObservation extends BackendThread {
         for(float degree = 0;degree < 360; degree += precisionOfDegree){
             float radian = degree * MathUtils.degreesToRadians;
             if(degree == 0 || degree == 180){
-                for(y = 0;y <4800; y++){
+                for(y = 0;y <4800; y+=10){
                     if(degree == 0){
                         pointsArray[centre_x][centre_y + y] = Systems.matrixSimulator.getPoint(centre_x, centre_y + y);
                         if(isPointNotEmpty(centre_x, centre_y + y)){
@@ -258,7 +277,7 @@ public class LidarObservation extends BackendThread {
                 }
             }
             else if(degree == 90 || degree == 270){
-                for(x = 0;x <8400; x++){
+                for(x = 0;x <8400; x+=10){
                     if(degree == 90){
                         pointsArray[centre_x + x][centre_y] = Systems.matrixSimulator.getPoint(centre_x + x, centre_y);
                         if(isPointNotEmpty(centre_x + x, centre_y)){
@@ -276,7 +295,7 @@ public class LidarObservation extends BackendThread {
                 }
             }
             else if(degree > 315 || degree < 45 || (degree > 135 && degree < 225)){
-                for(y = 0;y <4800; y++){
+                for(y = 0;y <4800; y+=10){
                     int offset_x = (int) (Math.tan(radian) * y);
                     int offset_y = y;
                     if(degree > 135 && degree < 180){
@@ -298,7 +317,7 @@ public class LidarObservation extends BackendThread {
                 }
             }
             else{
-                for(x = 0;x <8400; x++){
+                for(x = 0;x <8400; x+=10){
                     int offset_x = x;
                     int offset_y = (int) (x / Math.tan(radian));
                     if(degree <= 135){

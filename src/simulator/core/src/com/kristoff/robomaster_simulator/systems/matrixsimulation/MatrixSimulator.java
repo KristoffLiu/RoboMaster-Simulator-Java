@@ -50,12 +50,25 @@ public class MatrixSimulator extends Simulator {
     public enum MatrixPointStatus {
         Empty,
         StaticObject,
-        TeamRed,
-        TeamBlue
+        Blue1,
+        Blue2,
+        Red1,
+        Red2
     }
 
     public static boolean isPointNotEmpty(int x, int y){
         if(Systems.matrixSimulator.pointMatrix[x][y] == MatrixPointStatus.Empty || Systems.matrixSimulator.pointMatrix[x][y] == null){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public boolean isPointNotEmpty(int x, int y, MatrixPointStatus pointStatus){
+        if(this.pointMatrix[x][y] == MatrixPointStatus.Empty
+                || this.pointMatrix[x][y] == null
+                || this.pointMatrix[x][y] == pointStatus){
             return false;
         }
         else {

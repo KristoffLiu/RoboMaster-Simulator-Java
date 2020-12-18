@@ -15,6 +15,7 @@ public class Matrix {
 
     public Array<RoboMasterPoint> current;
     public Array<RoboMasterPoint> previous;
+    MatrixSimulator.MatrixPointStatus pointStatus;
 
     Runnable runnable;
 
@@ -23,32 +24,38 @@ public class Matrix {
         current = new Array<>();
         previous = new Array<>();
 
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if(thisRoboMaster != Systems.roboMasters.teamBlue.get(0)){
-                    previous = current;
-                    current = new Array<>();
-                    double angle = thisRoboMaster.mainBody.body.getTransform().getRotation();
-                    if(angle > 2*PI){
-                        angle = angle % (2*PI);
-                    }
-                    updateMatrix(
-                            angle,
-                            new Vector2(
-                                    thisRoboMaster.getPosition().x * 1000,
-                                    thisRoboMaster.getPosition().y * 1000),
-                            (int) (thisRoboMaster.property.width * 1000),
-                            (int) (thisRoboMaster.property.height * 1000),
-                            current
-                    );
-                }
+        switch (thisRoboMaster.No){
+            case 0 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Blue1;
             }
-        };
+            case 1 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Blue2;
+            }
+            case 2 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Red1;
+            }
+            case 3 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Red2;
+            }
+        }
     }
 
     public void step(){
-        runnable.run();
+        previous = current;
+        current = new Array<>();
+        double angle = thisRoboMaster.mainBody.body.getTransform().getRotation();
+        if(angle > 2*PI){
+            angle = angle % (2*PI);
+        }
+        updateMatrix(
+                angle,
+                new Vector2(
+                        thisRoboMaster.getPosition().x * 1000,
+                        thisRoboMaster.getPosition().y * 1000),
+                (int) (thisRoboMaster.property.width * 1000),
+                (int) (thisRoboMaster.property.height * 1000),
+                current
+        );
     }
 
     private void updateMatrix(double angle, Vector2 center, int width, int height, Array<RoboMasterPoint> matrix){
@@ -56,11 +63,11 @@ public class Matrix {
         Vector2 b = getVertex(angle, new Vector2(center.x + width/2,center.y + height/2), center);
         Vector2 c = getVertex(angle, new Vector2(center.x - width/2,center.y - height/2), center);
         Vector2 d = getVertex(angle, new Vector2(center.x + width/2,center.y - height/2), center);
-//        addLineByTwoPoint(a, b, matrix);
-//        addLineByTwoPoint(b, d, matrix);
-//        addLineByTwoPoint(c, d, matrix);
-//        addLineByTwoPoint(c, a, matrix);
-        addPlaneByFourPoints(a, c, b, d, matrix);
+        addLineByTwoPoint(a, b, matrix);
+        addLineByTwoPoint(b, d, matrix);
+        addLineByTwoPoint(c, d, matrix);
+        addLineByTwoPoint(c, a, matrix);
+        //addPlaneByFourPoints(a, c, b, d, matrix);
     }
 
     private Vector2 getVertex(double rotatedAngle, Vector2 orginalPosition, Vector2 centre_p){
@@ -72,10 +79,6 @@ public class Matrix {
 
     private void addLineByTwoPoint(Vector2 a, Vector2 b, Array<RoboMasterPoint> matrix){
         float gradient = (a.y - b.y)/(a.x - b.x);
-        MatrixSimulator.MatrixPointStatus pointStatus = MatrixSimulator.MatrixPointStatus.TeamBlue;
-        if(thisRoboMaster.team == Systems.roboMasters.teamRed){
-            pointStatus = MatrixSimulator.MatrixPointStatus.TeamRed;
-        }
         if( Math.abs(a.x - b.x) >= Math.abs(a.y - b.y)){
             if(a.x < b.x){
                 for(int i = 0 ; i < b.x - a.x; i++ ){
@@ -107,21 +110,21 @@ public class Matrix {
         float leftGradient = (leftUp.y - leftDown.y)/(leftUp.x - leftDown.x);
         float rightGradient = (rightUp.y - rightDown.y)/(rightUp.x - rightDown.x);
         if(leftUp.y - leftDown.y < rightUp.y - rightDown.y){
-            for(i = 0; i <= leftUp.y - leftDown.y; i++){
+            for(int i = 0; i <= leftUp.y - leftDown.y; i++){
                 addLineByTwoPoint(new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), matrix);
             }
-            for(i = 0; i <= rightUp.y - rightDown.y - leftUp.y + leftDown.y; i++){
+            for(int i = 0; i <= rightUp.y - rightDown.y - leftUp.y + leftDown.y; i++){
                 addLineByTwoPoint(leftUp, new Vector2(rightUp.x + i * rightGradient, rightUp.y + i), matrix);
             }
         }else if(leftUp.y - leftDown.y > rightUp.y - rightDown.y){
-            for(i = 0; i <= rightUp.y - rightDown.y; i++){
+            for(int i = 0; i <= rightUp.y - rightDown.y; i++){
                 addLineByTwoPoint(new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), matrix);
             }
-            for(i = 0; i <= leftUp.y - ledtDown.y - rightUp.y + rightDown.y; i++){
+            for(int i = 0; i <= leftUp.y - leftDown.y - rightUp.y + rightDown.y; i++){
                 addLineByTwoPoint(rightUp, new Vector2(leftUp.x + i * leftGradient, leftUp.y + i), matrix);
             }
         }else{
-            for(i = 0; i <= leftUp.y - leftDown.y; i++){
+            for(int i = 0; i <= leftUp.y - leftDown.y; i++){
                 addLineByTwoPoint(new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), matrix);
             }
         }

@@ -7,10 +7,11 @@ import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasterList;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
 
 public class AlexanderMasterII extends RoboMaster {
-    public AlexanderMasterII(RoboMasterList roboMasterList){
+    public AlexanderMasterII(RoboMasterList roboMasterList, String name){
         super(new TextureRegion(
                         new Texture("RoboMasters/AlexanderMaster.png")),
-                roboMasterList);
+                        roboMasterList,
+                        name);
     }
 //    private double weight = 17.1;           //Kg
 //    private int max_forward_speed = 3;      //m/s

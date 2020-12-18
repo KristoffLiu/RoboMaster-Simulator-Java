@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
 import com.kristoff.robomaster_simulator.systems.robomasters.judgement.JudgeModule;
 import com.kristoff.robomaster_simulator.systems.robomasters.modules.*;
 import com.kristoff.robomaster_simulator.systems.robomasters.modules.Matrix;
@@ -32,16 +33,41 @@ public abstract class RoboMaster {
     public MainBody                         mainBody;                       //主体的2d物理建模
     public Weapon                           weapon;                         //武器 Weapon
     public RMActor                          renderer;                       //渲染器
-    public Matrix matrix;                         //点阵发生器
-    public LidarObservation lidarObservation;                    //激光雷达Lidar发生器
+    public Matrix                           matrix;                         //点阵发生器
+    public LidarObservation                 lidarObservation;               //激光雷达Lidar发生器
     public Dynamics                         dynamics;                       //动力系统
     public JudgeModule                      judgeModule;                    //裁判系统
-    public EnemiesObservationSimulator enemiesObservationSimulator;    //敌军视野模拟
+    public EnemiesObservationSimulator      enemiesObservationSimulator;    //敌军视野模拟
+
+    public String name;
+    public int No;
+    public MatrixSimulator.MatrixPointStatus pointStatus;
 
 
-    public RoboMaster(TextureRegion textureRegion, RoboMasterList roboMasterList) {
+    public RoboMaster(TextureRegion textureRegion, RoboMasterList roboMasterList, String name) {
         this.team = roboMasterList;
         this.team.add(this);
+        this.name = name;
+        if(this.team == RoboMasters.teamBlue){
+            No = RoboMasters.teamBlue.size();
+        }
+        else {
+            No = 2 + RoboMasters.teamRed.size();
+        }
+        switch (this.No){
+            case 0 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Blue1;
+            }
+            case 1 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Blue2;
+            }
+            case 2 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Red1;
+            }
+            case 3 -> {
+                pointStatus = MatrixSimulator.MatrixPointStatus.Red2;
+            }
+        }
 
         property = new Property();
         mainBody = new MainBody(this);
@@ -51,6 +77,7 @@ public abstract class RoboMaster {
         lidarObservation = new LidarObservation(this);
         judgeModule = new JudgeModule(this);
         enemiesObservationSimulator = new EnemiesObservationSimulator(this);
+
         shapeRenderer = new ShapeRenderer();
     }
 
