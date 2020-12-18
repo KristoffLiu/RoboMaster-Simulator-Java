@@ -25,7 +25,7 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer2 = new ShapeRenderer();
         //circleRenderer = new ShapeRenderer();
 
-        lidarPointCloudPointsArray = Systems.roboMasters.teamBlue.get(0).observation.other;
+        lidarPointCloudPointsArray = Systems.roboMasters.teamBlue.get(0).lidarObservation.other;
 
         renderLidarPoints = new Runnable() {
             @Override
@@ -118,6 +118,6 @@ public class LidarPointCloudLayer extends VisualLayer {
     }
 
     public Array<RoboMasterPoint> getLidarPointCloudPointsArray(){
-        return Systems.roboMasters.teamBlue.get(0).observation.other;
+        return Systems.roboMasters.teamBlue.get(0).lidarObservation.other;
     }
 }
