@@ -42,6 +42,9 @@ public class JudgeModule extends BackendThread {
 
     @Override
     public void step(){
+        if (this.health <= 0){
+            this.isDead = true;
+        }
 
     }
 
@@ -52,8 +55,8 @@ public class JudgeModule extends BackendThread {
 
 
 
-    public void bulletHitDamage(String casename){
-        switch (casename) {
+    public void bulletHitDamage(String caseName){
+        switch (caseName) {
             case "front" -> healthChange(-20);
             case "right", "left" -> healthChange(-40);
             case "back" -> healthChange(-60);
