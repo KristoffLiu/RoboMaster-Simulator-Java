@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.kristoff.robomaster_simulator.systems.robomasters.judgement.JudgeModule;
 import com.kristoff.robomaster_simulator.systems.robomasters.modules.Dynamics;
 import com.kristoff.robomaster_simulator.systems.robomasters.modules.Property;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.RoboMasterRenderer;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.RMActor;
 import com.kristoff.robomaster_simulator.systems.robomasters.modules.MainBody;
 import com.kristoff.robomaster_simulator.systems.robomasters.modules.Observation;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPointMatrix;
@@ -36,7 +36,7 @@ public abstract class RoboMaster {
     public Property property;               //基本属性 Basic Property
     public MainBody mainBody;               //主体的2d物理建模
     public Weapon weapon;                   //武器 Weapon
-    public RoboMasterRenderer renderer;     //渲染器
+    public RMActor renderer;     //渲染器
     public RoboMasterPointMatrix matrix;    //点阵发生器
     public Observation observation;         //激光雷达Lidar发生器
     public Dynamics dynamics;               //动力系统
@@ -49,7 +49,7 @@ public abstract class RoboMaster {
 
         property = new Property();
         mainBody = new MainBody(this);
-        renderer = new RoboMasterRenderer(textureRegion,this);
+        renderer = new RMActor(textureRegion,this);
         weapon = new Weapon(this);
         matrix = new RoboMasterPointMatrix(this);
         observation = new Observation(this);

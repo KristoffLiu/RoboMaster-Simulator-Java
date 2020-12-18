@@ -5,10 +5,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.view.actors.MovingObject;
 
-public class RoboMasterRenderer extends MovingObject {
+public class RMActor extends MovingObject {
     RoboMaster thisRoboMaster;
 
-    public RoboMasterRenderer(TextureRegion textureRegion, RoboMaster roboMaster) {
+    public RMActor(TextureRegion textureRegion, RoboMaster roboMaster) {
         super(textureRegion);
         this.thisRoboMaster = roboMaster;
     }
