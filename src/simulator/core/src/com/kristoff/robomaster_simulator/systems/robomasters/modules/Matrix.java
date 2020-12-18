@@ -107,11 +107,7 @@ public class Matrix {
 
 
     private void addPlaneByFourPoints(Vector2 leftUp, Vector2 leftDown, Vector2 rightUp, Vector2 rightDown, Array<RoboMasterPoint> matrix){
-<<<<<<< Updated upstream
-        // for all four points
-=======
 //        for all four points
->>>>>>> Stashed changes
 //        float leftGradient = (leftUp.y - leftDown.y)/(leftUp.x - leftDown.x);
 //        float rightGradient = (rightUp.y - rightDown.y)/(rightUp.x - rightDown.x);
 //        if(leftUp.y - leftDown.y < rightUp.y - rightDown.y){
@@ -133,15 +129,6 @@ public class Matrix {
 //                addLineByTwoPoint(new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), matrix);
 //            }
 //        }
-<<<<<<< Updated upstream
-
-        //only for Rectangle
-        float gradient = (leftUp.y - leftDown.y)/(leftUp.x - leftDown.x);
-        for(int i = 0; i <= leftUp.x - rightUp.x; i++){
-            Vector2 upMovingPoint = new Vector2(leftUp.x + i, (int)(leftUp.y + i * gradient));
-            Vector2 downMovingPoint = new Vector2(leftDown.x + i, (int)(leftDown.y + i * gradient));
-            addLineByTwoPoint(upMovingPoint, downMovingPoint, matrix);
-=======
         //for Rectangle only
         if(leftUp.y == rightUp.y){
             for(int i = 0; i <= leftUp.x - rightUp.x; i++){
@@ -162,7 +149,6 @@ public class Matrix {
                 Vector2 downMovingPoint = new Vector2(leftDown.x + i, (int)(leftDown.y + i * gradient));
                 addLineByTwoPoint(upMovingPoint, downMovingPoint, matrix);
             }
->>>>>>> Stashed changes
         }
 
     }
