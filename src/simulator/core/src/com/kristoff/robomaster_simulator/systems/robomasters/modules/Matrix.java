@@ -131,7 +131,7 @@ public class Matrix {
 //        }
         //for Rectangle only
         if(leftUp.y == rightUp.y){
-            for(int i = 0; i <= leftUp.x - rightUp.x; i++){
+            for(int i = 0; i <= rightUp.x - leftUp.x; i++){
                 Vector2 upMovingPoint = new Vector2(leftUp.x + i, leftUp.y);
                 Vector2 downMovingPoint = new Vector2(leftDown.x + i, leftDown.y);
                 addLineByTwoPoint(upMovingPoint, downMovingPoint, matrix);
@@ -144,7 +144,7 @@ public class Matrix {
             }
         }else{
             float gradient = (leftUp.y - rightUp.y)/(leftUp.x - rightUp.x);
-            for(int i = 0; i <= leftUp.x - rightUp.x; i++){
+            for(int i = 0; i <= rightUp.x - leftUp.x; i++){
                 Vector2 upMovingPoint = new Vector2(leftUp.x + i, (int)(leftUp.y + i * gradient));
                 Vector2 downMovingPoint = new Vector2(leftDown.x + i, (int)(leftDown.y + i * gradient));
                 addLineByTwoPoint(upMovingPoint, downMovingPoint, matrix);
