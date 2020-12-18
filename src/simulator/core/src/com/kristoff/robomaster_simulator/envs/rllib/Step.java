@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.envs.launchers.env.rllib;
+package com.kristoff.robomaster_simulator.envs.rllib;
 
 import com.badlogic.gdx.utils.Null;
 

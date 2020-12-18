@@ -3,8 +3,7 @@ package com.kristoff.robomaster_simulator.view.layers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.kristoff.robomaster_simulator.view.EnvRenderer;
-import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
+import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
 
 public class FloorLayer extends VisualLayer {
     EnvRenderer envRenderer;

@@ -1,8 +1,8 @@
-package com.kristoff.robomaster_simulator.envs.launchers;
+package com.kristoff.robomaster_simulator.launchers;
 
 import com.kristoff.robomaster_simulator.Launcher;
-import com.kristoff.robomaster_simulator.envs.environment.Environment;
-import com.kristoff.robomaster_simulator.envs.environment.EnvironmentConfiguration;
+import com.kristoff.robomaster_simulator.envs.Environment;
+import com.kristoff.robomaster_simulator.envs.EnvironmentConfiguration;
 
 public abstract class LauncherBase {
     public static LauncherBase current;
@@ -10,16 +10,16 @@ public abstract class LauncherBase {
     public EnvironmentConfiguration config;
 
     public LauncherBase(){
-
+        env = new Environment(new EnvironmentConfiguration());
     }
 
     public static void main (String[] arg) {
         current = new Launcher();
-        current.init();
+        current.launch();
     }
 
-    public void init(){
-        env = new Environment();
+    public void launch(){
+        env.launch();
     }
 
     public Environment getEnv(){

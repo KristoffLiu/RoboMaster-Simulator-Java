@@ -5,9 +5,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
-import com.kristoff.robomaster_simulator.view.EnvRenderer;
+import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.view.base.layers.VisualLayer;
 
 import java.awt.*;
 

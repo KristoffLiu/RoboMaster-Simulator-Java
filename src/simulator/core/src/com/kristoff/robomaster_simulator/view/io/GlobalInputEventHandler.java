@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.view.EnvRenderer;
+import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
 import com.kristoff.robomaster_simulator.view.View;
 
 /**

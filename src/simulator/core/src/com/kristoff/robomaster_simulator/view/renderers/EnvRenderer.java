@@ -1,17 +1,18 @@
-package com.kristoff.robomaster_simulator.view;
+package com.kristoff.robomaster_simulator.view.renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.kristoff.robomaster_simulator.envs.environment.Environment;
+import com.kristoff.robomaster_simulator.envs.Environment;
 import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.view.View;
 import com.kristoff.robomaster_simulator.view.io.GlobalInputEventHandler;
 import com.kristoff.robomaster_simulator.systems.maps.Map;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.view.layers.*;
-import com.kristoff.robomaster_simulator.view.base.Assets;
+import com.kristoff.robomaster_simulator.view.Assets;
 
 
 public class EnvRenderer implements Screen {

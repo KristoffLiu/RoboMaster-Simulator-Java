@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.envs.launchers.env.rllib;
+package com.kristoff.robomaster_simulator.envs.rllib;
 
 public interface RLlibEnvInterface {
     void seed();

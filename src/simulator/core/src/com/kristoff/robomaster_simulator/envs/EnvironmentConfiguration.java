@@ -1,10 +1,11 @@
-package com.kristoff.robomaster_simulator.envs.environment;
+package com.kristoff.robomaster_simulator.envs;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public class EnvironmentConfiguration {
-    LwjglApplicationConfiguration rendererConfig = new LwjglApplicationConfiguration();
+    public EnvironmentMode mode = EnvironmentMode.normal;
 
+    LwjglApplicationConfiguration rendererConfig = new LwjglApplicationConfiguration();
     public boolean isRendering                  = true;
     public float physicalWorldStep              = 1 / 60f;
     public int renderedFrameRate                = 120;

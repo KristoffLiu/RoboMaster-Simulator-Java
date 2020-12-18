@@ -1,7 +1,7 @@
-package com.kristoff.robomaster_simulator.view.base.layers;
+package com.kristoff.robomaster_simulator.view.layers;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.kristoff.robomaster_simulator.view.EnvRenderer;
+import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
 
 public class VisualLayer extends Layer {
 

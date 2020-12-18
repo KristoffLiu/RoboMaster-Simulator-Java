@@ -1,12 +1,11 @@
-package com.kristoff.robomaster_simulator.envs.launchers.env.rllib;
+package com.kristoff.robomaster_simulator.envs.rllib;
 
-import com.kristoff.robomaster_simulator.envs.environment.Environment;
+import com.kristoff.robomaster_simulator.envs.Environment;
+import com.kristoff.robomaster_simulator.envs.EnvironmentConfiguration;
 
 public class RLlibEnv extends Environment implements RLlibEnvInterface {
-    RLlibEnvSimulatorConfiguration config;
-
-    public RLlibEnv(){
-        super(EnvironmentMode.rllib);
+    public RLlibEnv(EnvironmentConfiguration config){
+        super(config);
     }
 
     @Override
