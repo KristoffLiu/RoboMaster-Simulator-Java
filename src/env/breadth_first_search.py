@@ -70,7 +70,7 @@ class BreadthFirstSearchPlanner:
             return str(self.x) + "," + str(self.y) + "," + str(
                 self.cost) + "," + str(self.parent_index)
 
-    def planning(self, sx, sy, gx, gy):
+    def planning(self, sx, sy):
         """
         Breadth First search based planning
         input:
@@ -85,8 +85,9 @@ class BreadthFirstSearchPlanner:
 
         nstart = self.Node(self.calc_xyindex(sx, self.minx),
                            self.calc_xyindex(sy, self.miny), 0.0, -1, None)
-        ngoal = self.Node(self.calc_xyindex(gx, self.minx),
-                          self.calc_xyindex(gy, self.miny), 0.0, -1, None)
+        ngoal = nstart
+        # ngoal = self.Node(self.calc_xyindex(gx, self.minx),
+        #                   self.calc_xyindex(gy, self.miny), 0.0, -1, None)
 
         open_set, closed_set = dict(), dict()
         open_set[self.calc_grid_index(nstart)] = nstart
@@ -114,10 +115,17 @@ class BreadthFirstSearchPlanner:
                 if len(closed_set.keys()) % 10 == 0:
                     plt.pause(0.001)
 
-            if current.x == ngoal.x and current.y == ngoal.y:
+            # if current.x == ngoal.x and current.y == ngoal.y:
+            #     print("Find goal")
+            #     ngoal.parent_index = current.parent_index
+            #     ngoal.cost = current.cost
+            #     break
+            if self.obmap[current.x][current.y] == 2:
                 print("Find goal")
                 ngoal.parent_index = current.parent_index
                 ngoal.cost = current.cost
+                ngoal.x = current.x
+                ngoal.y = current.y
                 break
 
             # expand_grid search grid based on motion model
@@ -135,7 +143,10 @@ class BreadthFirstSearchPlanner:
                     node.parent = current
                     open_set[n_id] = node
 
-        rx, ry = self.calc_final_path(ngoal, closed_set)
+        # rx, ry = self.calc_final_path(ngoal, closed_set)
+        # return rx, ry
+        rx, ry = [self.calc_grid_position(ngoal.x, self.minx)], [
+            self.calc_grid_position(ngoal.y, self.miny)]
         return rx, ry
 
     def calc_final_path(self, ngoal, closedset):
@@ -180,7 +191,7 @@ class BreadthFirstSearchPlanner:
             return False
 
         # collision check
-        if self.obmap[node.x][node.y]:
+        if self.obmap[node.x][node.y] == 1:
             return False
 
         return True
@@ -229,7 +240,7 @@ def calc_obstacle_map(ox, oy):
     print("y_width:", ywidth)
 
     # obstacle map generation
-    obmap = [[False for _ in range(ywidth)]
+    obmap = [[0 for _ in range(ywidth)]
                     for _ in range(xwidth)]
     for ix in range(xwidth):
         x = calc_grid_position(ix, minx)
@@ -238,7 +249,7 @@ def calc_obstacle_map(ox, oy):
             for iox, ioy in zip(ox, oy):
                 d = math.hypot(iox - x, ioy - y)
                 if d <= rr:
-                    obmap[ix][iy] = True
+                    obmap[ix][iy] = 1
                     break
 
 def main():
@@ -276,12 +287,18 @@ def main():
     calc_obstacle_map(ox, oy)
 
     bfs = BreadthFirstSearchPlanner(obmap, grid_size, robot_radius)
-    rx, ry = bfs.planning(sx, sy, gx, gy)
+    tx = bfs.calc_xyindex(gx, bfs.minx)
+    ty = bfs.calc_xyindex(gy, bfs.miny)
+    obmap[tx][ty] = 2
+    rx, ry = bfs.planning(sx, sy)
+    print("rx: ", rx)
+    print("ry: ", ry)
 
     if show_animation:  # pragma: no cover
         plt.plot(rx, ry, "-r")
         plt.pause(0.01)
         plt.show()
+    
 
 
 if __name__ == '__main__':
