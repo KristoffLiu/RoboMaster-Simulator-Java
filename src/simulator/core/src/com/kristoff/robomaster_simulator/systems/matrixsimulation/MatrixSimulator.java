@@ -71,7 +71,11 @@ public class MatrixSimulator extends Simulator {
     }
 
     private void addInnerBoundary(){
-        addRectangle(204,204,8080,4480);
+//        addRectangle(204,204,8080,4480);
+        addBlock(0, 0, 204, 4890);
+        addBlock(205, 0, 8080, 204);
+        addBlock(205, 4685, 8080, 205);
+        addBlock(8284, 0, 204, 4890);
     }
 
     private void addBlocks(){
@@ -80,7 +84,8 @@ public class MatrixSimulator extends Simulator {
             float y = textureMapObject.getY();
             float width = textureMapObject.getTextureRegion().getRegionWidth();
             float height = textureMapObject.getTextureRegion().getRegionHeight();;
-            addRectangle( x,  y,  width, height);
+//            addRectangle( x,  y,  width, height);
+            addBlock( x,  y,  width, height);
         }
     }
 
@@ -102,5 +107,17 @@ public class MatrixSimulator extends Simulator {
                 }
             }
         }
+    }
+
+    private void addBlock(float x, float y, float width, float height){
+        addBlock((int) x, (int) y, (int) width, (int) height);
+    }
+
+    private void addBlock(int x, int y, int width, int height){
+        for(int i=x;i<x+width-1;i++){
+            for(int j=y;j<y+height-1;j++){
+                staticObjectPointMatrix[i][j] = MatrixPointStatus.StaticObject;
+                }
+            }
     }
 }
