@@ -71,7 +71,11 @@ public class MatrixSimulator extends Simulator {
     }
 
     private void addInnerBoundary(){
-        addRectangle(204,204,8080,4480);
+//        addRectangle(204,204,8080,4480);
+        addBlock(0, 0, 204, 4890);
+        addBlock(205, 0, 8080, 204);
+        addBlock(205, 4685, 8080, 205);
+        addBlock(8284, 0, 204, 4890);
     }
 
     private void addBlocks(){
