@@ -104,26 +104,35 @@ public class Matrix {
 
 
     private void addPlaneByFourPoints(Vector2 leftUp, Vector2 leftDown, Vector2 rightUp, Vector2 rightDown, Array<RoboMasterPoint> matrix){
-        float leftGradient = (leftUp.y - leftDown.y)/(leftUp.x - leftDown.x);
-        float rightGradient = (rightUp.y - rightDown.y)/(rightUp.x - rightDown.x);
-        if(leftUp.y - leftDown.y < rightUp.y - rightDown.y){
-            for(i = 0; i <= leftUp.y - leftDown.y; i++){
-                addLineByTwoPoint(new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), matrix);
-            }
-            for(i = 0; i <= rightUp.y - rightDown.y - leftUp.y + leftDown.y; i++){
-                addLineByTwoPoint(leftUp, new Vector2(rightUp.x + i * rightGradient, rightUp.y + i), matrix);
-            }
-        }else if(leftUp.y - leftDown.y > rightUp.y - rightDown.y){
-            for(i = 0; i <= rightUp.y - rightDown.y; i++){
-                addLineByTwoPoint(new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), matrix);
-            }
-            for(i = 0; i <= leftUp.y - ledtDown.y - rightUp.y + rightDown.y; i++){
-                addLineByTwoPoint(rightUp, new Vector2(leftUp.x + i * leftGradient, leftUp.y + i), matrix);
-            }
-        }else{
-            for(i = 0; i <= leftUp.y - leftDown.y; i++){
-                addLineByTwoPoint(new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), matrix);
-            }
+        // for all four points
+//        float leftGradient = (leftUp.y - leftDown.y)/(leftUp.x - leftDown.x);
+//        float rightGradient = (rightUp.y - rightDown.y)/(rightUp.x - rightDown.x);
+//        if(leftUp.y - leftDown.y < rightUp.y - rightDown.y){
+//            for(int i = 0; i <= leftUp.y - leftDown.y; i++){
+//                addLineByTwoPoint(new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), matrix);
+//            }
+//            for(int i = 0; i <= rightUp.y - rightDown.y - leftUp.y + leftDown.y; i++){
+//                addLineByTwoPoint(leftUp, new Vector2(rightUp.x + i * rightGradient, rightUp.y + i), matrix);
+//            }
+//        }else if(leftUp.y - leftDown.y > rightUp.y - rightDown.y){
+//            for(int i = 0; i <= rightUp.y - rightDown.y; i++){
+//                addLineByTwoPoint(new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), matrix);
+//            }
+//            for(int i = 0; i <= leftUp.y - leftDown.y - rightUp.y + rightDown.y; i++){
+//                addLineByTwoPoint(rightUp, new Vector2(leftUp.x + i * leftGradient, leftUp.y + i), matrix);
+//            }
+//        }else{
+//            for(int i = 0; i <= leftUp.y - leftDown.y; i++){
+//                addLineByTwoPoint(new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), matrix);
+//            }
+//        }
+
+        //only for Rectangle
+        float gradient = (leftUp.y - leftDown.y)/(leftUp.x - leftDown.x);
+        for(int i = 0; i <= leftUp.x - rightUp.x; i++){
+            Vector2 upMovingPoint = new Vector2(leftUp.x + i, (int)(leftUp.y + i * gradient));
+            Vector2 downMovingPoint = new Vector2(leftDown.x + i, (int)(leftDown.y + i * gradient));
+            addLineByTwoPoint(upMovingPoint, downMovingPoint, matrix);
         }
     }
 }
