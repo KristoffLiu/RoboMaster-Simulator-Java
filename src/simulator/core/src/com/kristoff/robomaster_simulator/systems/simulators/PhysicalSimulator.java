@@ -140,7 +140,7 @@ public class PhysicalSimulator extends Simulator{
                 Systems.roboMasters.teamBlue.get(i).deploy(x,y,this.physicalWorld);
                 Systems.roboMasters.teamBlue.get(i).dynamics = new Dynamics(Systems.roboMasters.teamBlue.get(i));
                 Systems.roboMasters.teamBlue.get(i).dynamics.start();
-                Systems.roboMasters.teamBlue.get(i).observation.start();
+                Systems.roboMasters.teamBlue.get(i).lidarObservation.start();
                 i ++;
             }
         }
@@ -158,7 +158,7 @@ public class PhysicalSimulator extends Simulator{
                 Systems.roboMasters.teamRed.get(i).deploy(x,y,this.physicalWorld);
                 Systems.roboMasters.teamRed.get(i).dynamics = new Dynamics(Systems.roboMasters.teamRed.get(i));
                 Systems.roboMasters.teamRed.get(i).dynamics.start();
-                Systems.roboMasters.teamRed.get(i).observation.start();
+                Systems.roboMasters.teamRed.get(i).lidarObservation.start();
                 i ++;
             }
         }

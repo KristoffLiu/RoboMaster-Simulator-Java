@@ -33,7 +33,7 @@ public abstract class RoboMaster {
     public Weapon                           weapon;                         //武器 Weapon
     public RMActor                          renderer;                       //渲染器
     public Matrix matrix;                         //点阵发生器
-    public Observation                      observation;                    //激光雷达Lidar发生器
+    public LidarObservation lidarObservation;                    //激光雷达Lidar发生器
     public Dynamics                         dynamics;                       //动力系统
     public JudgeModule                      judgeModule;                    //裁判系统
     public EnemiesObservationSimulator enemiesObservationSimulator;    //敌军视野模拟
@@ -48,10 +48,9 @@ public abstract class RoboMaster {
         renderer = new RMActor(textureRegion,this);
         weapon = new Weapon(this);
         matrix = new Matrix(this);
-        observation = new Observation(this);
+        lidarObservation = new LidarObservation(this);
         judgeModule = new JudgeModule(this);
         enemiesObservationSimulator = new EnemiesObservationSimulator(this);
-
         shapeRenderer = new ShapeRenderer();
     }
 

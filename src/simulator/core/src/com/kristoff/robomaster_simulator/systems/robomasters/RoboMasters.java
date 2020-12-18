@@ -1,15 +1,16 @@
 package com.kristoff.robomaster_simulator.systems.robomasters;
 
 import com.badlogic.gdx.utils.Array;
-import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.LidarObservation;
 import com.kristoff.robomaster_simulator.systems.robomasters.types.AlexanderMasterII;
 
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class RoboMasters{
+    public static LidarObservation.LidarMode lidarMode = LidarObservation.LidarMode.both;
+
     public static RoboMasterList  all       = new RoboMasterList();
     public static RoboMasterList teamBlue   = new RoboMasterList();
     public static RoboMasterList teamRed    = new RoboMasterList();
@@ -104,7 +105,7 @@ public class RoboMasters{
 
     public void stepObservation(){
         for(RoboMaster roboMaster : all){
-            roboMaster.observation.step();
+            roboMaster.lidarObservation.step();
         }
         //teamBlue.get(0).observation.step();
     }

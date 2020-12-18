@@ -10,11 +10,27 @@ public class EnemiesObservationSimulator extends BackendThread {
     RoboMaster thisRoboMaster;
     Mode mode;
 
+    EnemyObservationMapPoint[][] eoMatrix;
+
     public EnemiesObservationSimulator(RoboMaster roboMaster){
         this.thisRoboMaster = roboMaster;
-        mode = Mode.global_observation;
+        mode = Mode.self_observation;
         isStep = true;
         delta = 1f;
+        switch (mode){
+            case self_observation -> {
+
+            }
+            case global_observation -> {
+                if(thisRoboMaster.team == RoboMasters.teamBlue)
+                {
+
+                }
+                else{
+
+                }
+            }
+        }
     }
 
     public enum Mode{

@@ -3,6 +3,7 @@ package com.kristoff.robomaster_simulator.systems.matrixsimulation;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.LidarObservation;
 import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.systems.simulators.Simulator;
 
@@ -62,8 +63,12 @@ public class MatrixSimulator extends Simulator {
         }
     }
 
-    public static RoboMasterPoint getPoint(int x, int y){
+    public static RoboMasterPoint getRoboMasterPoint(int x, int y){
         return new RoboMasterPoint(x,y,Systems.matrixSimulator.pointMatrix[x][y]);
+    }
+
+    public MatrixPointStatus getPoint(int x, int y){
+        return Systems.matrixSimulator.pointMatrix[x][y];
     }
 
     public MatrixPointStatus[][] getMatrix() {
