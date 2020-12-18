@@ -56,10 +56,13 @@ public class Matrix {
         Vector2 b = getVertex(angle, new Vector2(center.x + width/2,center.y + height/2), center);
         Vector2 c = getVertex(angle, new Vector2(center.x - width/2,center.y - height/2), center);
         Vector2 d = getVertex(angle, new Vector2(center.x + width/2,center.y - height/2), center);
+        //add lines only
 //        addLineByTwoPoint(a, b, matrix);
 //        addLineByTwoPoint(b, d, matrix);
 //        addLineByTwoPoint(c, d, matrix);
 //        addLineByTwoPoint(c, a, matrix);
+
+        //add the whole plane
         addPlaneByFourPoints(a, c, b, d, matrix);
     }
 
