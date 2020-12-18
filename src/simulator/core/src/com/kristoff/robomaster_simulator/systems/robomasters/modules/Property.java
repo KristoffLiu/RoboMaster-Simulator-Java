@@ -17,8 +17,11 @@ public class Property {
     public int numOfBulletsOwned;
     public int numOfBulletsLeft;
     int numOfBulletsShot;
+    public float cannonHeat;
+    public float bulletSpeed;
 
 
     public boolean movable = true;
     public boolean shootable = true;
+    public boolean isAlive = false;
 }
