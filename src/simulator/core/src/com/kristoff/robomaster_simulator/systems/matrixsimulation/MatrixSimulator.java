@@ -32,19 +32,20 @@ public class MatrixSimulator extends Simulator {
         runnable = new Runnable() {
             @Override
             public void run() {
-                for(RoboMasterPoint point : Systems.roboMasters.getPreviousPoints()){
-                    pointMatrix[point.x][point.y] = MatrixPointStatus.Empty;
-                }
-                Systems.roboMasters.stepMatrix();
-                for(RoboMasterPoint point : Systems.roboMasters.getCurrentPoints()){
-                    pointMatrix[point.x][point.y] = point.status;
-                }
+//                for(RoboMasterPoint point : Systems.roboMasters.getPreviousPoints()){
+//                    pointMatrix[point.x][point.y] = MatrixPointStatus.Empty;
+//                }
+//                Systems.roboMasters.stepMatrix();
+//                for(RoboMasterPoint point : Systems.roboMasters.getCurrentPoints()){
+//                    pointMatrix[point.x][point.y] = point.status;
+//                }
             }
         };
+        RoboMasters.stepMatrix();
     }
 
     public void step(){
-        runnable.run();
+
     }
 
     public enum MatrixPointStatus {

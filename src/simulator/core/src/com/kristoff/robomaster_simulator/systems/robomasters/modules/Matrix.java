@@ -7,22 +7,22 @@ import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulato
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
+import com.kristoff.robomaster_simulator.utils.BackendThread;
 
 import static java.lang.Math.*;
 
-public class Matrix {
+public class Matrix extends BackendThread {
     RoboMaster thisRoboMaster;
-
-    public Array<RoboMasterPoint> current;
-    public Array<RoboMasterPoint> previous;
     MatrixSimulator.MatrixPointStatus pointStatus;
+
+    public RoboMasterPoint[][] matrix;
 
     Runnable runnable;
 
     public Matrix(RoboMaster roboMaster){
         this.thisRoboMaster = roboMaster;
-        current = new Array<>();
-        previous = new Array<>();
+        isStep = true;
+        delta_x = 1/60f;
 
         switch (thisRoboMaster.No){
             case 0 -> {
@@ -38,125 +38,32 @@ public class Matrix {
                 pointStatus = MatrixSimulator.MatrixPointStatus.Red2;
             }
         }
+
+        matrix = new RoboMasterPoint[600][450];
+        for(int i = 0; i < 600 ; i++){
+            for(int j = 0; j < 450 ; j++){
+                matrix[i][j] = new RoboMasterPoint(i+500,j+500,pointStatus);
+            }
+        }
     }
 
+    int centre_x = 300;
+    int centre_y = 225;
+    float delta_x = 0;
+    float delta_y = 0;
+    @Override
     public void step(){
-        previous = current;
-        current = new Array<>();
-        double angle = thisRoboMaster.mainBody.body.getTransform().getRotation();
-        if(angle > 2*PI){
-            angle = angle % (2*PI);
-        }
-        updateMatrix(
-                angle,
-                new Vector2(
-                        thisRoboMaster.getPosition().x * 1000,
-                        thisRoboMaster.getPosition().y * 1000),
-                (int) (thisRoboMaster.property.width * 1000),
-                (int) (thisRoboMaster.property.height * 1000),
-                current
-        );
-    }
-
-    private void updateMatrix(double angle, Vector2 center, int width, int height, Array<RoboMasterPoint> matrix){
-        Vector2 a = getVertex(angle, new Vector2(center.x - width/2,center.y + height/2), center);
-        Vector2 b = getVertex(angle, new Vector2(center.x + width/2,center.y + height/2), center);
-        Vector2 c = getVertex(angle, new Vector2(center.x - width/2,center.y - height/2), center);
-        Vector2 d = getVertex(angle, new Vector2(center.x + width/2,center.y - height/2), center);
-        //add lines only
-//        addLineByTwoPoint(a, b, matrix);
-//        addLineByTwoPoint(b, d, matrix);
-//        addLineByTwoPoint(c, d, matrix);
-//        addLineByTwoPoint(c, a, matrix);
-
-        //add the whole plane
-        addPlaneByFourPoints(a, c, b, d, matrix);
-    }
-
-    private Vector2 getVertex(double rotatedAngle, Vector2 orginalPosition, Vector2 centre_p){
-        return new Vector2(
-                (float) (cos(rotatedAngle) * (orginalPosition.x-centre_p.x) - sin(rotatedAngle) * (orginalPosition.y-centre_p.y) + centre_p.x),
-                (float) (sin(rotatedAngle) * (orginalPosition.x-centre_p.x) + cos(rotatedAngle) * (orginalPosition.y-centre_p.y) + centre_p.y)
-        );
-    }
-
-    private void addLineByTwoPoint(Vector2 a, Vector2 b, Array<RoboMasterPoint> matrix){
-        float gradient = (a.y - b.y)/(a.x - b.x);
-        MatrixSimulator.MatrixPointStatus pointStatus = MatrixSimulator.MatrixPointStatus.TeamBlue;
-        if(thisRoboMaster.team == RoboMasters.teamRed){
-            pointStatus = MatrixSimulator.MatrixPointStatus.TeamRed;
-        }
-        if( Math.abs(a.x - b.x) >= Math.abs(a.y - b.y)){
-            if(a.x < b.x){
-                for(int i = 0 ; i < b.x - a.x; i++ ){
-                    matrix.add(new RoboMasterPoint((int)a.x + i, (int)(a.y + gradient * i),pointStatus));
-                }
-            }
-            else{
-                for(int i = 0 ; i < a.x - b.x; i++ ){
-                    matrix.add(new RoboMasterPoint((int)b.x + i, (int)(b.y + gradient * i),pointStatus));
-                }
+        RoboMasterPoint centrePoint = matrix[centre_x][centre_y];
+        delta_x = (int)(thisRoboMaster.getPosition().x * 1000 - centrePoint.x);
+        delta_y = (int)(thisRoboMaster.getPosition().y * 1000 - centrePoint.y);
+        for(int i = 0; i < 600 ; i++){
+            for(int j = 0; j < 450 ; j++){
+                RoboMasterPoint transformedPoint = matrix[i][j];
+                Systems.matrixSimulator.getMatrix()[transformedPoint.x][transformedPoint.y] = MatrixSimulator.MatrixPointStatus.Empty;
+                transformedPoint.x += delta_x;
+                transformedPoint.y += delta_y;
+                Systems.matrixSimulator.getMatrix()[transformedPoint.x][transformedPoint.y] = pointStatus;
             }
         }
-        else {
-            if(a.y < b.y){
-                for(int i = 0 ; i < b.y - a.y; i++ ){
-                    matrix.add(new RoboMasterPoint((int)(a.x + i / gradient), (int)(a.y+i),pointStatus));
-                }
-            }
-            else{
-                for(int i = 0 ; i < a.y - b.y; i++ ){
-                    matrix.add(new RoboMasterPoint((int)(b.x + i / gradient), (int)(b.y+i),pointStatus));
-                }
-            }
-        }
-    }
-
-
-    private void addPlaneByFourPoints(Vector2 leftUp, Vector2 leftDown, Vector2 rightUp, Vector2 rightDown, Array<RoboMasterPoint> matrix){
-//        for all four points
-//        float leftGradient = (leftUp.y - leftDown.y)/(leftUp.x - leftDown.x);
-//        float rightGradient = (rightUp.y - rightDown.y)/(rightUp.x - rightDown.x);
-//        if(leftUp.y - leftDown.y < rightUp.y - rightDown.y){
-//            for(int i = 0; i <= leftUp.y - leftDown.y; i++){
-//                addLineByTwoPoint(new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), matrix);
-//            }
-//            for(int i = 0; i <= rightUp.y - rightDown.y - leftUp.y + leftDown.y; i++){
-//                addLineByTwoPoint(leftUp, new Vector2(rightUp.x + i * rightGradient, rightUp.y + i), matrix);
-//            }
-//        }else if(leftUp.y - leftDown.y > rightUp.y - rightDown.y){
-//            for(int i = 0; i <= rightUp.y - rightDown.y; i++){
-//                addLineByTwoPoint(new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), matrix);
-//            }
-//            for(int i = 0; i <= leftUp.y - leftDown.y - rightUp.y + rightDown.y; i++){
-//                addLineByTwoPoint(rightUp, new Vector2(leftUp.x + i * leftGradient, leftUp.y + i), matrix);
-//            }
-//        }else{
-//            for(int i = 0; i <= leftUp.y - leftDown.y; i++){
-//                addLineByTwoPoint(new Vector2(leftDown.x + i * leftGradient, leftDown.y + i), new Vector2(rightDown.x + i * rightGradient, rightDown.y + i), matrix);
-//            }
-//        }
-        //for Rectangle only
-        if(leftUp.y == rightUp.y){
-            for(int i = 0; i <= rightUp.x - leftUp.x; i++){
-                Vector2 upMovingPoint = new Vector2(leftUp.x + i, leftUp.y);
-                Vector2 downMovingPoint = new Vector2(leftDown.x + i, leftDown.y);
-                addLineByTwoPoint(upMovingPoint, downMovingPoint, matrix);
-            }
-        }else if(leftUp.x == leftDown.x){
-            for(int i = 0; i <= leftUp.y - leftDown.y; i++){
-                Vector2 upMovingPoint = new Vector2(leftUp.x, leftUp.y + i);
-                Vector2 downMovingPoint = new Vector2(rightUp.x, rightUp.y + i);
-                addLineByTwoPoint(upMovingPoint, downMovingPoint, matrix);
-            }
-        }else{
-            float gradient = (leftUp.y - rightUp.y)/(leftUp.x - rightUp.x);
-            for(int i = 0; i <= rightUp.x - leftUp.x; i++){
-                Vector2 upMovingPoint = new Vector2(leftUp.x + i, (int)(leftUp.y + i * gradient));
-                Vector2 downMovingPoint = new Vector2(leftDown.x + i, (int)(leftDown.y + i * gradient));
-                addLineByTwoPoint(upMovingPoint, downMovingPoint, matrix);
-            }
-        }
-
     }
 }

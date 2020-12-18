@@ -37,52 +37,12 @@ public class RoboMasters{
         teamBlue.get(0).enemiesObservationSimulator.start();
     }
 
-    public Array<RoboMasterPoint> getCurrentPoints(){
+    public static void stepMatrix(){
         Lock lock = new ReentrantLock();
         if(lock.tryLock()) {
             try{
                 synchronized (all){
-                    Array<RoboMasterPoint> currentPoints = new Array<>();
-                    all.forEach(x->currentPoints.addAll(x.matrix.current));
-                    return currentPoints;
-                }
-            }catch(Exception ex){
-
-            }finally{
-                lock.unlock();   //释放锁
-            }
-        }else {
-            return new Array<>();
-        }
-        return new Array<>();
-    }
-
-    public Array<RoboMasterPoint> getPreviousPoints(){
-        Lock lock = new ReentrantLock();
-        if(lock.tryLock()) {
-            try{
-                synchronized (all){
-                    Array<RoboMasterPoint> previousPoints = new Array<>();
-                    all.forEach(x->previousPoints.addAll(x.matrix.previous));
-                    return previousPoints;
-                }
-            }catch(Exception ex){
-
-            }finally{
-                lock.unlock();   //释放锁
-            }
-        }else {
-            return new Array<>();
-        }
-        return new Array<>();
-    }
-
-    public void stepMatrix(){
-        Lock lock = new ReentrantLock();
-        if(lock.tryLock()) {
-            try{
-                synchronized (all){
-                    all.forEach(x->x.matrix.step());
+                    all.forEach(x->x.matrix.start());
                 }
             }catch(Exception ex){
 

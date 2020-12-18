@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasterList;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
@@ -17,6 +18,7 @@ public class EnemiesObservationSimulator extends BackendThread {
     RoboMaster thisRoboMaster;
     Mode mode;
 
+    public Array<RoboMasterPoint> eoArrayList;
     public int[][] eoMatrix    = new int[8490][4890];
     int[][] emptyMatrix = new int[8490][4890];
 
@@ -63,8 +65,8 @@ public class EnemiesObservationSimulator extends BackendThread {
                         eoMatrix[i][j] = 0;
                     }
                 }
-                enemyObservationOne.simulate(eoMatrix);
-                enemyObservationTwo.simulate(eoMatrix);
+                enemyObservationOne.simulate(eoMatrix,eoArrayList);
+                enemyObservationTwo.simulate(eoMatrix,eoArrayList);
                 for(int i=0; i<8490; i+=20){
                     for(int j=0; j<4890; j+=20){
                         if(RoboMasters.teamBlue.get(0).enemiesObservationSimulator.eoMatrix[i][j] != 0) {
@@ -89,6 +91,10 @@ public class EnemiesObservationSimulator extends BackendThread {
 
     public CopyOnWriteArrayList<Position> getSafeZone(){
         return safeZone;
+    }
+
+    public int[][] getDangerousZone(){
+        return eoMatrix;
     }
 
     @Override

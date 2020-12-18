@@ -168,8 +168,32 @@ public class LidarPointCloudLayer extends VisualLayer {
             shapeRenderer3.circle(
                     x / 1000f,
                     y / 1000f,
-                    0.04f,10);
+                    0.025f,10);
         }
+
+//        shapeRenderer3.begin(ShapeRenderer.ShapeType.Filled);
+//        for(Position position : RoboMasters.teamBlue.get(0).enemiesObservationSimulator.getSafeZone()){
+//            int x = position.x;
+//            int y = position.y;
+//            shapeRenderer3.setColor(1.0f,0f,0f,1.0f);
+//            shapeRenderer3.point(
+//                    x / 1000f,
+//                    y / 1000f,
+//                    0f);
+//        }
+
+//        int[][] zone = RoboMasters.teamBlue.get(0).enemiesObservationSimulator.getDangerousZone();
+//        for(int i = 0; i<zone.length; i++){
+//            for(int j=0; j<zone[i].length; j++){
+//                int x = position.x;
+//                int y = position.y;
+//                shapeRenderer3.setColor(1.0f,0f,0f,1.0f);
+//                shapeRenderer3.point(
+//                        x / 1000f,
+//                        y / 1000f,
+//                        0f);
+//            }
+//        }
         shapeRenderer3.end();
     }
 
