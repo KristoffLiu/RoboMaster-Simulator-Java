@@ -1,14 +1,16 @@
-package com.kristoff.robomaster_simulator.systems.matrixsimulation;
+package com.kristoff.robomaster_simulator.systems.robomasters.modules;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
+import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
 
 import static java.lang.Math.*;
 
-public class RoboMasterPointMatrix {
+public class Matrix {
     RoboMaster thisRoboMaster;
 
     public Array<RoboMasterPoint> current;
@@ -16,7 +18,7 @@ public class RoboMasterPointMatrix {
 
     Runnable runnable;
 
-    public RoboMasterPointMatrix(RoboMaster roboMaster){
+    public Matrix(RoboMaster roboMaster){
         this.thisRoboMaster = roboMaster;
         current = new Array<>();
         previous = new Array<>();

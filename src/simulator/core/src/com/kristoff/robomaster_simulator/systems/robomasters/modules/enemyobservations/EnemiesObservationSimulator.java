@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.systems.robomasters.modules;
+package com.kristoff.robomaster_simulator.systems.robomasters.modules.enemyobservations;
 
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;

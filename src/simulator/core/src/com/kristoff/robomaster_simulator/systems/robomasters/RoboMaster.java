@@ -1,18 +1,13 @@
 package com.kristoff.robomaster_simulator.systems.robomasters;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.kristoff.robomaster_simulator.systems.robomasters.judgement.JudgeModule;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.Dynamics;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.Property;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.RMActor;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.MainBody;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.Observation;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPointMatrix;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.Weapon;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.*;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.Matrix;
+import com.kristoff.robomaster_simulator.systems.robomasters.modules.enemyobservations.EnemiesObservationSimulator;
 import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.utils.VectorHelper;
 
@@ -33,14 +28,15 @@ public abstract class RoboMaster {
 
     public RoboMasterList team;
 
-    public Property property;               //基本属性 Basic Property
-    public MainBody mainBody;               //主体的2d物理建模
-    public Weapon weapon;                   //武器 Weapon
-    public RMActor renderer;     //渲染器
-    public RoboMasterPointMatrix matrix;    //点阵发生器
-    public Observation observation;         //激光雷达Lidar发生器
-    public Dynamics dynamics;               //动力系统
-    public JudgeModule judgeModule;         //裁判系统
+    public Property                         property;                       //基本属性 Basic Property
+    public MainBody                         mainBody;                       //主体的2d物理建模
+    public Weapon                           weapon;                         //武器 Weapon
+    public RMActor                          renderer;                       //渲染器
+    public Matrix matrix;                         //点阵发生器
+    public Observation                      observation;                    //激光雷达Lidar发生器
+    public Dynamics                         dynamics;                       //动力系统
+    public JudgeModule                      judgeModule;                    //裁判系统
+    public EnemiesObservationSimulator enemiesObservationSimulator;    //敌军视野模拟
 
 
     public RoboMaster(TextureRegion textureRegion, RoboMasterList roboMasterList) {
@@ -51,10 +47,10 @@ public abstract class RoboMaster {
         mainBody = new MainBody(this);
         renderer = new RMActor(textureRegion,this);
         weapon = new Weapon(this);
-        matrix = new RoboMasterPointMatrix(this);
+        matrix = new Matrix(this);
         observation = new Observation(this);
         judgeModule = new JudgeModule(this);
-
+        enemiesObservationSimulator = new EnemiesObservationSimulator(this);
 
         shapeRenderer = new ShapeRenderer();
     }

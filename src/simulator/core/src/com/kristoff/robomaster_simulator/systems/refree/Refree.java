@@ -21,7 +21,6 @@ public class Refree extends BackendThread {
          delta = 1/30f;
     }
 
-
     @Override
     public void step(){
 
