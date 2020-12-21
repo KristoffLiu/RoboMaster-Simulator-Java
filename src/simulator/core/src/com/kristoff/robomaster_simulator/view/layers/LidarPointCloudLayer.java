@@ -5,12 +5,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.utils.Position;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 
 import java.awt.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LidarPointCloudLayer extends VisualLayer {
     ShapeRenderer shapeRenderer;
@@ -21,7 +22,7 @@ public class LidarPointCloudLayer extends VisualLayer {
 
 
     //ShapeRenderer circleRenderer;
-    public Array<RoboMasterPoint> lidarPointCloudPointsArray;
+    public CopyOnWriteArrayList<RoboMasterPoint> lidarPointCloudPointsArray;
     public LidarPointCloudLayer(EnvRenderer env) {
         super(env);
         shapeRenderer = new ShapeRenderer();
@@ -29,7 +30,7 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer3 = new ShapeRenderer();
         //circleRenderer = new ShapeRenderer();
 
-        lidarPointCloudPointsArray = Systems.roboMasters.teamBlue.get(0).lidarObservation.other;
+        lidarPointCloudPointsArray = RoboMasters.teamBlue.get(0).lidarObservation.other;
 
         renderLidarPoints = new Runnable() {
             @Override
@@ -103,8 +104,8 @@ public class LidarPointCloudLayer extends VisualLayer {
             int j = point.y;
             Point a = new Point(i,j);
             Point b = new Point(
-                    (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().x * 1000),
-                    (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().y * 1000));
+                    (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().x),
+                    (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().y));
             float distance = (float) a.distance(b);
             float red;
             float green;
@@ -139,20 +140,20 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer2.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer2.setAutoShapeType(true);
         shapeRenderer2.begin(ShapeRenderer.ShapeType.Line);
-        for(RoboMaster roboMaster : Systems.roboMasters.all){
+        for(RoboMaster roboMaster : RoboMasters.all){
             shapeRenderer2.setColor(1.0f,0,0,1.0f);
             shapeRenderer2.line(
-                    roboMaster.getLidarPosition().x,
-                    roboMaster.getLidarPosition().y,
-                    roboMaster.getLidarPosition().x + (float) (2f * Math.sin(roboMaster.getFacingAngle())),
-                    roboMaster.getLidarPosition().y + (float) (2f * Math.cos(roboMaster.getFacingAngle())));
+                    roboMaster.getLidarPosition().x / 1000,
+                    roboMaster.getLidarPosition().y / 1000,
+                    roboMaster.getLidarPosition().x  / 1000+ (float) (2f * Math.sin(roboMaster.getFacingAngle())),
+                    roboMaster.getLidarPosition().y / 1000 + (float) (2f * Math.cos(roboMaster.getFacingAngle())));
 
             shapeRenderer2.setColor(0f,1.0f,0,1.0f);
             shapeRenderer2.line(
-                    roboMaster.getLidarPosition().x,
-                    roboMaster.getLidarPosition().y,
-                    roboMaster.getLidarPosition().x + (float) (3f * Math.sin(roboMaster.getCannonAngle())),
-                    roboMaster.getLidarPosition().y + (float) (3f * Math.cos(roboMaster.getCannonAngle())));
+                    roboMaster.getLidarPosition().x / 1000,
+                    roboMaster.getLidarPosition().y / 1000,
+                    roboMaster.getLidarPosition().x / 1000 + (float) (3f * Math.sin(roboMaster.getCannonAngle())),
+                    roboMaster.getLidarPosition().y / 1000 + (float) (3f * Math.cos(roboMaster.getCannonAngle())));
         }
         shapeRenderer2.end();
 
@@ -202,7 +203,7 @@ public class LidarPointCloudLayer extends VisualLayer {
 
     }
 
-    public Array<RoboMasterPoint> getLidarPointCloudPointsArray(){
-        return Systems.roboMasters.teamBlue.get(0).lidarObservation.other;
+    public CopyOnWriteArrayList<RoboMasterPoint> getLidarPointCloudPointsArray(){
+        return RoboMasters.teamBlue.get(0).lidarObservation.other;
     }
 }

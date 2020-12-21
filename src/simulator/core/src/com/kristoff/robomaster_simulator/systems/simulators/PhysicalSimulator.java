@@ -3,10 +3,11 @@ package com.kristoff.robomaster_simulator.systems.simulators;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.kristoff.robomaster_simulator.robomasters.modules.RMPhysicalSimulation;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.Dynamics;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.modules.Dynamics;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 
 public class PhysicalSimulator extends Simulator{
     public static PhysicalSimulator current;
@@ -23,18 +24,8 @@ public class PhysicalSimulator extends Simulator{
 
         physicalWorld = new World(new Vector2(), false);
 
-        deployTeamBlue();
-        deployTeamRed();
         //create world boundary
-        this.createBoundary(0.205f, 0.205f,8.08f, 4.48f);
-        this.createStaticBlocks();
 
-
-        for(RoboMaster roboMaster : Systems.roboMasters.teamBlue){
-            roboMaster.transformRotation((float) (Math.PI));
-        }
-
-        box2DDebugRenderer = new Box2DDebugRenderer();
 
 //        runnable = new Runnable() {
 //            @Override
@@ -47,12 +38,27 @@ public class PhysicalSimulator extends Simulator{
 //        };
     }
 
+    public void start(){
+        this.createBoundary(0.205f, 0.205f,8.08f, 4.48f);
+        this.createStaticBlocks();
+
+        box2DDebugRenderer = new Box2DDebugRenderer();
+
+        super.start();
+    }
+
     @Override
     public void step(){
         physicalWorld.step(1/60f,6,2);
-        for(RoboMaster roboMaster : Systems.roboMasters.all){
-            roboMaster.simulateFriction();
-        }
+        RoboMasters.all.forEach(x->{
+            if(x.RMPhysicalSimulation.body != null){
+                Body body = x.RMPhysicalSimulation.body;
+                int positionX = (int) (body.getPosition().x * 1000);
+                int positionY = (int) (body.getPosition().y * 1000);
+                x.actor.update(positionX, positionY, body.getAngle());
+                //x.simulateFriction();
+            }
+        });
     }
 
     float step_delta = 0;
@@ -115,53 +121,16 @@ public class PhysicalSimulator extends Simulator{
         roboMasterShape.dispose();
     }
 
-    private void createStaticBlocks(){
-        for(TextureMapObject textureMapObject : Systems.map.getBlocks()){
+    private void createStaticBlocks() {
+        for (TextureMapObject textureMapObject : Systems.map.getBlocks()) {
             float scale = 1f / 1000f;
             float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
             float halfHeight = textureMapObject.getTextureRegion().getRegionHeight() / 2f * scale;
             float x = textureMapObject.getX() * scale + halfWidth;
             float y = textureMapObject.getY() * scale;
-            Vector2 centre = new Vector2(0,halfHeight);
+            Vector2 centre = new Vector2(0, halfHeight);
             float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-            createStaticBlock(x,y,halfWidth,halfHeight,centre,rotation);
+            createStaticBlock(x, y, halfWidth, halfHeight, centre, rotation);
         }
     }
-
-    private void deployTeamBlue(){
-        int i = 0;
-        for(TextureMapObject textureMapObject : Systems.map.getBirthZones()){
-            if(textureMapObject.getProperties().containsKey("blue")){
-                float scale = 1f / 1000f;
-                float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
-                float halfHeight = textureMapObject.getTextureRegion().getRegionHeight() / 2f * scale;
-                float x = textureMapObject.getX() * scale + halfWidth;
-                float y = textureMapObject.getY() * scale + halfHeight;
-                Systems.roboMasters.teamBlue.get(i).deploy(x,y,this.physicalWorld);
-                Systems.roboMasters.teamBlue.get(i).dynamics = new Dynamics(Systems.roboMasters.teamBlue.get(i));
-                Systems.roboMasters.teamBlue.get(i).dynamics.start();
-                Systems.roboMasters.teamBlue.get(i).lidarObservation.start();
-                i ++;
-            }
-        }
-    }
-
-    private void deployTeamRed(){
-        int i = 0;
-        for(TextureMapObject textureMapObject : Systems.map.getBirthZones()){
-                if(textureMapObject.getProperties().containsKey("red")){
-                float scale = 1f / 1000f;
-                float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
-                float halfHeight = textureMapObject.getTextureRegion().getRegionHeight() / 2f * scale;
-                float x = textureMapObject.getX() * scale + halfWidth;
-                float y = textureMapObject.getY() * scale + halfHeight;
-                Systems.roboMasters.teamRed.get(i).deploy(x,y,this.physicalWorld);
-                Systems.roboMasters.teamRed.get(i).dynamics = new Dynamics(Systems.roboMasters.teamRed.get(i));
-                Systems.roboMasters.teamRed.get(i).dynamics.start();
-                Systems.roboMasters.teamRed.get(i).lidarObservation.start();
-                i ++;
-            }
-        }
-    }
-
 }

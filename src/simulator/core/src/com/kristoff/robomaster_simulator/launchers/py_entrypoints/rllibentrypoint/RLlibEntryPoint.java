@@ -1,17 +1,39 @@
 package com.kristoff.robomaster_simulator.launchers.py_entrypoints.rllibentrypoint;
 
-import com.kristoff.robomaster_simulator.envs.Environment;
-import com.kristoff.robomaster_simulator.envs.EnvironmentConfiguration;
-import com.kristoff.robomaster_simulator.envs.EnvironmentMode;
-import com.kristoff.robomaster_simulator.envs.rosrm.RosRMEnv;
-import com.kristoff.robomaster_simulator.launchers.py_entrypoints.EntryPoint;
-import com.kristoff.robomaster_simulator.envs.rllib.RLlibEnv;
+import com.kristoff.robomaster_simulator.envs.Simulator;
+import com.kristoff.robomaster_simulator.envs.SimulatorConfiguration;
+import com.kristoff.robomaster_simulator.envs.SimulatorMode;
+import com.kristoff.robomaster_simulator.launchers.py_entrypoints.rosrmentrypoint.RosRMEntryPoint;
+import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
 import py4j.GatewayServer;
 
-public class RLlibEntryPoint extends EntryPoint {
+public class RLlibEntryPoint{
+    public static RLlibEntryPoint current;
+    public Simulator simulator;
+    public SimulatorConfiguration config;
+
     public RLlibEntryPoint(){
-        config = new EnvironmentConfiguration();
-        config.mode = EnvironmentMode.rosrm;
-        env = new RLlibEnv(config);
+        config = new SimulatorConfiguration();
+        config.mode = SimulatorMode.simulatorRLlib;
+        simulator = new Simulator(config);
+    }
+
+    public static void main(String[] args) {
+        GatewayServer gatewayServer = new GatewayServer(new RosRMEntryPoint());
+        gatewayServer.start();
+        System.out.println("Gateway Server Started");
+    }
+
+    public void launch(){
+        simulator.launch();
+    }
+
+    public Simulator getSimulator(){
+        return simulator;
+    }
+
+    public MatrixSimulator.MatrixPointStatus[][] getMap(){
+        return Systems.matrixSimulator.getMatrix();
     }
 }

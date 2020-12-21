@@ -4,19 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.kristoff.robomaster_simulator.envs.Environment;
+import com.kristoff.robomaster_simulator.envs.SimulatorConfiguration;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.view.View;
 import com.kristoff.robomaster_simulator.view.io.GlobalInputEventHandler;
 import com.kristoff.robomaster_simulator.systems.maps.Map;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.view.layers.*;
 import com.kristoff.robomaster_simulator.view.Assets;
 
 
 public class EnvRenderer implements Screen {
-    Environment environment;
+    SimulatorConfiguration config;
     Assets assets = new Assets();
 
     public final float width = 8.49f;
@@ -26,8 +25,6 @@ public class EnvRenderer implements Screen {
     public RoboMasters roboMasters;
     public Map map;
 
-    public MatrixSimulator matrixSimulator;
-
     public FloorLayer floorLayer;
     public PhysicsDebugLayer physicsDebugLayer;
 
@@ -36,9 +33,8 @@ public class EnvRenderer implements Screen {
 
     public FrameRate frameRate;
 
-    public EnvRenderer(final Environment environment){
-        this.environment = environment;
-        this.matrixSimulator = Systems.matrixSimulator;
+    public EnvRenderer(SimulatorConfiguration simulatorConfiguration){
+        this.config = simulatorConfiguration;
 
         view = new View(width, height);
         map = Systems.map;
@@ -46,10 +42,17 @@ public class EnvRenderer implements Screen {
         floorLayer = new FloorLayer(this);
         floorLayer.addListener(new GlobalInputEventHandler(this));
         renderedLayer = new RenderedLayer(this);
-        physicsDebugLayer = new PhysicsDebugLayer(environment);
-
         lidarPointCloudLayer = new LidarPointCloudLayer(this);
         frameRate = new FrameRate();
+
+        switch (config.mode){
+            case simulator,simulatorRLlib ->{
+                physicsDebugLayer = new PhysicsDebugLayer(this);
+            }
+            case realMachine -> {
+
+            }
+        }
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(floorLayer);
@@ -85,11 +88,17 @@ public class EnvRenderer implements Screen {
         lidarPointCloudLayer.act(delta);
         lidarPointCloudLayer.draw();
 
-        physicsDebugLayer.render(delta);
+        switch (config.mode){
+            case simulator,simulatorRLlib ->{
+                physicsDebugLayer.render(delta);
+            }
+            case realMachine -> {
+
+            }
+        }
 
         frameRate.update();
         frameRate.render();
-
     }
 
     /**

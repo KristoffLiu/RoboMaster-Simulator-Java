@@ -7,12 +7,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.envs.Simulator;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
 
 public class Map {
     EnvRenderer envRenderer;
     private final float scale = 1f/1000f;
 
+    private String mapName;
     private TiledMap map;
     private TmxMapLoader loader;
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
@@ -23,6 +25,10 @@ public class Map {
 
     //"Map/CompetitionMap/map.tmx"
     public Map(String mapName){
+        this.mapName = mapName;
+    }
+
+    public void start(){
         loader      = new TmxMapLoader();
         map         = loader.load(MapSets.getMapPath(mapName));
         this.orthogonalTiledMapRenderer = new OrthogonalTiledMapRenderer(map,scale);
@@ -70,11 +76,10 @@ public class Map {
 
     public void render(){
         try{
-            if(this.envRenderer != null){
-                orthogonalTiledMapRenderer.setView(envRenderer.view.getOrthographicCamera());
+            if(Simulator.current.envRenderer != null){
+                orthogonalTiledMapRenderer.setView(Simulator.current.envRenderer.view.getOrthographicCamera());
                 orthogonalTiledMapRenderer.render();
             }
-
         }
         finally {
 

@@ -1,7 +1,7 @@
 package com.kristoff.robomaster_simulator.systems.refree.Buffs;
 
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 
 public class RedAddBullet extends Buff{
 

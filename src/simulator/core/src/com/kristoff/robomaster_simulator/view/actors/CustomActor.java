@@ -17,6 +17,9 @@ public class CustomActor extends Actor {
     private TextureRegion textureRegion;
     private final Rectangle Bounds = new Rectangle();
 
+    public CustomActor() {
+        super();
+    }
 
     public CustomActor(TextureRegion textureRegion) {
         super();
@@ -27,6 +30,8 @@ public class CustomActor extends Actor {
         // which is 0, and makes it invisible.
         setSize(this.textureRegion.getRegionWidth(), this.textureRegion.getRegionHeight());
     }
+
+
 
     public TextureRegion getTextureRegion() {
         return textureRegion;

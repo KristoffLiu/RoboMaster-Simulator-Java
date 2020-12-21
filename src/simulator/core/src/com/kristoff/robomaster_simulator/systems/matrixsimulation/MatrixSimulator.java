@@ -2,8 +2,7 @@ package com.kristoff.robomaster_simulator.systems.matrixsimulation;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.systems.robomasters.modules.LidarObservation;
+import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.systems.simulators.Simulator;
 
@@ -12,8 +11,6 @@ public class MatrixSimulator extends Simulator {
 
     public MatrixPointStatus[][] pointMatrix;
     public MatrixPointStatus[][] staticObjectPointMatrix;
-
-    Runnable runnable;
 
     public MatrixSimulator() {
         delta = 1/60f;
@@ -25,23 +22,15 @@ public class MatrixSimulator extends Simulator {
         //pointMatrix = new MatrixPointStatus[8080][4480];
         staticObjectPointMatrix = new MatrixPointStatus[8490][4890];
 
+
+    }
+
+    @Override
+    public void start(){
         addInnerBoundary();
         addBlocks();
         pointMatrix = staticObjectPointMatrix.clone();
-
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-//                for(RoboMasterPoint point : Systems.roboMasters.getPreviousPoints()){
-//                    pointMatrix[point.x][point.y] = MatrixPointStatus.Empty;
-//                }
-//                Systems.roboMasters.stepMatrix();
-//                for(RoboMasterPoint point : Systems.roboMasters.getCurrentPoints()){
-//                    pointMatrix[point.x][point.y] = point.status;
-//                }
-            }
-        };
-        RoboMasters.stepMatrix();
+        super.start();
     }
 
     public void step(){
@@ -56,6 +45,8 @@ public class MatrixSimulator extends Simulator {
         Red1,
         Red2
     }
+
+
 
     public static boolean isPointNotEmpty(int x, int y){
         if(Systems.matrixSimulator.pointMatrix[x][y] == MatrixPointStatus.Empty || Systems.matrixSimulator.pointMatrix[x][y] == null){
