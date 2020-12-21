@@ -17,6 +17,8 @@ from geometry_msgs.msg import PoseStamped
 import threading
 import math
 import matplotlib.pyplot as plt
+import time
+import copy
 
 show_animation = True
 
@@ -276,7 +278,7 @@ class Brain():
         #                             rospy.Subscriber("/jackal1/obstacle_filtered", Obstacles, self.ownObservationCB1)]
 
         self.blue1 = entrypoint.getRoboMaster("Blue1") #直接获取RoboMaster对象
-        self.bfs = BreadthFirstSearchPlanner(None, 1000, None)
+        self.bfs = BreadthFirstSearchPlanner(None, 100, None)
 
 
     class Robot:
@@ -337,14 +339,23 @@ class Brain():
         self.bfs.ywidth = (self.bfs.maxy - self.bfs.miny) / self.bfs.reso
         # print(self.bfs.minx)
         # print(self.bfs.miny) 
-        # print(self.bfs.maxx) 
-        # print(self.bfs.maxy) 
+        print(self.bfs.maxx) 
+        print(self.bfs.maxy) 
         # print(self.bfs.xwidth)
         # print(self.bfs.ywidth)
+        start = time.time()
+        # a = copy.deepcopy(self.blue1.getEnemiesObservationSimulationResult())
+        a = self.bfs.obmap
         for i in range(self.bfs.maxx):
             for j in range(self.bfs.maxy):
-                print(self.bfs.obmap[i][j], end=' ')
-            print("")
+                a[i][j] = 6
+                # print(self.bfs.obmap[i][j], end=' ')
+            # print("")
+
+        #计算时间消耗，特别是对程序运行时间消耗
+        end = time.time()
+        print("循环运行时间:%.2f秒"%(end-start))
+        #output:循环运行时间:5.50秒
     
     def find_next_position(self):
         #0 safe

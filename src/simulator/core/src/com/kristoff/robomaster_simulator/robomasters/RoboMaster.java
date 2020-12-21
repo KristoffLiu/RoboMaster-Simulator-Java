@@ -141,11 +141,11 @@ public abstract class RoboMaster {
     }
 
     public int[][] getEnemiesObservationSimulationResult(){
-        return this.enemiesObservationSimulator.eoMatrix;
+        return this.enemiesObservationSimulator.matrixForROS;
     }
 
     public List<RoboMasterPoint> getLidarObservation(){
-        return (List<RoboMasterPoint>) this.lidarObservation.other;
+        return this.lidarObservation.other;
     }
 
     public Vector2 getLinearVelocity() {

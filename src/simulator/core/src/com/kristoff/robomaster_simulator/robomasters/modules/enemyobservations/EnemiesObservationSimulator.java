@@ -17,7 +17,8 @@ public class EnemiesObservationSimulator extends BackendThread {
 
     public Array<RoboMasterPoint> eoArrayList;
     public int[][] eoMatrix    = new int[8490][4890];
-    int[][] emptyMatrix = new int[8490][4890];
+    public int[][] matrixForROS    = new int[849][489];
+    int[][] emptyMatrix        = new int[8490][4890];
 
     public CopyOnWriteArrayList<Position> safeZone = new CopyOnWriteArrayList<>();
 
@@ -36,6 +37,12 @@ public class EnemiesObservationSimulator extends BackendThread {
         mode = Mode.self_observation;
         isStep = true;
         delta = 1/60f;
+
+        for(int i=0; i<849; i++){
+            for(int j=0; j<489; j++){
+                matrixForROS[i][j] = 0;
+            }
+        }
         for(int i=0; i<8490; i++){
             for(int j=0; j<4890; j++){
                 emptyMatrix[i][j] = 0;
@@ -69,6 +76,12 @@ public class EnemiesObservationSimulator extends BackendThread {
                         if(RoboMasters.teamBlue.get(0).enemiesObservationSimulator.eoMatrix[i][j] != 0) {
                             arrayList.add(new Position(i,j));
                         }
+                    }
+                }
+
+                for(int i=0; i<849; i++){
+                    for(int j=0; j<489; j++){
+                        matrixForROS[i][j] = eoMatrix[i*10][j*10];
                     }
                 }
                 safeZone = arrayList;

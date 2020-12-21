@@ -45,5 +45,4 @@ public class RosRMEntryPoint{
         roboMaster = RoboMasters.getRoboMaster(name);
         return roboMaster;
     }
-
 }
