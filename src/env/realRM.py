@@ -4,6 +4,11 @@ author: Erwin Lejeune (@spida_rwin)
 See Wikipedia article (https://en.wikipedia.org/wiki/Breadth-first_search)
 """
 
+import rospy
+from geometry_msgs.msg import PoseStamped
+import threading
+
+
 import math
 
 import matplotlib.pyplot as plt
@@ -138,8 +143,7 @@ class BreadthFirstSearchPlanner:
                     node.parent = current
                     open_set[n_id] = node
 
-        rx, ry = self.calc_grid_position(ngoal.x, self.minx), 
-                 self.calc_grid_position(ngoal.y, self.miny)
+        rx, ry = self.calc_grid_position(ngoal.x, self.minx), self.calc_grid_position(ngoal.y, self.miny)
         return rx, ry
 
     def calc_final_path(self, ngoal, closedset):
@@ -203,9 +207,6 @@ class BreadthFirstSearchPlanner:
 
         return motion
 
-
-
-
 def calc_grid_position(index, minp):
     """
     calc grid position
@@ -233,7 +234,7 @@ def calc_obstacle_map(ox, oy):
     print("y_width:", ywidth)
 
     # obstacle map generation
-    obmap = [[0 for _ in range(ywidth)]
+    obmap = [[False for _ in range(ywidth)]
                     for _ in range(xwidth)]
     for ix in range(xwidth):
         x = calc_grid_position(ix, minx)
@@ -242,57 +243,113 @@ def calc_obstacle_map(ox, oy):
             for iox, ioy in zip(ox, oy):
                 d = math.hypot(iox - x, ioy - y)
                 if d <= rr:
-                    obmap[ix][iy] = 1
+                    obmap[ix][iy] = True
                     break
 
-def main():
-    print(__file__ + " start!!")
+#!/usr/bin/env python
 
 
-    # set obstacle positions
-    ox, oy = [], []
-    for i in range(-10, 60):
-        ox.append(i)
-        oy.append(-10.0)
-    for i in range(-10, 60):
-        ox.append(60.0)
-        oy.append(i)
-    for i in range(-10, 61):
-        ox.append(i)
-        oy.append(60.0)
-    for i in range(-10, 61):
-        ox.append(-10.0)
-        oy.append(i)
-    for i in range(-10, 40):
-        ox.append(20.0)
-        oy.append(i)
-    for i in range(0, 40):
-        ox.append(40.0)
-        oy.append(60.0 - i)
-
-    if show_animation:  # pragma: no cover
-        plt.plot(ox, oy, ".k")
-        plt.plot(sx, sy, "og")
-        plt.plot(gx, gy, "xb")
-        plt.grid(True)
-        plt.axis("equal")
-
-    calc_obstacle_map(ox, oy)
-
-    bfs = BreadthFirstSearchPlanner(obmap, grid_size, robot_radius)
-    tx = bfs.calc_xyindex(gx, bfs.minx)
-    ty = bfs.calc_xyindex(gy, bfs.miny)
-    obmap[tx][ty] = 2
-    rx, ry = bfs.planning(sx, sy)
-    print("rx: ", rx)
-    print("ry: ", ry)
-
-    if show_animation:  # pragma: no cover
-        plt.plot(rx, ry, "-r")
-        plt.pause(0.01)
-        plt.show()
+def callback(data):
+    rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
     
+class Brain():
+    def __init__(self):
+        # self._decision_pub = [rospy.Publisher("/CAR1/move_base_simple/goal", PoseStamped, queue_size=10),
+        #                       rospy.Publisher("/CAR2/move_base_simple/goal", PoseStamped, queue_size=10)]
+        # self._debuff_subscriber = rospy.Subscriber("/debuff", String, self.receiveDebuffSignal)
+        # self._robots_subscriber = [rospy.Subscriber("/CAR1/amcl_pose", PoseStamped, self.ownPositionCB0),
+        #                            rospy.Subscriber("/CAR2/amcl_pose", PoseStamped, self.ownPositionCB1)]
+        # self._enemies_subscriber = [rospy.Subscriber("/CAR1/obstacle_filtered", Obstacles, self.ownObservationCB0),
+        #                             rospy.Subscriber("/CAR2/obstacle_filtered", Obstacles, self.ownObservationCB1)]
+        self._decision_pub = [rospy.Publisher("/jackal0/move_base_simple/goal", PoseStamped, queue_size=10),
+                              rospy.Publisher("/jackal1/move_base_simple/goal", PoseStamped, queue_size=10)]
+        # self._debuff_subscriber = rospy.Subscriber("/debuff", String, self.receiveDebuffSignal)
+        # self._robots_subscriber = [rospy.Subscriber("/jackal0/amcl_pose", PoseStamped, self.ownPositionCB0),
+        #                            rospy.Subscriber("/jackal1/amcl_pose", PoseStamped, self.ownPositionCB1)]
 
+        # self._enemies_subscriber = [rospy.Subscriber("/jackal0/obstacle_filtered", Obstacles, self.ownObservationCB0),
+        #                             rospy.Subscriber("/jackal1/obstacle_filtered", Obstacles, self.ownObservationCB1)]
+
+        self.bfs = BreadthFirstSearchPlanner(None, None, None)
+
+
+    class Robot:
+        x, y, yaw = 0.0, 0.0, 0.0
+        theta = 0.25
+        def __init__(self, x, y, yaw):
+            self.x, self.y, self.yaw = x, y, yaw
+        def __str__(self):
+            return "x: %.2f, y: %.2f" % (self.x, self.y)
+        def __eq__(self, other):
+            return abs(self.x - other.x) < self.theta and abs(self.y - other.y) < self.theta
+
+        def __sub__(self, other):
+            return self.x - other.x, self.y - other.y
+
+    def ownPositionCB0(self, msg):
+        self.robots[0].x = msg.pose.position.x
+        self.robots[0].y = msg.pose.position.y
+        [y, p, r] = R.from_quat([msg.pose.orientation.x,
+                                 msg.pose.orientation.y,
+                                 msg.pose.orientation.z,
+                                 msg.pose.orientation.w]).as_euler('zyx', degrees=True)
+        self.robots[0].yaw = y
+
+    def ownPositionCB1(self, msg):
+        self.robots[1].x = msg.pose.position.x
+        self.robots[1].y = msg.pose.position.y
+        [y, p, r] = R.from_quat([msg.pose.orientation.x,
+                                 msg.pose.orientation.y,
+                                 msg.pose.orientation.z,
+                                 msg.pose.orientation.w]).as_euler('zyx', degrees=True)
+        self.robots[1].yaw = y
+
+    def ownObservationCB0(self, data):
+        self.robot_obs[0] = []
+        for enemy in data.circles:
+            self.robot_obs[0].append(self.Robot(enemy.center.x, enemy.center.y, 0.0))
+        self.observation = self.robot_obs[0] + self.robot_obs[1]
+        # print("robot0 obs", len(self.robot_obs[0]))
+        # self.merge_observation()
+
+    def ownObservationCB1(self, data):
+        self.robot_obs[1] = []
+        for enemy in data.circles:
+            self.robot_obs[1].append(self.Robot(enemy.center.x, enemy.center.y, 0.0))
+        self.observation = self.robot_obs[0] + self.robot_obs[1]
+        # print("robot1 obs", len(self.robot_obs[1]))
+        # self.merge_observation()
+
+
+    def update_map(self):
+        pass
+    
+    def find_next_position(self):
+        rx, ry = self.bfs.planning(sx, sy)
+
+        goal = PoseStamped()
+        goal.header.frame_id = "/map"
+        goal.pose.position.x, goal.pose.position.y = rx, ry
+
+        self._decision_pub[0].publish(goal)
+
+
+def call_rosspin():
+    rospy.spin()
 
 if __name__ == '__main__':
-    main()
+    try: 
+        print(__file__ + " start!!")
+        rospy.init_node('decision_node', anonymous=True)
+        rate = rospy.Rate(1)
+        brain = Brain()
+        print(brain)
+        spin_thread = threading.Thread(target=call_rosspin).start()
+
+        while not rospy.core.is_shutdown():
+            brain.update_map()
+            brain.find_next_position()
+            rate.sleep()
+
+    except rospy.ROSInterruptException:
+        pass
