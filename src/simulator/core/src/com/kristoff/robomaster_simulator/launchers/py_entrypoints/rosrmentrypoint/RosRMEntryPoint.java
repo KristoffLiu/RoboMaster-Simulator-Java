@@ -46,5 +46,4 @@ public class RosRMEntryPoint{
         return roboMaster;
     }
 
-
 }

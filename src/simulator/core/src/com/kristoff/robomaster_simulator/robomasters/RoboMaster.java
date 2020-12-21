@@ -13,6 +13,7 @@ import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.utils.Position;
 import com.kristoff.robomaster_simulator.utils.VectorHelper;
 
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /***
@@ -143,8 +144,8 @@ public abstract class RoboMaster {
         return this.enemiesObservationSimulator.eoMatrix;
     }
 
-    public CopyOnWriteArrayList<RoboMasterPoint> getLidarObservation(){
-        return this.lidarObservation.other;
+    public List<RoboMasterPoint> getLidarObservation(){
+        return (List<RoboMasterPoint>) this.lidarObservation.other;
     }
 
     public Vector2 getLinearVelocity() {

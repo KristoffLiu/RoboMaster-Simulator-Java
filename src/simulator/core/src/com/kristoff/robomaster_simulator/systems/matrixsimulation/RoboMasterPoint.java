@@ -12,4 +12,16 @@ public class RoboMasterPoint {
         this.y = y;
         this.status = status;
     }
+
+    public int getX(){
+        return this.x;
+    }
+
+    public int getY(){
+        return this.y;
+    }
+
+    public MatrixSimulator.MatrixPointStatus getPointStatus(){
+        return status;
+    }
 }

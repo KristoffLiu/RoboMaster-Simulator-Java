@@ -4,13 +4,18 @@ author: Erwin Lejeune (@spida_rwin)
 See Wikipedia article (https://en.wikipedia.org/wiki/Breadth-first_search)
 """
 
+from py4j.java_gateway import JavaGateway
+from py4j.java_gateway import java_import
+
+gateway = JavaGateway() #启动py4j服务器
+entrypoint = gateway.entry_point #获取服务器桥的入口
+
+java_import(gateway.jvm,'java.util.*') #导入java中的类的方法
+
 import rospy
 from geometry_msgs.msg import PoseStamped
 import threading
-
-
 import math
-
 import matplotlib.pyplot as plt
 
 show_animation = True
@@ -120,7 +125,7 @@ class BreadthFirstSearchPlanner:
                 if len(closed_set.keys()) % 10 == 0:
                     plt.pause(0.001)
 
-            if self.obmap[current.x][current.y] == 2:
+            if self.obmap[current.x][current.y] == 3:
                 print("Find goal")
                 ngoal.parent_index = current.parent_index
                 ngoal.cost = current.cost
@@ -261,8 +266,8 @@ class Brain():
         #                            rospy.Subscriber("/CAR2/amcl_pose", PoseStamped, self.ownPositionCB1)]
         # self._enemies_subscriber = [rospy.Subscriber("/CAR1/obstacle_filtered", Obstacles, self.ownObservationCB0),
         #                             rospy.Subscriber("/CAR2/obstacle_filtered", Obstacles, self.ownObservationCB1)]
-        self._decision_pub = [rospy.Publisher("/jackal0/move_base_simple/goal", PoseStamped, queue_size=10),
-                              rospy.Publisher("/jackal1/move_base_simple/goal", PoseStamped, queue_size=10)]
+        # self._decision_pub = [rospy.Publisher("/jackal0/move_base_simple/goal", PoseStamped, queue_size=10),
+        #                       rospy.Publisher("/jackal1/move_base_simple/goal", PoseStamped, queue_size=10)]
         # self._debuff_subscriber = rospy.Subscriber("/debuff", String, self.receiveDebuffSignal)
         # self._robots_subscriber = [rospy.Subscriber("/jackal0/amcl_pose", PoseStamped, self.ownPositionCB0),
         #                            rospy.Subscriber("/jackal1/amcl_pose", PoseStamped, self.ownPositionCB1)]
@@ -270,7 +275,8 @@ class Brain():
         # self._enemies_subscriber = [rospy.Subscriber("/jackal0/obstacle_filtered", Obstacles, self.ownObservationCB0),
         #                             rospy.Subscriber("/jackal1/obstacle_filtered", Obstacles, self.ownObservationCB1)]
 
-        self.bfs = BreadthFirstSearchPlanner(None, None, None)
+        self.blue1 = entrypoint.getRoboMaster("Blue1") #直接获取RoboMaster对象
+        self.bfs = BreadthFirstSearchPlanner(None, 1000, None)
 
 
     class Robot:
@@ -322,9 +328,29 @@ class Brain():
 
 
     def update_map(self):
-        pass
+        self.bfs.obmap = self.blue1.getEnemiesObservationSimulationResult()
+        self.bfs.minx = 0
+        self.bfs.miny = 0
+        self.bfs.maxx = len(self.bfs.obmap)
+        self.bfs.maxy = len(self.bfs.obmap[0])
+        self.bfs.xwidth = (self.bfs.maxx - self.bfs.minx) / self.bfs.reso
+        self.bfs.ywidth = (self.bfs.maxy - self.bfs.miny) / self.bfs.reso
+        # print(self.bfs.minx)
+        # print(self.bfs.miny) 
+        # print(self.bfs.maxx) 
+        # print(self.bfs.maxy) 
+        # print(self.bfs.xwidth)
+        # print(self.bfs.ywidth)
+        for i in range(self.bfs.maxx):
+            for j in range(self.bfs.maxy):
+                print(self.bfs.obmap[i][j], end=' ')
+            print("")
     
     def find_next_position(self):
+        #0 safe
+        #1 observe 1only
+        #2 observe 2only
+        #3 observe both
         rx, ry = self.bfs.planning(sx, sy)
 
         goal = PoseStamped()
@@ -340,16 +366,17 @@ def call_rosspin():
 if __name__ == '__main__':
     try: 
         print(__file__ + " start!!")
-        rospy.init_node('decision_node', anonymous=True)
-        rate = rospy.Rate(1)
+        # rospy.init_node('decision_node', anonymous=True)
+        # rate = rospy.Rate(0.001)
         brain = Brain()
         print(brain)
-        spin_thread = threading.Thread(target=call_rosspin).start()
+        # spin_thread = threading.Thread(target=call_rosspin).start()
 
-        while not rospy.core.is_shutdown():
-            brain.update_map()
-            brain.find_next_position()
-            rate.sleep()
+        brain.update_map()
+        # while not rospy.core.is_shutdown():
+        #     brain.update_map()
+        #     brain.find_next_position()
+        #     rate.sleep()
 
     except rospy.ROSInterruptException:
         pass
