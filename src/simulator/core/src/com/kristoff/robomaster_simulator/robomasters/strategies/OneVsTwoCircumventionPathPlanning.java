@@ -44,13 +44,9 @@ public class OneVsTwoCircumventionPathPlanning {
             queue.offer(rootNode);
             nodeGrid[rootNode.position.x][rootNode.position.y] = true;
 
-            int count = 0;
             while (!this.queue.isEmpty()){
                 resultNode = this.queue.poll();
-                if(enemiesObservationGrid[resultNode.position.x][resultNode.position.y] == 0){
-                    count ++;
-                }
-                if(count > 10){
+                if(enemiesObservationGrid[resultNode.position.x][resultNode.position.y] != 3){
                     boolean canStop = true;
                     for(int i=0;i<60;i++){
                         for(int j=0;j<45;j++){
@@ -58,7 +54,7 @@ public class OneVsTwoCircumventionPathPlanning {
                             int y = resultNode.position.y + j - 23;
                             if(        x>=0 && x<849
                                     && y>=0 && y<489
-                                    && (enemiesObservationGrid[x][y] != 0
+                                    && (enemiesObservationGrid[x][y] == 3
                                     || Systems.matrixSimulator.isPointNotEmptyLowResolution(x,y,thisRoboMaster.pointStatus))){
                                 canStop = false;
                                 break;
