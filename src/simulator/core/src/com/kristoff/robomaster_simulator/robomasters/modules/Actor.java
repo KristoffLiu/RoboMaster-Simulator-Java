@@ -4,11 +4,11 @@ import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
-import com.kristoff.robomaster_simulator.utils.BackendThread;
+import com.kristoff.robomaster_simulator.utils.LoopThread;
 
 import static java.lang.Math.*;
 
-public class Actor extends BackendThread {
+public class Actor extends LoopThread {
     public RoboMaster thisRoboMaster;
     public int x;
     public int y;
@@ -111,5 +111,7 @@ public class Actor extends BackendThread {
         }
     }
 
-
+    public void startToFormMatrix(){
+        super.start();
+    }
 }

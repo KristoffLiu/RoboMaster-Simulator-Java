@@ -1,26 +1,31 @@
 package com.kristoff.robomaster_simulator.robomasters.modules.enemyobservations;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.robomasters.strategies.OneVsTwoCircumventionPathPlanning;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasterList;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.utils.BackendThread;
+import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.utils.Position;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class EnemiesObservationSimulator extends BackendThread {
+public class EnemiesObservationSimulator extends LoopThread {
     RoboMaster thisRoboMaster;
     Mode mode;
 
     public Array<RoboMasterPoint> eoArrayList;
     public int[][] eoMatrix    = new int[8490][4890];
-    public int[][] matrixForROS    = new int[849][489];
-    int[][] emptyMatrix        = new int[8490][4890];
+    int[][] eoMatrix2    = new int[8490][4890];
+    int[][] emptyMatrix = new int[8490][4890];
 
-    public CopyOnWriteArrayList<Position> safeZone = new CopyOnWriteArrayList<>();
+    public int[][] matrix    = new int[849][489];
+
+
+    public CopyOnWriteArrayList<EnemiesObservationPoint> dangerousZone = new CopyOnWriteArrayList<>();
+
+    public OneVsTwoCircumventionPathPlanning oneVsTwoCircumventionPathPlanning;
 
     // 0 = none,
     // 1 = enemy1observed,
@@ -31,26 +36,25 @@ public class EnemiesObservationSimulator extends BackendThread {
     EnemyObservation enemyObservationTwo;
 
     Runnable runnable;
+    Runnable runnable2;
 
     public EnemiesObservationSimulator(RoboMaster roboMaster){
         this.thisRoboMaster = roboMaster;
         mode = Mode.self_observation;
         isStep = true;
         delta = 1/60f;
-
-        for(int i=0; i<849; i++){
-            for(int j=0; j<489; j++){
-                matrixForROS[i][j] = 0;
-            }
-        }
         for(int i=0; i<8490; i++){
             for(int j=0; j<4890; j++){
                 emptyMatrix[i][j] = 0;
             }
         }
+        oneVsTwoCircumventionPathPlanning = new OneVsTwoCircumventionPathPlanning(matrix, thisRoboMaster);
 
         runnable = () -> {
-
+            enemyObservationOne.simulate3(matrix,eoArrayList);
+        };
+        runnable2 = () -> {
+            enemyObservationTwo.simulate3(matrix,eoArrayList);
         };
     }
 
@@ -63,28 +67,54 @@ public class EnemiesObservationSimulator extends BackendThread {
     public void step(){
         switch (mode){
             case self_observation -> {
-                CopyOnWriteArrayList<Position> arrayList = new CopyOnWriteArrayList<>();
+                long startTime = System.currentTimeMillis();//开始时间
+                CopyOnWriteArrayList<EnemiesObservationPoint> arrayList = new CopyOnWriteArrayList<>();
+
                 for(int i=0; i<8490; i++){
                     for(int j=0; j<4890; j++){
+                        eoMatrix2[i][j] = eoMatrix[i][j];
                         eoMatrix[i][j] = 0;
-                    }
-                }
-                enemyObservationOne.simulate(eoMatrix,eoArrayList);
-                enemyObservationTwo.simulate(eoMatrix,eoArrayList);
-                for(int i=0; i<8490; i+=20){
-                    for(int j=0; j<4890; j+=20){
-                        if(RoboMasters.teamBlue.get(0).enemiesObservationSimulator.eoMatrix[i][j] != 0) {
-                            arrayList.add(new Position(i,j));
-                        }
                     }
                 }
 
                 for(int i=0; i<849; i++){
                     for(int j=0; j<489; j++){
-                        matrixForROS[i][j] = eoMatrix[i*10][j*10];
+                        matrix[i][j] = 0;
                     }
                 }
-                safeZone = arrayList;
+
+                runnable.run();
+                runnable2.run();
+
+                long endTime = System.currentTimeMillis();//开始时间
+                //Gdx.app.log("", String.valueOf(endTime - startTime));
+                for(int i=0; i<849; i+=10){
+                    for(int j=0; j<489; j+=10){
+                        if(this.matrix[i][j] != 0) {
+                            arrayList.add(new EnemiesObservationPoint(i,j,matrix[i][j]));
+                        }
+                    }
+                }
+                dangerousZone = arrayList;
+
+
+                for(int i=0; i<849; i+=1){
+                    for(int j=0; j<489; j+=1){
+                        boolean isBreak = false;
+                        for(int k=0; k<10; k+=1){
+                            for(int c=0; c<10; c+=1){
+                                if(eoMatrix[i*10+k][j*10+c] != 0){
+                                    matrix[i][j] = eoMatrix[i*10+k][j*10+c];
+                                    isBreak = true;
+                                    break;
+                                }
+                            }
+                            if (isBreak){
+                                break;
+                            }
+                        }
+                    }
+                }
             }
             case global_observation -> {
                 if(thisRoboMaster.team == RoboMasters.teamBlue)
@@ -95,17 +125,17 @@ public class EnemiesObservationSimulator extends BackendThread {
 
                 }
             }
+
         }
-        Gdx.app.log("success", "");
     }
 
-    public CopyOnWriteArrayList<Position> getSafeZone(){
-        return safeZone;
+    public CopyOnWriteArrayList<EnemiesObservationPoint> getDangerousZone(){
+        return dangerousZone;
     }
 
-    public int[][] getDangerousZone(){
-        return eoMatrix;
-    }
+//    public int[][] getDangerousZone(){
+//        return eoMatrix;
+//    }
 
     @Override
     public void start(){
@@ -113,12 +143,12 @@ public class EnemiesObservationSimulator extends BackendThread {
             case self_observation -> {
                 if(thisRoboMaster.team == RoboMasters.teamBlue)
                 {
-                    enemyObservationOne = new EnemyObservation(RoboMasters.teamRed.get(0),1);
-                    enemyObservationTwo = new EnemyObservation(RoboMasters.teamRed.get(1),2);
+                    enemyObservationOne = new EnemyObservation(thisRoboMaster, RoboMasters.teamRed.get(0),1);
+                    enemyObservationTwo = new EnemyObservation(thisRoboMaster, RoboMasters.teamRed.get(1),2);
                 }
                 else{
-                    enemyObservationOne = new EnemyObservation(RoboMasters.teamBlue.get(0),1);
-                    enemyObservationTwo = new EnemyObservation(RoboMasters.teamBlue.get(1),2);
+                    enemyObservationOne = new EnemyObservation(thisRoboMaster, RoboMasters.teamBlue.get(0),1);
+                    enemyObservationTwo = new EnemyObservation(thisRoboMaster, RoboMasters.teamBlue.get(1),2);
                 }
             }
             case global_observation -> {
@@ -132,9 +162,14 @@ public class EnemiesObservationSimulator extends BackendThread {
             }
         }
         super.start();
+        oneVsTwoCircumventionPathPlanning.start();
     }
 
     public void a(RoboMasterList team){
 
+    }
+
+    public Position getNextPredictedPosition(){
+        return oneVsTwoCircumventionPathPlanning.resultNode.position;
     }
 }

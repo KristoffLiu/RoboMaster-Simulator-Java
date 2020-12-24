@@ -1,9 +1,9 @@
 package com.kristoff.robomaster_simulator.robomasters.judgement;
 
-import com.kristoff.robomaster_simulator.utils.BackendThread;
+import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 
-public class JudgeModule extends BackendThread {
+public class JudgeModule extends LoopThread {
     RoboMaster thisRoboMaster;
 
     float judgeFrequency = 1/60f;

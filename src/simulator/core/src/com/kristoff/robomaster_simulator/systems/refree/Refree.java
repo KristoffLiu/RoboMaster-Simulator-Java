@@ -1,6 +1,6 @@
 package com.kristoff.robomaster_simulator.systems.refree;
 
-import com.kristoff.robomaster_simulator.utils.BackendThread;
+import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasterList;
 import com.kristoff.robomaster_simulator.robomasters.judgement.BuffZone.BuffZone;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Refree extends BackendThread {
+public class Refree extends LoopThread {
 
     RoboMasterList thisRoboMasterList;
 

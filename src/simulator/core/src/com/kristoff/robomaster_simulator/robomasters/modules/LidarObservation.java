@@ -1,9 +1,8 @@
 package com.kristoff.robomaster_simulator.robomasters.modules;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.utils.BackendThread;
+import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
@@ -11,7 +10,7 @@ import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulato
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class LidarObservation extends BackendThread {
+public class LidarObservation extends LoopThread {
     RoboMaster thisRoboMaster;
     LidarMode mode;
     public CopyOnWriteArrayList<RoboMasterPoint> other;

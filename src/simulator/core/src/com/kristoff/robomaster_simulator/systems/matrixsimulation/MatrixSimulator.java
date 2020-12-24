@@ -6,11 +6,15 @@ import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.systems.simulators.Simulator;
 
+import java.awt.*;
+import java.util.List;
+
 public class MatrixSimulator extends Simulator {
     PhysicalSimulator physicalSimulator;
 
     public MatrixPointStatus[][] pointMatrix;
     public MatrixPointStatus[][] staticObjectPointMatrix;
+    public List<MatrixPointStatus> staticObjectPointsList;
 
     public MatrixSimulator() {
         delta = 1/60f;
@@ -66,6 +70,49 @@ public class MatrixSimulator extends Simulator {
         else {
             return true;
         }
+    }
+
+    public boolean isPointNotEmpty(int x, int y, MatrixPointStatus pointStatus, MatrixPointStatus pointStatus2){
+        if(this.pointMatrix[x][y] == MatrixPointStatus.Empty
+                || this.pointMatrix[x][y] == null
+                || this.pointMatrix[x][y] == pointStatus
+                || this.pointMatrix[x][y] == pointStatus2){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public boolean isPointNotEmptyLowResolution(int lowX, int lowY, MatrixPointStatus pointStatus){
+        int x = lowX * 10;
+        int y = lowY * 10;
+        for(int i=0; i<10; i++){
+            for(int j=0; j<10; j++){
+                if(this.pointMatrix[x][y] == MatrixPointStatus.Empty
+                        || this.pointMatrix[x][y] == null
+                        || this.pointMatrix[x][y] == pointStatus){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isPointNotEmptyLowResolution(int lowX, int lowY, MatrixPointStatus pointStatus, MatrixPointStatus pointStatus2){
+        int x = lowX * 10;
+        int y = lowY * 10;
+        for(int i=0; i<10; i++){
+            for(int j=0; j<10; j++){
+                if(this.pointMatrix[x][y] == MatrixPointStatus.Empty
+                        || this.pointMatrix[x][y] == null
+                        || this.pointMatrix[x][y] == pointStatus
+                        || this.pointMatrix[x][y] == pointStatus2){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static RoboMasterPoint getRoboMasterPoint(int x, int y){
@@ -127,7 +174,7 @@ public class MatrixSimulator extends Simulator {
         for(int i=x;i<x+width-1;i++){
             for(int j=y;j<y+height-1;j++){
                 staticObjectPointMatrix[i][j] = MatrixPointStatus.StaticObject;
-                }
             }
+        }
     }
 }

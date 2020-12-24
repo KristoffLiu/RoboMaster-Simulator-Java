@@ -1,8 +1,8 @@
 package com.kristoff.robomaster_simulator.systems.simulators;
 
-import com.kristoff.robomaster_simulator.utils.BackendThread;
+import com.kristoff.robomaster_simulator.utils.LoopThread;
 
-public class Simulator extends BackendThread implements SimulatorInterface{
+public class Simulator extends LoopThread implements SimulatorInterface{
     @Override
     public void step(){
 
