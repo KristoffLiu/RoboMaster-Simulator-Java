@@ -1,3 +1,4 @@
+from typing import Sequence
 from py4j.java_gateway import JavaGateway
 from py4j.java_gateway import java_import
 
@@ -28,8 +29,7 @@ f = robomaster.getLidarObservation() #获得roboMaster的激光雷达观测结�
 # print(dir(a.getClass))
 # print(b)
 # print(c)
-print(len(e[0]))
-print(len(e))
+print(type(e))
 # print(e[0][10])
 # robomasterpoint = f[10]
 # print(robomasterpoint.getX())

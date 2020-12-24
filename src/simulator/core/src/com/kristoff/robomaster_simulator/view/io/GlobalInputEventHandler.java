@@ -71,7 +71,6 @@ public class GlobalInputEventHandler extends InputListener {
             case Input.Keys.S:
                 RoboMasters.teamBlue.get(0).dynamics.moveBehind();
                 break;
-
             case Input.Keys.L:
                 RoboMasters.teamBlue.get(0).dynamics.slowDown();
                 break;

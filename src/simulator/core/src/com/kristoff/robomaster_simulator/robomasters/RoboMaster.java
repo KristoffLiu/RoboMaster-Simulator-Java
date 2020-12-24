@@ -105,6 +105,7 @@ public abstract class RoboMaster {
         }
         this.lidarObservation.start();
         this.renderer.start();
+        this.actor.startToFormMatrix();
     }
 
     public Position getPosition() {
@@ -156,6 +157,9 @@ public abstract class RoboMaster {
         return this.RMPhysicalSimulation.body.getAngularVelocity();
     }
 
+    public Position getNextPredictedPosition(){
+        return enemiesObservationSimulator.getNextPredictedPosition();
+    }
 
 
 //    public void move2() {

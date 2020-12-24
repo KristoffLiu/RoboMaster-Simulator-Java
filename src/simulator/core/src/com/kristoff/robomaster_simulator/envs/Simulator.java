@@ -49,6 +49,10 @@ public class Simulator extends Game {
 		rendererConfig.useGL30 = false;
 	}
 
+	public void reset(){
+
+	}
+
 	/**
 	 * Called when the game is first created.
 	 */

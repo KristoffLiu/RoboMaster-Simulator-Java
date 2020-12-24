@@ -1,10 +1,10 @@
 package com.kristoff.robomaster_simulator.utils;
 
-public class BackendThread extends Thread {
+public class LoopThread extends Thread {
     protected float delta = 1/60f;
     protected boolean isStep = false;
 
-    public BackendThread(){
+    public LoopThread(){
 
     }
 
