@@ -1,10 +1,14 @@
 import time
 #计算时间消耗，特别是对程序运行时间消耗
 
+
 for i in range(8490):
-    
+    for j in range(4890):
+        
+        pass
     pass
 start = time.time()
+
 for _ in range(100000000):
     pass
 end = time.time()

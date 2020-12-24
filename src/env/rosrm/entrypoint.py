@@ -10,7 +10,7 @@ map = entrypoint.getMap() #直接获取matrixsimulator点阵模拟器实时生�
 java_import(gateway.jvm,'java.util.*') #导入java中的类的方法
 
 robomaster = entrypoint.getRoboMaster("Blue1") #直接获取RoboMaster对象
-#一共有四辆Robomaster，分别叫 Blue1, Blue2, Red1, Red2。
+# 一共有四辆Robomaster，分别叫 Blue1, Blue2, Red1, Red2。
 # robomaster.setPosition(5000,1000) #设置x, y坐标
 robomaster.setPosition(5000,1000,float(1.57)) #设置x, y, yaw数值。 yaw用radian数值表示, 且必须是float类型
 a = robomaster.getPosition() #获得roboMaster的坐标，类型为java的Position类
@@ -23,13 +23,13 @@ e = robomaster.getEnemiesObservationSimulationResult() #获得roboMaster的敌�
 #2 observe2only
 #3 observeboth
 f = robomaster.getLidarObservation() #获得roboMaster的激光雷达观测结果，类型为java的List<RoboMasterPoint>列表
-
+g = robomaster.getNextPredictedPosition()
 
 
 # print(dir(a.getClass))
 # print(b)
 # print(c)
-print(type(e))
+print(g)
 # print(e[0][10])
 # robomasterpoint = f[10]
 # print(robomasterpoint.getX())

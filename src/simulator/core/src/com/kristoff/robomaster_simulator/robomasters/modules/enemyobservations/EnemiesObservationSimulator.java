@@ -67,50 +67,52 @@ public class EnemiesObservationSimulator extends LoopThread {
     public void step(){
         switch (mode){
             case self_observation -> {
-                long startTime = System.currentTimeMillis();//开始时间
-                CopyOnWriteArrayList<EnemiesObservationPoint> arrayList = new CopyOnWriteArrayList<>();
+                synchronized(matrix){
+                    long startTime = System.currentTimeMillis();//开始时间
+                    CopyOnWriteArrayList<EnemiesObservationPoint> arrayList = new CopyOnWriteArrayList<>();
 
-                for(int i=0; i<8490; i++){
-                    for(int j=0; j<4890; j++){
-                        eoMatrix2[i][j] = eoMatrix[i][j];
-                        eoMatrix[i][j] = 0;
-                    }
-                }
-
-                for(int i=0; i<849; i++){
-                    for(int j=0; j<489; j++){
-                        matrix[i][j] = 0;
-                    }
-                }
-
-                runnable.run();
-                runnable2.run();
-
-                long endTime = System.currentTimeMillis();//开始时间
-                //Gdx.app.log("", String.valueOf(endTime - startTime));
-                for(int i=0; i<849; i+=10){
-                    for(int j=0; j<489; j+=10){
-                        if(this.matrix[i][j] != 0) {
-                            arrayList.add(new EnemiesObservationPoint(i,j,matrix[i][j]));
+                    for(int i=0; i<8490; i++){
+                        for(int j=0; j<4890; j++){
+                            eoMatrix2[i][j] = eoMatrix[i][j];
+                            eoMatrix[i][j] = 0;
                         }
                     }
-                }
-                dangerousZone = arrayList;
+
+                    for(int i=0; i<849; i++){
+                        for(int j=0; j<489; j++){
+                            matrix[i][j] = 0;
+                        }
+                    }
+
+                    runnable.run();
+                    runnable2.run();
+
+                    long endTime = System.currentTimeMillis();//开始时间
+                    //Gdx.app.log("", String.valueOf(endTime - startTime));
+                    for(int i=0; i<849; i+=10){
+                        for(int j=0; j<489; j+=10){
+                            if(this.matrix[i][j] != 0) {
+                                arrayList.add(new EnemiesObservationPoint(i,j,matrix[i][j]));
+                            }
+                        }
+                    }
+                    dangerousZone = arrayList;
 
 
-                for(int i=0; i<849; i+=1){
-                    for(int j=0; j<489; j+=1){
-                        boolean isBreak = false;
-                        for(int k=0; k<10; k+=1){
-                            for(int c=0; c<10; c+=1){
-                                if(eoMatrix[i*10+k][j*10+c] != 0){
-                                    matrix[i][j] = eoMatrix[i*10+k][j*10+c];
-                                    isBreak = true;
+                    for(int i=0; i<849; i+=1){
+                        for(int j=0; j<489; j+=1){
+                            boolean isBreak = false;
+                            for(int k=0; k<10; k+=1){
+                                for(int c=0; c<10; c+=1){
+                                    if(eoMatrix[i*10+k][j*10+c] != 0){
+                                        matrix[i][j] = eoMatrix[i*10+k][j*10+c];
+                                        isBreak = true;
+                                        break;
+                                    }
+                                }
+                                if (isBreak){
                                     break;
                                 }
-                            }
-                            if (isBreak){
-                                break;
                             }
                         }
                     }
@@ -162,7 +164,6 @@ public class EnemiesObservationSimulator extends LoopThread {
             }
         }
         super.start();
-        oneVsTwoCircumventionPathPlanning.start();
     }
 
     public void a(RoboMasterList team){
@@ -170,6 +171,11 @@ public class EnemiesObservationSimulator extends LoopThread {
     }
 
     public Position getNextPredictedPosition(){
+        oneVsTwoCircumventionPathPlanning.update();
         return oneVsTwoCircumventionPathPlanning.resultNode.position;
+    }
+
+    public void getPlan(){
+        oneVsTwoCircumventionPathPlanning.update();
     }
 }

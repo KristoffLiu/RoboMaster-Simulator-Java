@@ -161,6 +161,10 @@ public abstract class RoboMaster {
         return enemiesObservationSimulator.getNextPredictedPosition();
     }
 
+    public void getPlan(){
+        enemiesObservationSimulator.getPlan();
+    }
+
 
 //    public void move2() {
 //        //this.body.setLinearVelocity(VectorHelper.getForce());

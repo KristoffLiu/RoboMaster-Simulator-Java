@@ -170,13 +170,13 @@ public class LidarPointCloudLayer extends VisualLayer {
             int y = position.y;
             switch (position.observationStatus){
                 case 1 ->{
-                    shapeRenderer3.setColor(1.0f,0f,0f,1.0f);
+                    shapeRenderer3.setColor(0.3f,0f,0f,1.0f);
                 }
                 case 2 ->{
-                    shapeRenderer3.setColor(0.7f,0f,0f,1.0f);
+                    shapeRenderer3.setColor(0.6f,0f,0f,1.0f);
                 }
                 case 3 ->{
-                    shapeRenderer3.setColor(0.3f,0f,0f,1.0f);
+                    shapeRenderer3.setColor(1.0f,0f,0f,1.0f);
                 }
             }
             shapeRenderer3.circle(
@@ -189,16 +189,16 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer5.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer5.setAutoShapeType(true);
         shapeRenderer5.begin(ShapeRenderer.ShapeType.Filled);
-        for(int i=0; i<RoboMasters.teamBlue.get(0).enemiesObservationSimulator.oneVsTwoCircumventionPathPlanning.nodeGrid.length; i+=2){
-            for(int j=0; j<RoboMasters.teamBlue.get(0).enemiesObservationSimulator.oneVsTwoCircumventionPathPlanning.nodeGrid[i].length; j+=2){
+        for(int i=0; i<RoboMasters.teamBlue.get(0).enemiesObservationSimulator.oneVsTwoCircumventionPathPlanning.nodeGrid.length; i+=10){
+            for(int j=0; j<RoboMasters.teamBlue.get(0).enemiesObservationSimulator.oneVsTwoCircumventionPathPlanning.nodeGrid[i].length; j+=10){
                 if(RoboMasters.teamBlue.get(0).enemiesObservationSimulator.oneVsTwoCircumventionPathPlanning.nodeGrid[i][j]){
                     int x = i * 10;
                     int y = j * 10;
-                    shapeRenderer5.setColor(0.0f,0f,1.0f,0.2f);
+                    shapeRenderer5.setColor(0.0f,0f,1.0f,1.0f);
                     shapeRenderer5.circle(
                             x / 1000f,
                             y / 1000f,
-                            0.01f,10);
+                            0.025f,10);
                 }
             }
         }
