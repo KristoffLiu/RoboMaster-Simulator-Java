@@ -2,11 +2,9 @@ package com.kristoff.robomaster_simulator.systems.matrixsimulation;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.systems.simulators.Simulator;
 
-import java.awt.*;
 import java.util.List;
 
 public class MatrixSimulator extends Simulator {
@@ -125,6 +123,12 @@ public class MatrixSimulator extends Simulator {
 
     public MatrixPointStatus[][] getMatrix() {
         return pointMatrix;
+    }
+
+    public void updatePoint(int x, int y, MatrixPointStatus status) {
+        if(getMatrix()[x][y] != MatrixPointStatus.StaticObject){
+            getMatrix()[x][y] = status;
+        }
     }
 
     private void addInnerBoundary(){

@@ -2,12 +2,12 @@ package com.kristoff.robomaster_simulator.view.layers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.kristoff.robomaster_simulator.robomasters.modules.enemyobservations.EnemiesObservationPoint;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.enemyobservations.EnemiesObservationPoint;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
-import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
+import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.utils.Position;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
-import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
 
 import java.awt.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -19,10 +19,6 @@ public class LidarPointCloudLayer extends VisualLayer {
     ShapeRenderer shapeRenderer4;
     ShapeRenderer shapeRenderer5;
 
-    Runnable renderLidarPoints;
-
-
-    //ShapeRenderer circleRenderer;
     public CopyOnWriteArrayList<RoboMasterPoint> lidarPointCloudPointsArray;
     public LidarPointCloudLayer(EnvRenderer env) {
         super(env);
@@ -34,51 +30,6 @@ public class LidarPointCloudLayer extends VisualLayer {
         //circleRenderer = new ShapeRenderer();
 
         lidarPointCloudPointsArray = RoboMasters.teamBlue.get(0).lidarObservation.other;
-
-        renderLidarPoints = new Runnable() {
-            @Override
-            public void run() {
-//                shapeRenderer.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
-//                shapeRenderer.setAutoShapeType(true);
-//                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//                for(RoboMasterPoint point : getLidarPointCloudPointsArray()){
-//                    int i = point.x;
-//                    int j = point.y;
-//                    Point a = new Point(i,j);
-//                    Point b = new Point(
-//                            (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().x * 1000),
-//                            (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().y * 1000));
-//                    float distance = (float) a.distance(b);
-//                    float red;
-//                    float green;
-//                    float blue;
-//                    if(distance <= 7000){
-//                        red = - 1f/7000f * distance + 1.0f;
-//                    }
-//                    else {
-//                        red = 0f;
-//                    }
-//                    if (distance <= 6000){
-//                        green = 1f/6000f * distance;
-//                    }
-//                    else {
-//                        green = 1.0f;
-//                    }
-//                    if (distance <= 5000 && distance >= 2000){
-//                        blue = -1f/3000f * distance + 5f/3f;
-//                    }
-//                    else {
-//                        blue = 0f;
-//                    }
-//                    shapeRenderer.setColor(red,green,blue,1.0f);
-//                    shapeRenderer.circle(
-//                            i / 1000f,
-//                            j / 1000f,
-//                            0.04f,10);
-//                }
-//                shapeRenderer.end();
-            }
-        };
     }
 
     @Override
@@ -144,19 +95,27 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer2.setAutoShapeType(true);
         shapeRenderer2.begin(ShapeRenderer.ShapeType.Line);
         for(RoboMaster roboMaster : RoboMasters.all){
+            float x = roboMaster.getPosition().x / 1000f;
+            float y = roboMaster.getPosition().y / 1000f;
+            shapeRenderer2.setColor(1.0f,0,0,1.0f);
+            shapeRenderer2.circle(
+                    x,
+                    y,
+                    0.05f,
+                    20);
             shapeRenderer2.setColor(1.0f,0,0,1.0f);
             shapeRenderer2.line(
-                    roboMaster.getLidarPosition().x / 1000,
-                    roboMaster.getLidarPosition().y / 1000,
-                    roboMaster.getLidarPosition().x  / 1000+ (float) (2f * Math.sin(roboMaster.getFacingAngle())),
-                    roboMaster.getLidarPosition().y / 1000 + (float) (2f * Math.cos(roboMaster.getFacingAngle())));
+                    x,
+                    y,
+                    x + (float) (2f * Math.sin(roboMaster.getFacingAngle())),
+                    y + (float) (2f * Math.cos(roboMaster.getFacingAngle())));
 
-            shapeRenderer2.setColor(0f,1.0f,0,1.0f);
-            shapeRenderer2.line(
-                    roboMaster.getLidarPosition().x / 1000,
-                    roboMaster.getLidarPosition().y / 1000,
-                    roboMaster.getLidarPosition().x / 1000 + (float) (3f * Math.sin(roboMaster.getCannonAngle())),
-                    roboMaster.getLidarPosition().y / 1000 + (float) (3f * Math.cos(roboMaster.getCannonAngle())));
+//            shapeRenderer2.setColor(0f,1.0f,0,1.0f);
+//            shapeRenderer2.line(
+//                    x,
+//                    y,
+//                    x + (float) (3f * Math.sin(roboMaster.getCannonAngle())),
+//                    y + (float) (3f * Math.cos(roboMaster.getCannonAngle())));
         }
         shapeRenderer2.end();
 
@@ -189,12 +148,12 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer5.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer5.setAutoShapeType(true);
         shapeRenderer5.begin(ShapeRenderer.ShapeType.Filled);
-        for(int i=0; i<RoboMasters.teamBlue.get(0).enemiesObservationSimulator.oneVsTwoCircumventionPathPlanning.nodeGrid.length; i+=10){
-            for(int j=0; j<RoboMasters.teamBlue.get(0).enemiesObservationSimulator.oneVsTwoCircumventionPathPlanning.nodeGrid[i].length; j+=10){
-                if(RoboMasters.teamBlue.get(0).enemiesObservationSimulator.oneVsTwoCircumventionPathPlanning.nodeGrid[i][j]){
+        for(int i = 0; i<RoboMasters.teamBlue.get(0).pathPlanning.nodeGrid.length; i+=10){
+            for(int j = 0; j<RoboMasters.teamBlue.get(0).pathPlanning.nodeGrid[i].length; j+=10){
+                if(RoboMasters.teamBlue.get(0).pathPlanning.nodeGrid[i][j]){
                     int x = i * 10;
                     int y = j * 10;
-                    shapeRenderer5.setColor(0.0f,0f,1.0f,1.0f);
+                    shapeRenderer5.setColor(1.0f,1.0f,1.0f,0.1f);
                     shapeRenderer5.circle(
                             x / 1000f,
                             y / 1000f,
@@ -207,7 +166,7 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer4.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer4.setAutoShapeType(true);
         shapeRenderer4.begin(ShapeRenderer.ShapeType.Filled);
-        for(Position position : RoboMasters.teamBlue.get(0).enemiesObservationSimulator.oneVsTwoCircumventionPathPlanning.results){
+        for(Position position : RoboMasters.teamBlue.get(0).pathPlanning.results){
             if(position!=null){
                 int x = position.x * 10;
                 int y = position.y * 10;

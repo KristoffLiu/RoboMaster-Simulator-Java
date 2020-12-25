@@ -3,12 +3,10 @@ package com.kristoff.robomaster_simulator.launchers.py_entrypoints.rosrmentrypoi
 import com.kristoff.robomaster_simulator.envs.Simulator;
 import com.kristoff.robomaster_simulator.envs.SimulatorConfiguration;
 import com.kristoff.robomaster_simulator.envs.SimulatorMode;
-import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.robomasters.modules.RMPhysicalSimulation;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
-import com.kristoff.robomaster_simulator.utils.Position;
 import py4j.GatewayServer;
 
 public class RosRMEntryPoint{

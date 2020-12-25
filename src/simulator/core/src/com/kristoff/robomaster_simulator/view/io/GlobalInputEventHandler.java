@@ -5,11 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.kristoff.robomaster_simulator.robomasters.RoboMasters;
-import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
 import com.kristoff.robomaster_simulator.view.View;
-import org.lwjgl.Sys;
 
 /**
  * 输入事件监听器（包括触屏, 鼠标点击, 键盘按键 的输入）

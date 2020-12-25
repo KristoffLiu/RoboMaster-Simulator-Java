@@ -1,10 +1,10 @@
 package com.kristoff.robomaster_simulator.systems.refree;
 
 import com.kristoff.robomaster_simulator.utils.LoopThread;
-import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.robomasters.RoboMasterList;
-import com.kristoff.robomaster_simulator.robomasters.judgement.BuffZone.BuffZone;
-import com.kristoff.robomaster_simulator.robomasters.judgement.BuffZoneList;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.teams.Team;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.judgement.BuffZone.BuffZone;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.judgement.BuffZoneList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +12,10 @@ import java.util.Random;
 
 public class Refree extends LoopThread {
 
-    RoboMasterList thisRoboMasterList;
+    Team thisTeam;
 
-    public Refree(RoboMasterList thisRoboMasterList){
-        this.thisRoboMasterList = thisRoboMasterList;
+    public Refree(Team thisTeam){
+        this.thisTeam = thisTeam;
          isStep = true;
          delta = 1/30f;
     }
