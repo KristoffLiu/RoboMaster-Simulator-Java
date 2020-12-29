@@ -3,7 +3,7 @@ package com.kristoff.robomaster_simulator.view.layers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.enemyobservations.EnemiesObservationPoint;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.StatusPoint;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.utils.Position;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
@@ -19,7 +19,7 @@ public class LidarPointCloudLayer extends VisualLayer {
     ShapeRenderer shapeRenderer4;
     ShapeRenderer shapeRenderer5;
 
-    public CopyOnWriteArrayList<RoboMasterPoint> lidarPointCloudPointsArray;
+    public CopyOnWriteArrayList<StatusPoint> lidarPointCloudPointsArray;
     public LidarPointCloudLayer(EnvRenderer env) {
         super(env);
         shapeRenderer = new ShapeRenderer();
@@ -53,7 +53,7 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer.setAutoShapeType(true);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        for(RoboMasterPoint point : getLidarPointCloudPointsArray()){
+        for(StatusPoint point : getLidarPointCloudPointsArray()){
             int i = point.x;
             int j = point.y;
             Point a = new Point(i,j);
@@ -195,7 +195,7 @@ public class LidarPointCloudLayer extends VisualLayer {
 
     }
 
-    public CopyOnWriteArrayList<RoboMasterPoint> getLidarPointCloudPointsArray(){
+    public CopyOnWriteArrayList<StatusPoint> getLidarPointCloudPointsArray(){
         return RoboMasters.teamBlue.get(0).lidarObservation.other;
     }
 }

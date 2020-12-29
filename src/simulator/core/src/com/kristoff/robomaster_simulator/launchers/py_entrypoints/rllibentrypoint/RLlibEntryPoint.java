@@ -5,7 +5,7 @@ import com.kristoff.robomaster_simulator.envs.SimulatorConfiguration;
 import com.kristoff.robomaster_simulator.envs.SimulatorMode;
 import com.kristoff.robomaster_simulator.launchers.py_entrypoints.rosrmentrypoint.RosRMEntryPoint;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import py4j.GatewayServer;
 
 public class RLlibEntryPoint{
@@ -33,7 +33,7 @@ public class RLlibEntryPoint{
         return simulator;
     }
 
-    public MatrixSimulator.MatrixPointStatus[][] getMap(){
-        return Systems.matrixSimulator.getMatrix();
+    public PointSimulator.PointStatus[][] getMap(){
+        return Systems.pointSimulator.getMatrix();
     }
 }

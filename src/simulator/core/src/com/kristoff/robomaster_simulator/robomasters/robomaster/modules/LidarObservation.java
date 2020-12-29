@@ -4,19 +4,19 @@ import com.badlogic.gdx.math.MathUtils;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.StatusPoint;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LidarObservation extends LoopThread {
     RoboMaster thisRoboMaster;
     LidarMode mode;
-    public CopyOnWriteArrayList<RoboMasterPoint> other;
-    public MatrixSimulator.MatrixPointStatus[][] other_array;
+    public CopyOnWriteArrayList<StatusPoint> other;
+    public PointSimulator.PointStatus[][] other_array;
 
-    MatrixSimulator.MatrixPointStatus pointStatus;
+    PointSimulator.PointStatus pointStatus;
 
     public LidarObservation(RoboMaster roboMaster){
         this.thisRoboMaster = roboMaster;
@@ -26,16 +26,16 @@ public class LidarObservation extends LoopThread {
 
         switch (thisRoboMaster.No){
             case 0 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Blue1;
+                pointStatus = PointSimulator.PointStatus.Blue1;
             }
             case 1 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Blue2;
+                pointStatus = PointSimulator.PointStatus.Blue2;
             }
             case 2 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Red1;
+                pointStatus = PointSimulator.PointStatus.Red1;
             }
             case 3 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Red2;
+                pointStatus = PointSimulator.PointStatus.Red2;
             }
         }
 
@@ -44,11 +44,11 @@ public class LidarObservation extends LoopThread {
                 other = new CopyOnWriteArrayList<>();
             }
             case array -> {
-                other_array = new MatrixSimulator.MatrixPointStatus[8490][4890];
+                other_array = new PointSimulator.PointStatus[8490][4890];
             }
             case both -> {
                 other = new CopyOnWriteArrayList<>();
-                other_array = new MatrixSimulator.MatrixPointStatus[8490][4890];
+                other_array = new PointSimulator.PointStatus[8490][4890];
             }
         }
     }
@@ -61,29 +61,31 @@ public class LidarObservation extends LoopThread {
 
     @Override
     public void step(){
-        if(Systems.matrixSimulator != null){
-            switch (mode){
-                case list -> {
-                    other = lidarPointCloudSimulate(
-                            RoboMasters.teamBlue.get(0).getLidarPosition().x,
-                            RoboMasters.teamBlue.get(0).getLidarPosition().y);
-                }
-                case array -> {
-                    other_array = lidarPointCloudSimulateArray(
-                            RoboMasters.teamBlue.get(0).getLidarPosition().x,
-                            RoboMasters.teamBlue.get(0).getLidarPosition().y);
-                }
-                case both -> {
-                    lidarSimulateInBothMode(
-                            RoboMasters.teamBlue.get(0).getLidarPosition().x,
-                            RoboMasters.teamBlue.get(0).getLidarPosition().y);
+        synchronized (Systems.pointSimulator){
+            if(Systems.pointSimulator != null){
+                switch (mode){
+                    case list -> {
+                        other = lidarPointCloudSimulate(
+                                RoboMasters.teamBlue.get(0).getLidarPosition().x,
+                                RoboMasters.teamBlue.get(0).getLidarPosition().y);
+                    }
+                    case array -> {
+                        other_array = lidarPointCloudSimulateArray(
+                                RoboMasters.teamBlue.get(0).getLidarPosition().x,
+                                RoboMasters.teamBlue.get(0).getLidarPosition().y);
+                    }
+                    case both -> {
+                        lidarSimulateInBothMode(
+                                RoboMasters.teamBlue.get(0).getLidarPosition().x,
+                                RoboMasters.teamBlue.get(0).getLidarPosition().y);
+                    }
                 }
             }
         }
     }
 
-    public CopyOnWriteArrayList<RoboMasterPoint> lidarPointCloudSimulate(float c_x, float c_y){
-        CopyOnWriteArrayList<RoboMasterPoint> pointsArray = new CopyOnWriteArrayList<>();
+    public CopyOnWriteArrayList<StatusPoint> lidarPointCloudSimulate(float c_x, float c_y){
+        CopyOnWriteArrayList<StatusPoint> pointsArray = new CopyOnWriteArrayList<>();
         int centre_x = (int) (c_x);
         int centre_y = (int) (c_y);
         float precisionOfDegree = 0.5f;
@@ -94,13 +96,13 @@ public class LidarObservation extends LoopThread {
             if(degree == 0 || degree == 180){
                 for(y = 0;y <4800; y++){
                     if(degree == 0){
-                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x, centre_y + y,pointStatus)){
+                        if(Systems.pointSimulator.isPointNotEmpty(centre_x, centre_y + y,pointStatus)){
                             pointsArray.add(getPointFromMatrix(centre_x, centre_y + y));
                             break;
                         }
                     }
                     else {
-                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x, centre_y - y,pointStatus)){
+                        if(Systems.pointSimulator.isPointNotEmpty(centre_x, centre_y - y,pointStatus)){
                             pointsArray.add(getPointFromMatrix(centre_x, centre_y - y));
                             break;
                         }
@@ -110,13 +112,13 @@ public class LidarObservation extends LoopThread {
             else if(degree == 90 || degree == 270){
                 for(x = 0;x <8400; x++){
                     if(degree == 90){
-                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x + x, centre_y,pointStatus)){
+                        if(Systems.pointSimulator.isPointNotEmpty(centre_x + x, centre_y,pointStatus)){
                             pointsArray.add(getPointFromMatrix(centre_x + x, centre_y));
                             break;
                         }
                     }
                     else {
-                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x - x, centre_y,pointStatus)){
+                        if(Systems.pointSimulator.isPointNotEmpty(centre_x - x, centre_y,pointStatus)){
                             pointsArray.add(getPointFromMatrix(centre_x - x, centre_y));
                             break;
                         }
@@ -138,7 +140,7 @@ public class LidarObservation extends LoopThread {
                     else{
                         offset_x = - offset_x;
                     }
-                    if(Systems.matrixSimulator.isPointNotEmpty(centre_x + offset_x, centre_y + offset_y,pointStatus)){
+                    if(Systems.pointSimulator.isPointNotEmpty(centre_x + offset_x, centre_y + offset_y,pointStatus)){
                         pointsArray.add(getPointFromMatrix(centre_x + offset_x, centre_y + offset_y));
                         break;
                     }
@@ -158,7 +160,7 @@ public class LidarObservation extends LoopThread {
                     else if(degree <= 315){
                         offset_x = - offset_x;
                     }
-                    if(Systems.matrixSimulator.isPointNotEmpty(centre_x + offset_x, centre_y + offset_y,pointStatus)){
+                    if(Systems.pointSimulator.isPointNotEmpty(centre_x + offset_x, centre_y + offset_y,pointStatus)){
                         pointsArray.add(getPointFromMatrix(centre_x + offset_x, centre_y + offset_y));
                         break;
                     }
@@ -170,8 +172,8 @@ public class LidarObservation extends LoopThread {
         return pointsArray;
     }
 
-    public MatrixSimulator.MatrixPointStatus[][] lidarPointCloudSimulateArray(float c_x, float c_y){
-        MatrixSimulator.MatrixPointStatus[][] pointsArray = new MatrixSimulator.MatrixPointStatus[8490][4890];
+    public PointSimulator.PointStatus[][] lidarPointCloudSimulateArray(float c_x, float c_y){
+        PointSimulator.PointStatus[][] pointsArray = new PointSimulator.PointStatus[8490][4890];
         int centre_x = (int) (c_x * 1000);
         int centre_y = (int) (c_y * 1000);
         float precisionOfDegree = 0.5f;
@@ -182,11 +184,11 @@ public class LidarObservation extends LoopThread {
             if(degree == 0 || degree == 180){
                 for(y = 0;y <4800; y++){
                     if(degree == 0){
-                        pointsArray[centre_x][centre_y + y] = Systems.matrixSimulator.getPoint(centre_x, centre_y + y);
+                        pointsArray[centre_x][centre_y + y] = Systems.pointSimulator.getPoint(centre_x, centre_y + y);
                         if(isPointNotEmpty(centre_x, centre_y + y)) break;
                     }
                     else {
-                        pointsArray[centre_x][centre_y - y] = Systems.matrixSimulator.getPoint(centre_x, centre_y - y);
+                        pointsArray[centre_x][centre_y - y] = Systems.pointSimulator.getPoint(centre_x, centre_y - y);
                         if(isPointNotEmpty(centre_x, centre_y - y)) break;
                     }
                 }
@@ -194,11 +196,11 @@ public class LidarObservation extends LoopThread {
             else if(degree == 90 || degree == 270){
                 for(x = 0;x <8400; x++){
                     if(degree == 90){
-                        pointsArray[centre_x + x][centre_y] = Systems.matrixSimulator.getPoint(centre_x + x, centre_y);
+                        pointsArray[centre_x + x][centre_y] = Systems.pointSimulator.getPoint(centre_x + x, centre_y);
                         if(isPointNotEmpty(centre_x + x, centre_y)) break;
                     }
                     else {
-                        pointsArray[centre_x - x][centre_y] = Systems.matrixSimulator.getPoint(centre_x - x, centre_y);
+                        pointsArray[centre_x - x][centre_y] = Systems.pointSimulator.getPoint(centre_x - x, centre_y);
                         if(isPointNotEmpty(centre_x - x, centre_y)) break;
                     }
                 }
@@ -218,7 +220,7 @@ public class LidarObservation extends LoopThread {
                     else{
                         offset_x = - offset_x;
                     }
-                    pointsArray[centre_x + offset_x][centre_y + offset_y] = Systems.matrixSimulator.getPoint(centre_x + offset_x, centre_y + offset_y);
+                    pointsArray[centre_x + offset_x][centre_y + offset_y] = Systems.pointSimulator.getPoint(centre_x + offset_x, centre_y + offset_y);
                     if(isPointNotEmpty(centre_x + offset_x, centre_y + offset_y)) break;
                 }
             }
@@ -236,7 +238,7 @@ public class LidarObservation extends LoopThread {
                     else if(degree <= 315){
                         offset_x = - offset_x;
                     }
-                    pointsArray[centre_x + offset_x][centre_y + offset_y] = Systems.matrixSimulator.getPoint(centre_x + offset_x, centre_y + offset_y);
+                    pointsArray[centre_x + offset_x][centre_y + offset_y] = Systems.pointSimulator.getPoint(centre_x + offset_x, centre_y + offset_y);
                     if(isPointNotEmpty(centre_x + offset_x, centre_y + offset_y)) break;
                 }
             }
@@ -248,8 +250,8 @@ public class LidarObservation extends LoopThread {
 
 
     public void lidarSimulateInBothMode(float c_x, float c_y){
-        CopyOnWriteArrayList<RoboMasterPoint> pointsArrayList = new CopyOnWriteArrayList<>();
-        MatrixSimulator.MatrixPointStatus[][] pointsArray = new MatrixSimulator.MatrixPointStatus[8490][4890];
+        CopyOnWriteArrayList<StatusPoint> pointsArrayList = new CopyOnWriteArrayList<>();
+        PointSimulator.PointStatus[][] pointsArray = new PointSimulator.PointStatus[8490][4890];
 
         int centre_x = (int) (c_x * 1000);
         int centre_y = (int) (c_y * 1000);
@@ -261,14 +263,14 @@ public class LidarObservation extends LoopThread {
             if(degree == 0 || degree == 180){
                 for(y = 0;y <4800; y+=10){
                     if(degree == 0){
-                        pointsArray[centre_x][centre_y + y] = Systems.matrixSimulator.getPoint(centre_x, centre_y + y);
+                        pointsArray[centre_x][centre_y + y] = Systems.pointSimulator.getPoint(centre_x, centre_y + y);
                         if(isPointNotEmpty(centre_x, centre_y + y)){
                             pointsArrayList.add(getPointFromMatrix(centre_x, centre_y + y));
                             break;
                         }
                     }
                     else {
-                        pointsArray[centre_x][centre_y - y] = Systems.matrixSimulator.getPoint(centre_x, centre_y - y);
+                        pointsArray[centre_x][centre_y - y] = Systems.pointSimulator.getPoint(centre_x, centre_y - y);
 
                         if(isPointNotEmpty(centre_x, centre_y - y)){
                             pointsArrayList.add(getPointFromMatrix(centre_x, centre_y - y));
@@ -280,14 +282,14 @@ public class LidarObservation extends LoopThread {
             else if(degree == 90 || degree == 270){
                 for(x = 0;x <8400; x+=10){
                     if(degree == 90){
-                        pointsArray[centre_x + x][centre_y] = Systems.matrixSimulator.getPoint(centre_x + x, centre_y);
+                        pointsArray[centre_x + x][centre_y] = Systems.pointSimulator.getPoint(centre_x + x, centre_y);
                         if(isPointNotEmpty(centre_x + x, centre_y)){
                             pointsArrayList.add(getPointFromMatrix(centre_x + x, centre_y));
                             break;
                         }
                     }
                     else {
-                        pointsArray[centre_x - x][centre_y] = Systems.matrixSimulator.getPoint(centre_x - x, centre_y);
+                        pointsArray[centre_x - x][centre_y] = Systems.pointSimulator.getPoint(centre_x - x, centre_y);
                         if(isPointNotEmpty(centre_x - x, centre_y)){
                             pointsArrayList.add(getPointFromMatrix(centre_x - x, centre_y));
                             break;
@@ -310,7 +312,7 @@ public class LidarObservation extends LoopThread {
                     else{
                         offset_x = - offset_x;
                     }
-                    pointsArray[centre_x + offset_x][centre_y + offset_y] = Systems.matrixSimulator.getPoint(centre_x + offset_x, centre_y + offset_y);
+                    pointsArray[centre_x + offset_x][centre_y + offset_y] = Systems.pointSimulator.getPoint(centre_x + offset_x, centre_y + offset_y);
                     if(isPointNotEmpty(centre_x + offset_x, centre_y + offset_y)){
                         pointsArrayList.add(getPointFromMatrix(centre_x + offset_x, centre_y + offset_y));
                         break;
@@ -331,7 +333,7 @@ public class LidarObservation extends LoopThread {
                     else if(degree <= 315){
                         offset_x = - offset_x;
                     }
-                    pointsArray[centre_x + offset_x][centre_y + offset_y] = Systems.matrixSimulator.getPoint(centre_x + offset_x, centre_y + offset_y);
+                    pointsArray[centre_x + offset_x][centre_y + offset_y] = Systems.pointSimulator.getPoint(centre_x + offset_x, centre_y + offset_y);
                     if(isPointNotEmpty(centre_x + offset_x, centre_y + offset_y)){
                         pointsArrayList.add(getPointFromMatrix(centre_x + offset_x, centre_y + offset_y));
                         break;
@@ -346,11 +348,11 @@ public class LidarObservation extends LoopThread {
     }
 
 
-    private RoboMasterPoint getPointFromMatrix(int x, int y){
-        return MatrixSimulator.getRoboMasterPoint(x, y);
+    private StatusPoint getPointFromMatrix(int x, int y){
+        return PointSimulator.getRoboMasterPoint(x, y);
     }
 
     private boolean isPointNotEmpty(int x, int y){
-        return MatrixSimulator.isPointNotEmpty(x, y);
+        return PointSimulator.isPointNotEmpty(x, y);
     }
 }

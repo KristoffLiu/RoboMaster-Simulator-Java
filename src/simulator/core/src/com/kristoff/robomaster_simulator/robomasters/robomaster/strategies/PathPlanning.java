@@ -5,7 +5,6 @@ import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.utils.Position;
 
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -58,7 +57,7 @@ public class PathPlanning {
                             if(        x>=0 && x<849
                                     && y>=0 && y<489
                                     && (enemiesObservationGrid[x][y] != 0
-                                    || Systems.matrixSimulator.isPointNotEmptyLowResolution(x,y,thisRoboMaster.pointStatus))){
+                                    || Systems.pointSimulator.isPointNotEmptyLowResolution(x,y,thisRoboMaster.pointStatus))){
                                 canStop = false;
                                 break;
                             }
@@ -118,7 +117,7 @@ public class PathPlanning {
                             if(        x>=0 && x<849
                                     && y>=0 && y<489
                                     && (enemiesObservationGrid[x][y] == 3
-                                    || Systems.matrixSimulator.isPointNotEmptyLowResolution(x,y,thisRoboMaster.pointStatus))){
+                                    || Systems.pointSimulator.isPointNotEmptyLowResolution(x,y,thisRoboMaster.pointStatus))){
                                 canStop = false;
                                 break;
                             }
@@ -153,7 +152,7 @@ public class PathPlanning {
             int x = node.position.x + childrenNodesFindingCost[i][0] ;
             int y = node.position.y + childrenNodesFindingCost[i][1] ;
             double cost = Math.sqrt(childrenNodesFindingCost[i][2]);
-            if(hasThisNodeNotBeenVisited(x, y, nodeGrid) && (!Systems.matrixSimulator.isPointNotEmptyLowResolution(x,y,this.thisRoboMaster.pointStatus))){
+            if(hasThisNodeNotBeenVisited(x, y, nodeGrid) && (!Systems.pointSimulator.isPointNotEmptyLowResolution(x,y,this.thisRoboMaster.pointStatus))){
                 PathPlanningNode childNode = new PathPlanningNode(x,y,node.index + 1, cost,node);
                 node.childrenNodes.add(childNode);
                 queue.offer(childNode);

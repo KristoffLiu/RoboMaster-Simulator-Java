@@ -1,13 +1,10 @@
 package com.kristoff.robomaster_simulator.robomasters.robomaster.modules.enemyobservations;
 
 import com.badlogic.gdx.utils.Array;
-import com.kristoff.robomaster_simulator.robomasters.robomaster.strategies.PathPlanning;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.StatusPoint;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
-import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
-import com.kristoff.robomaster_simulator.utils.Position;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -15,7 +12,7 @@ public class EnemiesObservationSimulator extends LoopThread {
     RoboMaster thisRoboMaster;
     Mode mode;
 
-    public Array<RoboMasterPoint> eoArrayList;
+    public Array<StatusPoint> eoArrayList;
     public int[][] eoMatrix    = new int[8490][4890];
     int[][] eoMatrix2    = new int[8490][4890];
     int[][] emptyMatrix = new int[8490][4890];
@@ -65,7 +62,6 @@ public class EnemiesObservationSimulator extends LoopThread {
         switch (mode){
             case self_observation -> {
                 synchronized(matrix){
-                    long startTime = System.currentTimeMillis();//开始时间
                     CopyOnWriteArrayList<EnemiesObservationPoint> arrayList = new CopyOnWriteArrayList<>();
 
                     for(int i=0; i<8490; i++){
@@ -84,8 +80,6 @@ public class EnemiesObservationSimulator extends LoopThread {
                     runnable.run();
                     runnable2.run();
 
-                    long endTime = System.currentTimeMillis();//开始时间
-                    //Gdx.app.log("", String.valueOf(endTime - startTime));
                     for(int i=0; i<849; i+=10){
                         for(int j=0; j<489; j+=10){
                             if(this.matrix[i][j] != 0) {
@@ -94,7 +88,6 @@ public class EnemiesObservationSimulator extends LoopThread {
                         }
                     }
                     dangerousZone = arrayList;
-
 
                     for(int i=0; i<849; i+=1){
                         for(int j=0; j<489; j+=1){
@@ -131,10 +124,6 @@ public class EnemiesObservationSimulator extends LoopThread {
     public CopyOnWriteArrayList<EnemiesObservationPoint> getDangerousZone(){
         return dangerousZone;
     }
-
-//    public int[][] getDangerousZone(){
-//        return eoMatrix;
-//    }
 
     @Override
     public void start(){

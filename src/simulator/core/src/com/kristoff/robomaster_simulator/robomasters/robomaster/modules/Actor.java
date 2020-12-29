@@ -2,8 +2,8 @@ package com.kristoff.robomaster_simulator.robomasters.robomaster.modules;
 
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.StatusPoint;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
 
 import static java.lang.Math.*;
@@ -16,8 +16,8 @@ public class Actor extends LoopThread {
     public float cannonAngle;
 
 
-    public RoboMasterPoint[][] matrix;
-    MatrixSimulator.MatrixPointStatus pointStatus;
+    public StatusPoint[][] matrix;
+    PointSimulator.PointStatus pointStatus;
 
     public Actor(RoboMaster roboMaster){
         this.thisRoboMaster = roboMaster;
@@ -26,23 +26,23 @@ public class Actor extends LoopThread {
 
         switch (thisRoboMaster.No){
             case 0 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Blue1;
+                pointStatus = PointSimulator.PointStatus.Blue1;
             }
             case 1 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Blue2;
+                pointStatus = PointSimulator.PointStatus.Blue2;
             }
             case 2 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Red1;
+                pointStatus = PointSimulator.PointStatus.Red1;
             }
             case 3 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Red2;
+                pointStatus = PointSimulator.PointStatus.Red2;
             }
         }
 
-        matrix = new RoboMasterPoint[600][450];
+        matrix = new StatusPoint[600][450];
         for(int i = 0; i < 600 ; i++){
             for(int j = 0; j < 450 ; j++){
-                matrix[i][j] = new RoboMasterPoint(i+500,j+500,pointStatus);
+                matrix[i][j] = new StatusPoint(i+500,j+500,pointStatus);
             }
         }
     }
@@ -91,7 +91,7 @@ public class Actor extends LoopThread {
 
     @Override
     public void step(){
-        RoboMasterPoint centrePoint = matrix[centre_x][centre_y];
+        StatusPoint centrePoint = matrix[centre_x][centre_y];
         float centreX = x;
         float centreY = y;
         float delta_x = (int)(centreX - centrePoint.x);
@@ -100,13 +100,13 @@ public class Actor extends LoopThread {
         previousRotation = rotation;
         for(int i = 0; i < 600 ; i++){
             for(int j = 0; j < 450 ; j++){
-                RoboMasterPoint transformedPoint = matrix[i][j];
-                Systems.matrixSimulator.getMatrix()[transformedPoint.x][transformedPoint.y] = MatrixSimulator.MatrixPointStatus.Empty;
+                StatusPoint transformedPoint = matrix[i][j];
+                Systems.pointSimulator.getMatrix()[transformedPoint.x][transformedPoint.y] = PointSimulator.PointStatus.Empty;
                 transformedPoint.x += delta_x;
                 transformedPoint.y += delta_y;
                 transformedPoint.x = (int) (cos(delta_rotation) * (transformedPoint.x-centreX) - sin(delta_rotation) * (transformedPoint.y-centreY) + centreX);
                 transformedPoint.y = (int) (sin(delta_rotation) * (transformedPoint.x-centreX) + cos(delta_rotation) * (transformedPoint.y-centreY) + centreY);
-                Systems.matrixSimulator.updatePoint(transformedPoint.x, transformedPoint.y, pointStatus);
+                Systems.pointSimulator.updatePoint(transformedPoint.x, transformedPoint.y, pointStatus);
             }
         }
     }

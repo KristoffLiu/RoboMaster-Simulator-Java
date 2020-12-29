@@ -6,11 +6,11 @@ import com.kristoff.robomaster_simulator.envs.Simulator;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.strategies.PathPlanning;
 import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.judgement.JudgeModule;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.*;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.enemyobservations.EnemiesObservationSimulator;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.StatusPoint;
 import com.kristoff.robomaster_simulator.utils.Position;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public abstract class RoboMaster {
 
     public String name;
     public int No;
-    public MatrixSimulator.MatrixPointStatus pointStatus;
+    public PointSimulator.PointStatus pointStatus;
 
 
     public RoboMaster(String textureRegionPath, Team team, String name) {
@@ -59,16 +59,16 @@ public abstract class RoboMaster {
         }
         switch (this.No){
             case 0 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Blue1;
+                pointStatus = PointSimulator.PointStatus.Blue1;
             }
             case 1 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Blue2;
+                pointStatus = PointSimulator.PointStatus.Blue2;
             }
             case 2 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Red1;
+                pointStatus = PointSimulator.PointStatus.Red1;
             }
             case 3 -> {
-                pointStatus = MatrixSimulator.MatrixPointStatus.Red2;
+                pointStatus = PointSimulator.PointStatus.Red2;
             }
         }
 
@@ -104,9 +104,29 @@ public abstract class RoboMaster {
                 this.dynamics.start();
             }
         }
+        if(this.name.contains("Blue1")){
+
+        }
         this.lidarObservation.start();
         this.renderer.start();
         this.actor.startToFormMatrix();
+    }
+
+    //API
+    public float getRotation() {
+        return this.actor.rotation;
+    }
+    public void setPosition(int x, int y) {
+        this.actor.update(x, y);
+    }
+    public void setPosition(int x, int y, float rotation) {
+        this.actor.update(x, y, rotation);
+    }
+    public Position getPointAvoidingFacingEnemies(){
+        return pathPlanning.getPointAvoidingFacingEnemies();
+    }
+    public Position getPointToTheSafeZone(){
+        return pathPlanning.getPointToTheSafeZone();
     }
 
     public Position getPosition() {
@@ -118,17 +138,7 @@ public abstract class RoboMaster {
     public int getY() {
         return this.actor.y;
     }
-    public float getRotation() {
-        return this.actor.rotation;
-    }
 
-    public void setPosition(int x, int y) {
-        this.actor.update(x, y);
-    }
-
-    public void setPosition(int x, int y, float rotation) {
-        this.actor.update(x, y, rotation);
-    }
 
     public Position getLidarPosition() {
         return getPosition();
@@ -146,7 +156,7 @@ public abstract class RoboMaster {
         return this.enemiesObservationSimulator.matrix;
     }
 
-    public List<RoboMasterPoint> getLidarObservation(){
+    public List<StatusPoint> getLidarObservation(){
         return this.lidarObservation.other;
     }
 
@@ -158,12 +168,7 @@ public abstract class RoboMaster {
         return this.RMPhysicalSimulation.body.getAngularVelocity();
     }
 
-    public Position getPointAvoidingFacingEnemies(){
-        return pathPlanning.getPointAvoidingFacingEnemies();
-    }
-    public Position getPointToTheSafeZone(){
-        return pathPlanning.getPointToTheSafeZone();
-    }
+
 
 //    public void move2() {
 //        //this.body.setLinearVelocity(VectorHelper.getForce());

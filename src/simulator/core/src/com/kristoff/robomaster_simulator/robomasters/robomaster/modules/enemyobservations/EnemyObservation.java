@@ -3,7 +3,7 @@ package com.kristoff.robomaster_simulator.robomasters.robomaster.modules.enemyob
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.RoboMasterPoint;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.StatusPoint;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
 import com.kristoff.robomaster_simulator.utils.Position;
 
@@ -27,9 +27,9 @@ public class EnemyObservation{
         this.position = position;
     }
 
-    public void simulate(int[][] EnemyObservationMapPoints, Array<RoboMasterPoint> eoArrayList){
+    public void simulate(int[][] EnemyObservationMapPoints, Array<StatusPoint> eoArrayList){
         int[][] pointsArray = EnemyObservationMapPoints;
-        Array<RoboMasterPoint> pointsArrayList = new Array<>();
+        Array<StatusPoint> pointsArrayList = new Array<>();
         this.setPosition(enemy.getLidarPosition());
         int centre_x = position.x;
         int centre_y = position.y;
@@ -42,15 +42,15 @@ public class EnemyObservation{
                 for(y = 0;y <4800; y++){
                     if(degree == 0){
                         if(pointsArray[centre_x][centre_y + y] != this.weight) pointsArray[centre_x][centre_y + y] += this.weight;
-                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x, centre_y + y, this.self.pointStatus,this.enemy.pointStatus)){
-                            pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x, centre_y + y));
+                        if(Systems.pointSimulator.isPointNotEmpty(centre_x, centre_y + y, this.self.pointStatus,this.enemy.pointStatus)){
+                            pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x, centre_y + y));
                             break;
                         }
                     }
                     else {
                         if(pointsArray[centre_x][centre_y - y] != this.weight) pointsArray[centre_x][centre_y - y] += this.weight;
-                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x, centre_y - y,this.self.pointStatus,this.enemy.pointStatus)){
-                            pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x, centre_y - y));
+                        if(Systems.pointSimulator.isPointNotEmpty(centre_x, centre_y - y,this.self.pointStatus,this.enemy.pointStatus)){
+                            pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x, centre_y - y));
                             break;
                         }
                     }
@@ -60,15 +60,15 @@ public class EnemyObservation{
                 for(x = 0;x <8400; x++){
                     if(degree == 90){
                         if(pointsArray[centre_x + x][centre_y] != this.weight) pointsArray[centre_x + x][centre_y] += this.weight;
-                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x + x, centre_y,this.self.pointStatus,this.enemy.pointStatus)) {
-                            pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x + x, centre_y));
+                        if(Systems.pointSimulator.isPointNotEmpty(centre_x + x, centre_y,this.self.pointStatus,this.enemy.pointStatus)) {
+                            pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x + x, centre_y));
                             break;
                         }
                     }
                     else {
                         if(pointsArray[centre_x - x][centre_y] != this.weight) pointsArray[centre_x - x][centre_y] += this.weight;
-                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x - x, centre_y,this.self.pointStatus,this.enemy.pointStatus)) {
-                            pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x - x, centre_y));
+                        if(Systems.pointSimulator.isPointNotEmpty(centre_x - x, centre_y,this.self.pointStatus,this.enemy.pointStatus)) {
+                            pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x - x, centre_y));
                             break;
                         }
                     }
@@ -90,8 +90,8 @@ public class EnemyObservation{
                         offset_x = - offset_x;
                     }
                     if(pointsArray[centre_x + offset_x][centre_y + offset_y] != this.weight) pointsArray[centre_x + offset_x][centre_y + offset_y] += this.weight;
-                    if(Systems.matrixSimulator.isPointNotEmpty(centre_x + offset_x, centre_y + offset_y,this.self.pointStatus,this.enemy.pointStatus)) {
-                        pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x + offset_x, centre_y + offset_y));
+                    if(Systems.pointSimulator.isPointNotEmpty(centre_x + offset_x, centre_y + offset_y,this.self.pointStatus,this.enemy.pointStatus)) {
+                        pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x + offset_x, centre_y + offset_y));
                         break;
                     }
                 }
@@ -111,8 +111,8 @@ public class EnemyObservation{
                         offset_x = - offset_x;
                     }
                     if(pointsArray[centre_x + offset_x][centre_y + offset_y] != this.weight) pointsArray[centre_x + offset_x][centre_y + offset_y] += this.weight;
-                    if(Systems.matrixSimulator.isPointNotEmpty(centre_x + offset_x, centre_y + offset_y,this.self.pointStatus,this.enemy.pointStatus)) {
-                        pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x + offset_x, centre_y + offset_y));
+                    if(Systems.pointSimulator.isPointNotEmpty(centre_x + offset_x, centre_y + offset_y,this.self.pointStatus,this.enemy.pointStatus)) {
+                        pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x + offset_x, centre_y + offset_y));
                         break;
                     }
                 }
@@ -122,9 +122,9 @@ public class EnemyObservation{
         }
     }
 
-    public void simulate2(int[][] EnemyObservationMapPoints, Array<RoboMasterPoint> eoArrayList){
+    public void simulate2(int[][] EnemyObservationMapPoints, Array<StatusPoint> eoArrayList){
         int[][] pointsArray = EnemyObservationMapPoints;
-        Array<RoboMasterPoint> pointsArrayList = new Array<>();
+        Array<StatusPoint> pointsArrayList = new Array<>();
         this.setPosition(enemy.getLidarPosition());
         int centre_x = position.x;
         int centre_y = position.y;
@@ -137,15 +137,15 @@ public class EnemyObservation{
                 for(y = 0;y <4800; y++){
                     if(degree == 0){
                         if(pointsArray[centre_x][centre_y + y] != this.weight) pointsArray[centre_x][centre_y + y] += this.weight;
-                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x, centre_y + y, this.self.pointStatus,this.enemy.pointStatus)){
-                            pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x, centre_y + y));
+                        if(Systems.pointSimulator.isPointNotEmpty(centre_x, centre_y + y, this.self.pointStatus,this.enemy.pointStatus)){
+                            pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x, centre_y + y));
                             break;
                         }
                     }
                     else {
                         if(pointsArray[centre_x][centre_y - y] != this.weight) pointsArray[centre_x][centre_y - y] += this.weight;
-                        if(Systems.matrixSimulator.isPointNotEmpty(centre_x, centre_y - y,this.self.pointStatus,this.enemy.pointStatus)){
-                            pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x, centre_y - y));
+                        if(Systems.pointSimulator.isPointNotEmpty(centre_x, centre_y - y,this.self.pointStatus,this.enemy.pointStatus)){
+                            pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x, centre_y - y));
                             break;
                         }
                     }
@@ -155,8 +155,8 @@ public class EnemyObservation{
                 for(x = 0;x <8490; x++){
                     y = (int)(Math.cos(radian) / Math.sin(radian) * x);
                     if(pointsArray[centre_x + x][centre_y + y] != this.weight) pointsArray[centre_x + x][centre_y + y] += this.weight;
-                    if(Systems.matrixSimulator.isPointNotEmpty(centre_x + x, centre_y + y,this.self.pointStatus,this.enemy.pointStatus)){
-                        pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x + x, centre_y + y));
+                    if(Systems.pointSimulator.isPointNotEmpty(centre_x + x, centre_y + y,this.self.pointStatus,this.enemy.pointStatus)){
+                        pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x + x, centre_y + y));
                         break;
                     }
                 }
@@ -165,8 +165,8 @@ public class EnemyObservation{
                 for(x = 0;x <8490; x++){
                     y = (int)(Math.cos(radian) / Math.sin(radian) * x);
                     if(pointsArray[centre_x - x][centre_y + y] != this.weight) pointsArray[centre_x - x][centre_y + y] += this.weight;
-                    if(Systems.matrixSimulator.isPointNotEmpty(centre_x - x, centre_y + y,this.self.pointStatus,this.enemy.pointStatus)){
-                        pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x - x, centre_y + y));
+                    if(Systems.pointSimulator.isPointNotEmpty(centre_x - x, centre_y + y,this.self.pointStatus,this.enemy.pointStatus)){
+                        pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x - x, centre_y + y));
                         break;
                     }
                 }
@@ -174,55 +174,56 @@ public class EnemyObservation{
         }
     }
 
-    public void simulate3(int[][] EnemyObservationMapPoints, Array<RoboMasterPoint> eoArrayList){
+    public void simulate3(int[][] EnemyObservationMapPoints, Array<StatusPoint> eoArrayList){
         int[][] pointsArray = EnemyObservationMapPoints;
-        Array<RoboMasterPoint> pointsArrayList = new Array<>();
+        Array<StatusPoint> pointsArrayList = new Array<>();
         this.setPosition(enemy.getLidarPosition());
         int centre_x = position.x / 10;
         int centre_y = position.y / 10;
         float precisionOfDegree = 0.01f;
         int x = 0;
         int y = 0;
+        int radius = 300;
         for(float degree = 0;degree < 360; degree += precisionOfDegree){
             float radian = degree * MathUtils.degreesToRadians;
             if(degree == 0 || degree == 180){
-                for(y = 0;y <489; y++){
+                for(y = 0;y < radius; y++){
                     if(degree == 0){
                         addPoint(pointsArray,centre_x,centre_y + y);
-                        if(Systems.matrixSimulator.isPointNotEmptyLowResolution(centre_x, centre_y + y, this.self.pointStatus,this.enemy.pointStatus)){
-                            pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x, centre_y + y));
+                        if(Systems.pointSimulator.isPointNotEmptyLowResolution(centre_x, centre_y + y, this.self.pointStatus,this.enemy.pointStatus)){
+                            pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x, centre_y + y));
                             break;
                         }
                     }
                     else {
                         addPoint(pointsArray,centre_x,centre_y - y);
-                        if(Systems.matrixSimulator.isPointNotEmptyLowResolution(centre_x, centre_y - y,this.self.pointStatus,this.enemy.pointStatus)){
-                            pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x, centre_y - y));
+                        if(Systems.pointSimulator.isPointNotEmptyLowResolution(centre_x, centre_y - y,this.self.pointStatus,this.enemy.pointStatus)){
+                            pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x, centre_y - y));
                             break;
                         }
                     }
                 }
             }
             else if(degree == 90 || degree == 270){
-                for(x = 0;x <849; x++){
+                for(x = 0;x < radius; x++){
                     if(degree == 90){
                         addPoint(pointsArray,centre_x + x,centre_y);
-                        if(Systems.matrixSimulator.isPointNotEmptyLowResolution(centre_x + x, centre_y,this.self.pointStatus,this.enemy.pointStatus)) {
-                            pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x + x, centre_y));
+                        if(Systems.pointSimulator.isPointNotEmptyLowResolution(centre_x + x, centre_y,this.self.pointStatus,this.enemy.pointStatus)) {
+                            pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x + x, centre_y));
                             break;
                         }
                     }
                     else {
                         addPoint(pointsArray,centre_x - x,centre_y);
-                        if(Systems.matrixSimulator.isPointNotEmptyLowResolution(centre_x - x, centre_y,this.self.pointStatus,this.enemy.pointStatus)) {
-                            pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x - x, centre_y));
+                        if(Systems.pointSimulator.isPointNotEmptyLowResolution(centre_x - x, centre_y,this.self.pointStatus,this.enemy.pointStatus)) {
+                            pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x - x, centre_y));
                             break;
                         }
                     }
                 }
             }
             else if(degree > 315 || degree < 45 || (degree > 135 && degree < 225)){
-                for(y = 0;y <480; y++){
+                for(y = 0;y < radius; y++){
                     int offset_x = (int) (Math.round(Math.tan(radian) * y));
                     int offset_y = y;
                     if(degree > 135 && degree < 180){
@@ -237,14 +238,14 @@ public class EnemyObservation{
                         offset_x = - offset_x;
                     }
                     addPoint(pointsArray,centre_x + offset_x,centre_y + offset_y);
-                    if(Systems.matrixSimulator.isPointNotEmptyLowResolution(centre_x + offset_x, centre_y + offset_y,this.self.pointStatus,this.enemy.pointStatus)) {
-                        pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x + offset_x, centre_y + offset_y));
+                    if(Systems.pointSimulator.isPointNotEmptyLowResolution(centre_x + offset_x, centre_y + offset_y,this.self.pointStatus,this.enemy.pointStatus)) {
+                        pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x + offset_x, centre_y + offset_y));
                         break;
                     }
                 }
             }
             else{
-                for(x = 0;x <840; x++){
+                for(x = 0;x < radius; x++){
                     int offset_x = x;
                     int offset_y = (int) (Math.round(x / Math.tan(radian)));
                     if(degree <= 135){
@@ -258,8 +259,8 @@ public class EnemyObservation{
                         offset_x = - offset_x;
                     }
                     addPoint(pointsArray,centre_x + offset_x,centre_y + offset_y);
-                    if(Systems.matrixSimulator.isPointNotEmptyLowResolution(centre_x + offset_x, centre_y + offset_y,this.self.pointStatus,this.enemy.pointStatus)) {
-                        pointsArrayList.add(Systems.matrixSimulator.getRoboMasterPoint(centre_x + offset_x, centre_y + offset_y));
+                    if(Systems.pointSimulator.isPointNotEmptyLowResolution(centre_x + offset_x, centre_y + offset_y,this.self.pointStatus,this.enemy.pointStatus)) {
+                        pointsArrayList.add(Systems.pointSimulator.getRoboMasterPoint(centre_x + offset_x, centre_y + offset_y));
                         break;
                     }
                 }

@@ -23,7 +23,7 @@ e = robomaster.getEnemiesObservationSimulationResult() #获得roboMaster的敌�
 #2 observe2only
 #3 observeboth
 f = robomaster.getLidarObservation() #获得roboMaster的激光雷达观测结果，类型为java的List<RoboMasterPoint>列表
-g = robomaster.getNextPredictedPosition()
+
 
 
 # print(dir(a.getClass))
@@ -33,14 +33,8 @@ robomaster2 = entrypoint.getRoboMaster("Blue2")
 robomaster3 = entrypoint.getRoboMaster("Red1")
 robomaster4 = entrypoint.getRoboMaster("Red2")
 
-for i in range(100):
-    robomaster.setPosition(robomaster.getX() + 60, robomaster.getY() - 30, float(1.57))
 
-    robomaster3.setPosition(robomaster3.getX() - 40, robomaster3.getY() - 40, float(0))
-    robomaster4.setPosition(robomaster4.getX() - 40, robomaster4.getY() + 40, float(0))
-    robomaster.getNextPredictedPosition()
-
-
+robomaster.getPointAvoidingFacingEnemies()
 
 # print(e[0][10])
 # robomasterpoint = f[10]

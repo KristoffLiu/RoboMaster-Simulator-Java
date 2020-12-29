@@ -6,7 +6,7 @@ import com.kristoff.robomaster_simulator.envs.SimulatorMode;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.matrixsimulation.MatrixSimulator;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import py4j.GatewayServer;
 
 public class RosRMEntryPoint{
@@ -32,8 +32,8 @@ public class RosRMEntryPoint{
         return simulator;
     }
 
-    public MatrixSimulator.MatrixPointStatus[][] getMap(){
-        return Systems.matrixSimulator.getMatrix();
+    public PointSimulator.PointStatus[][] getMap(){
+        return Systems.pointSimulator.getMatrix();
     }
 
     public void setPosition(String name, int x, int y, float rotation){
