@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.launchers.py_entrypoints.rosrmentrypoint;
+package com.kristoff.robomaster_simulator;
 
 import com.kristoff.robomaster_simulator.envs.Simulator;
 import com.kristoff.robomaster_simulator.envs.SimulatorConfiguration;
@@ -9,12 +9,12 @@ import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import py4j.GatewayServer;
 
-public class RosRMEntryPoint{
+public class RosRMLauncher {
     public Simulator simulator;
     public SimulatorConfiguration config;
     public RoboMaster roboMaster;
 
-    public RosRMEntryPoint(){
+    public RosRMLauncher(){
         this.config = new SimulatorConfiguration();
         this.config.mode = SimulatorMode.realMachine;
         this.simulator = new Simulator(config);
@@ -23,7 +23,7 @@ public class RosRMEntryPoint{
     }
 
     public static void main(String[] args) {
-        GatewayServer gatewayServer = new GatewayServer(new RosRMEntryPoint());
+        GatewayServer gatewayServer = new GatewayServer(new RosRMLauncher());
         gatewayServer.start();
         System.out.println("Gateway Server Started");
     }
