@@ -2,7 +2,7 @@ package com.kristoff.robomaster_simulator.robomasters.robomaster;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.kristoff.robomaster_simulator.envs.Simulator;
+import com.kristoff.robomaster_simulator.core.Simulator;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.strategies.PathPlanning;
 import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;

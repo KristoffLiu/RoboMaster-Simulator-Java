@@ -1,7 +1,7 @@
 package com.kristoff.robomaster_simulator.view.renderers;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.kristoff.robomaster_simulator.envs.Simulator;
+import com.kristoff.robomaster_simulator.core.Simulator;
 
 public class Renderer{
     LwjglApplication application;

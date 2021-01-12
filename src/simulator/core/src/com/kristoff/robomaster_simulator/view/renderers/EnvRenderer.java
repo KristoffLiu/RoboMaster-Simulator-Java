@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.kristoff.robomaster_simulator.envs.SimulatorConfiguration;
+import com.kristoff.robomaster_simulator.core.SimulatorConfiguration;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.view.View;
 import com.kristoff.robomaster_simulator.view.io.GlobalInputEventHandler;

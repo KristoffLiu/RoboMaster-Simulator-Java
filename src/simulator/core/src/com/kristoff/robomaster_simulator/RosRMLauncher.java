@@ -1,8 +1,10 @@
 package com.kristoff.robomaster_simulator;
 
-import com.kristoff.robomaster_simulator.envs.Simulator;
-import com.kristoff.robomaster_simulator.envs.SimulatorConfiguration;
-import com.kristoff.robomaster_simulator.envs.SimulatorMode;
+import com.kristoff.robomaster_simulator.core.Simulator;
+import com.kristoff.robomaster_simulator.core.SimulatorConfiguration;
+import com.kristoff.robomaster_simulator.core.SimulatorMode;
+import com.kristoff.robomaster_simulator.enemies.Enemies;
+import com.kristoff.robomaster_simulator.enemies.Enemy;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.Systems;
@@ -44,4 +46,8 @@ public class RosRMLauncher {
         roboMaster = RoboMasters.getRoboMaster(name);
         return roboMaster;
     }
+
+//    public Enemy getEnemy(String name){
+//        Enemy
+//    }
 }

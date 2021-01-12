@@ -1,6 +1,6 @@
 package com.kristoff.robomaster_simulator.systems;
 
-import com.kristoff.robomaster_simulator.envs.SimulatorConfiguration;
+import com.kristoff.robomaster_simulator.core.SimulatorConfiguration;
 import com.kristoff.robomaster_simulator.systems.maps.Map;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;

@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.envs;
+package com.kristoff.robomaster_simulator.core;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
