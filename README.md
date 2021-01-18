@@ -3,8 +3,6 @@
 
 ## Get Started
 
-***
-
 ## 部署开发环境
 
 ### 安装 IDE - IntellJ IDEA Community 版本
@@ -32,40 +30,4 @@ ROS的交互一般是用C++/Python进行的，而模拟器是用Java构建的，
 ### 安装强化学习所需的依赖 -  Py4J
 
 
-
-# Install
-
-***
-
-The easiest way to use JavaScript Standard Style is to install it globally as a Node command line program. Run the following command in Terminal:
-
-```text
-$ npm install standard --global
-```
-
-Or, you can install `standard` locally, for use in a single project:
-
-```text
-$ npm install standard --save-dev
-```
-
-
-
-# Usage
-
-***
-
-After you've installed `standard`, you should be able to use the `standard` program. The simplest use case would be checking the style of all JavaScript files in the current working directory:
-
-```text
-$ standard
-Error: Use JavaScript Standard Style
-  lib/torrent.js:950:11: Expected '===' and instead saw '=='.
-```
-
-You can optionally pass in a directory (or directories) using the glob pattern. Be sure to quote paths containing glob patterns so that they are expanded by `standard` instead of your shell:
-
-```text
-$ standard "src/util/**/*.js" "test/**/*.js"
-```
 
