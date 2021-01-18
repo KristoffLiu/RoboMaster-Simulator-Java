@@ -3,11 +3,13 @@
 
 ## Get Started
 
-### 1. 部署开发环境
+### 1. 安装IDE
 
-#### 1.1 安装 IDE - IntellJ IDEA Community 版本
+#### 1.1 Java - 安装 IntellJ IDEA Community 版本
 
 [IntelliJ IDEA: The Capable & Ergonomic Java IDE by JetBrains](https://www.jetbrains.com/idea/)
+
+#### 1.2 Python - 任意好用的Python IDE即可
 
 ### 2. 安装模拟器本体所需的依赖 -  JDK + JVM
 
