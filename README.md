@@ -1,46 +1,71 @@
-# RoboMaster-libGDX-Simulator
-这是一个全新的RoboMaster AI对抗赛特供模拟器，在后续更新中或许会增加业务范围
-内置精确到毫米级的地图和车辆模型，搭配完善的物理引擎和裁判系统，用最小的计算量模拟到每一颗子弹的弹道
-由于使用2D模拟，不会使用过量计算量计算无用的Z轴方向运动，在不变动结果的同时增加模拟速率
-模拟器部分使用JAVA编写，core中分出四个包，分别运行裁判系统，车辆属性，模拟器以及其他
-模拟器由五个Layer分别渲染，最小化无意义的重复渲染计算量
-# Get Started
-完全下载后进入RoboMaster-Simulator-Java/src/simulator/launcher/src/com/kristoff/robomaster_simulator/launcher运行DesktopLauncher.java即可
-# 依赖项
-python3
+# RoboMaster Simulator
+*基于Java liGDX的RoboMaster模拟器。*
 
-    sudo apt-get install python3 
+## Get Started
+
+***
+
+## 部署开发环境
+
+### 安装 IDE - IntellJ IDEA Community 版本
+
+[IntelliJ IDEA: The Capable & Ergonomic Java IDE by JetBrains](https://www.jetbrains.com/idea/)
+
+### 安装模拟器本体所需的依赖 -  JDK + JVM
+
+[AdoptOpenJDK](https://adoptopenjdk.net/)
+
+![](https://tcs.teambition.net/storage/3121854a587869f8b45f558873f9f1ff90e8?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjVmNGZhYTkzNzc3NGJiZTk2NWEzMjgxYSIsImV4cCI6MTYxMTU0NzM1OSwiaWF0IjoxNjEwOTQyNTU5LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMjE4NTRhNTg3ODY5ZjhiNDVmNTU4ODczZjlmMWZmOTBlOCJ9.LZEnjbHEvgtBd5bC9mXMozy_HbY51hekaOKK5cC0-JM&download=image.png "")
+
+安装页面会自动识别当前操作系统，**JDK** 优先选择 __OpenJDK 15__ 版本，**JVM** 优先选择 __HotSpot__ 版本。
+
+### 安装Python依赖 -  Python3、pip、PyTorch、Gym、RLlib、Py4J
+
+### 安装连接真机所需的依赖 -  Py4J
+
+ROS的交互一般是用C++/Python进行的，而模拟器是用Java构建的，所以我们需要建立起Python到Java之间的桥梁，这里就要用到Py4J框架了。
+
+需要注意的是，模拟器本身（即Java部分）已经自带Py4J框架，所以我们只需要为您的Python安装Py4J即可。
+
+**Py4J** `pip install py4j`
+
+### 安装强化学习所需的依赖 -  Py4J
 
 
-pip
 
-    sudo apt install python3-pip
+# Install
 
-PyTorch
+***
 
-根据以下安装教程网址安装
+The easiest way to use JavaScript Standard Style is to install it globally as a Node command line program. Run the following command in Terminal:
 
-https://blog.csdn.net/qq_38451119/article/details/81532779
+```text
+$ npm install standard --global
+```
 
-Gym
+Or, you can install `standard` locally, for use in a single project:
 
-根据以下安装教程网址安装
+```text
+$ npm install standard --save-dev
+```
 
-http://www.baidu.com/link?url=98azpRznooVGM77tcVexncV6GTszFKtiWaKqZ7VLiP5t5vMLnDllRQcyAmMaWSeRlfSBHn-kHVZOLKTjF5QcfvJktybfLdbwbxynzmTOjjG&wd=&eqid=ba83ce1d00001ee3000000035fd1b8ca
 
-RLlib
 
-    pip install ray[rllib]
+# Usage
 
-py4j
+***
 
-根据以下安装教程网址安装
-https://blog.csdn.net/hecongqing/article/details/85016154
+After you've installed `standard`, you should be able to use the `standard` program. The simplest use case would be checking the style of all JavaScript files in the current working directory:
 
-# Simulator
-依赖项都已集成在gradle里面了
-下载后建议使用IDEA打开，因为这是libgdx项目，需要进行配置
-在IDEA中打开File→open，进入Open File or Project界面
-找到下载的RoboMaster-libGDX-Simulator文件，不要直接选OK，先进去
-找到src/META-INF/build.gradle,选择此文件，点ok，然后在弹出的页面选Open as Project
-恭喜你可以开始使用啦
+```text
+$ standard
+Error: Use JavaScript Standard Style
+  lib/torrent.js:950:11: Expected '===' and instead saw '=='.
+```
+
+You can optionally pass in a directory (or directories) using the glob pattern. Be sure to quote paths containing glob patterns so that they are expanded by `standard` instead of your shell:
+
+```text
+$ standard "src/util/**/*.js" "test/**/*.js"
+```
+
