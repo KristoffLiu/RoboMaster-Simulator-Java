@@ -223,7 +223,7 @@ public class EnemyObservation{
                 }
             }
             else if(degree > 315 || degree < 45 || (degree > 135 && degree < 225)){
-                for(y = 0;y < radius; y++){
+                for(y = 0;y < Math.abs(Math.cos(radian) * radius); y++){
                     int offset_x = (int) (Math.round(Math.tan(radian) * y));
                     int offset_y = y;
                     if(degree > 135 && degree < 180){
@@ -245,7 +245,7 @@ public class EnemyObservation{
                 }
             }
             else{
-                for(x = 0;x < radius; x++){
+                for(x = 0;x < Math.abs(Math.sin(radian) * radius); x++){
                     int offset_x = x;
                     int offset_y = (int) (Math.round(x / Math.tan(radian)));
                     if(degree <= 135){
