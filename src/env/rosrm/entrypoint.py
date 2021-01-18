@@ -12,7 +12,9 @@ java_import(gateway.jvm,'java.util.*') #导入java中的类的方法
 robomaster = entrypoint.getRoboMaster("Blue1") #直接获取RoboMaster对象
 # 一共有四辆Robomaster，分别叫 Blue1, Blue2, Red1, Red2。
 # robomaster.setPosition(5000,1000) #设置x, y坐标
-# robomaster.setPosition(5000,1000,float(1.57)) #设置x, y, yaw数值。 yaw用radian数值表示, 且必须是float类型
+
+robomaster.setPosition(3500,1500,float(1.57)) #设置x, y, yaw数值。 yaw用radian数值表示, 且必须是float类型
+
 a = robomaster.getPosition() #获得roboMaster的坐标，类型为java的Position类
 b = robomaster.getX() #获得roboMaster的x坐标，类型为int整型
 c = robomaster.getY() #获得roboMaster的y坐标，类型为int整型
@@ -25,6 +27,15 @@ e = robomaster.getEnemiesObservationSimulationResult() #获得roboMaster的敌�
 f = robomaster.getLidarObservation() #获得roboMaster的激光雷达观测结果，类型为java的List<RoboMasterPoint>列表
 
 
+robomaster1 = entrypoint.getRoboMaster("Red1")
+robomaster1.setPosition(3500,3000,float(1)) #设置x, y, yaw数值。 yaw用radian数值表示, 且必须是float类型
+robomaster1 = entrypoint.getRoboMaster("Red2")
+robomaster1.setPosition(5500,2000,float(1)) #设置x, y, yaw数值。 yaw用radian数值表示, 且必须是float类型
+
+
+# g = robomaster.getNextPredictedPosition()
+
+
 
 # print(dir(a.getClass))
 # print(b)
@@ -34,9 +45,21 @@ robomaster3 = entrypoint.getRoboMaster("Red1")
 robomaster4 = entrypoint.getRoboMaster("Red2")
 
 
+# for i in range(100):
+#     robomaster.setPosition(robomaster.getX() + 60, robomaster.getY() - 30, float(1.57))
+
+#     robomaster3.setPosition(robomaster3.getX() - 40, robomaster3.getY() - 40, float(0))
+#     robomaster4.setPosition(robomaster4.getX() - 40, robomaster4.getY() + 40, float(0))
+#     robomaster.getNextPredictedPosition()
+
+
+
 robomaster.getPointAvoidingFacingEnemies()
 
 # print(e[0][10])
 # robomasterpoint = f[10]
 # print(robomasterpoint.getX())
 # print(map[0][1])
+
+# /robomaster1 = entrypoint.getRoboMaster("Red1")
+# robomaster1.setPosition(5500,2000,float(1)) #设置x, y, yaw数值。 yaw用radian数值表示, 且必须是float类型
