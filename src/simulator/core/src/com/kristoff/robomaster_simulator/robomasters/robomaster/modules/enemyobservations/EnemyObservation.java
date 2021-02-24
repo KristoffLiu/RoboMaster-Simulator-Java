@@ -173,7 +173,7 @@ public class EnemyObservation{
             }
         }
     }
-
+    
     public void simulate3(int[][] EnemyObservationMapPoints, Array<StatusPoint> eoArrayList){
         int[][] pointsArray = EnemyObservationMapPoints;
         Array<StatusPoint> pointsArrayList = new Array<>();

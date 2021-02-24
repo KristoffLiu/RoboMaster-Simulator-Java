@@ -1,6 +1,7 @@
 ## Other
 /src/core/build/libs/
 /src/desktop/
+.vscode
 
 
 ## Java
