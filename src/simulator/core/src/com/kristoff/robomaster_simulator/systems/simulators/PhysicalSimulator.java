@@ -121,13 +121,24 @@ public class PhysicalSimulator extends Simulator{
     private void createStaticBlocks() {
         for (TextureMapObject textureMapObject : Systems.map.getBlocks()) {
             float scale = 1f / 1000f;
-            float halfWidth = textureMapObject.getTextureRegion().getRegionWidth() / 2f * scale;
-            float halfHeight = textureMapObject.getTextureRegion().getRegionHeight() / 2f * scale;
-            float x = textureMapObject.getX() * scale + halfWidth;
-            float y = textureMapObject.getY() * scale;
-            Vector2 centre = new Vector2(0, halfHeight);
-            float rotation = (float) Math.toRadians(textureMapObject.getRotation());
-            createStaticBlock(x, y, halfWidth, halfHeight, centre, rotation);
+            float textureX = textureMapObject.getX();
+            float textureY = textureMapObject.getY();
+            float textureWidth = textureMapObject.getTextureRegion().getRegionWidth();
+            float textureHeight = textureMapObject.getTextureRegion().getRegionHeight();
+            float textureRotation = textureMapObject.getRotation();
+            float textureRotationInRadian = (float)Math.toRadians(textureRotation);
+
+            float halfWidth = textureWidth / 2f;
+            float halfHeight = textureHeight / 2f;
+            float x = (textureX) * scale;
+            float y = (textureY) * scale;
+            if(textureMapObject.getName().equals("B5")){
+                x = (textureX + textureWidth * (float)Math.cos(textureRotationInRadian) - halfWidth) * scale;
+                y = (textureY - halfHeight) * scale;
+            }
+            Vector2 centre = new Vector2(halfWidth * scale, halfHeight * scale);
+
+            createStaticBlock(x, y, halfWidth * scale, halfHeight * scale, centre, textureRotationInRadian);
         }
     }
 }

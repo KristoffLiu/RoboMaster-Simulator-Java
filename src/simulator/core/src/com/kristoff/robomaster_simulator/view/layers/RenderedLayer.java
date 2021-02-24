@@ -31,11 +31,19 @@ public class RenderedLayer extends VisualLayer {
     public void addBlocks(){
         for(TextureMapObject textureMapObject : environment.map.getBlocks()){
             float scale = 1f / 1000f;
+            float textureX = textureMapObject.getX();
+            float textureY = textureMapObject.getY();
+            float textureWidth = textureMapObject.getTextureRegion().getRegionWidth();
+            float textureHeight = textureMapObject.getTextureRegion().getRegionHeight();
+            float textureRotation = textureMapObject.getRotation();
+            float textureRotationInRadian = (float)Math.toRadians(textureRotation);
+
             CustomActor actor = new CustomActor(textureMapObject.getTextureRegion());
-            actor.setX(textureMapObject.getX() * scale);
-            actor.setY(textureMapObject.getY() * scale);
-            actor.setWidth(textureMapObject.getTextureRegion().getRegionWidth() * scale);
-            actor.setHeight(textureMapObject.getTextureRegion().getRegionHeight() * scale);
+            actor.setX((textureX + textureWidth * (float)Math.sin(textureRotationInRadian)) * scale);
+            actor.setY((textureY - textureHeight * (float)Math.sin(textureRotationInRadian)) * scale);
+            actor.setRotation(textureRotation);
+            actor.setWidth(textureWidth * scale);
+            actor.setHeight(textureHeight * scale);
             this.addActor(actor);
         }
     }

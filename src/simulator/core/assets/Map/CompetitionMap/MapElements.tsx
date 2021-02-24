@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.4" tiledversion="1.4.3" name="Wall" tilewidth="8080" tileheight="4480" tilecount="10" columns="0">
+<tileset version="1.4" tiledversion="1.4.3" name="Wall" tilewidth="8080" tileheight="4480" tilecount="11" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="2">
   <image width="50" height="50" source="tile.png"/>
@@ -30,5 +30,8 @@
  </tile>
  <tile id="11">
   <image width="205" height="4480" source="verticalwall.png"/>
+ </tile>
+ <tile id="12">
+  <image width="250" height="250" source="b5.png"/>
  </tile>
 </tileset>
