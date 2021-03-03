@@ -46,8 +46,4 @@ public class RosRMLauncher {
         roboMaster = RoboMasters.getRoboMaster(name);
         return roboMaster;
     }
-
-//    public Enemy getEnemy(String name){
-//        Enemy
-//    }
 }

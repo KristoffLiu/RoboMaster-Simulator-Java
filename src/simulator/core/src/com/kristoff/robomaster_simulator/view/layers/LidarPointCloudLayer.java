@@ -48,7 +48,6 @@ public class LidarPointCloudLayer extends VisualLayer {
     @Override
     public void draw(){
         super.draw();
-        //renderLidarPoints.run();
 
         shapeRenderer.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer.setAutoShapeType(true);
@@ -109,13 +108,6 @@ public class LidarPointCloudLayer extends VisualLayer {
                     y,
                     x + (float) (2f * Math.sin(roboMaster.getFacingAngle())),
                     y + (float) (2f * Math.cos(roboMaster.getFacingAngle())));
-
-//            shapeRenderer2.setColor(0f,1.0f,0,1.0f);
-//            shapeRenderer2.line(
-//                    x,
-//                    y,
-//                    x + (float) (3f * Math.sin(roboMaster.getCannonAngle())),
-//                    y + (float) (3f * Math.cos(roboMaster.getCannonAngle())));
         }
         shapeRenderer2.end();
 
@@ -177,15 +169,6 @@ public class LidarPointCloudLayer extends VisualLayer {
                         0.025f,10);
             }
         }
-
-//        Position position = RoboMasters.teamBlue.get(0).enemiesObservationSimulator.oneVsTwoCircumventionPathPlanning.resultNode.position;
-//        int x = position.x * 10;
-//        int y = position.y * 10;
-//        shapeRenderer4.setColor(0.0f,1.0f,0f,1.0f);
-//        shapeRenderer4.circle(
-//                x / 1000f,
-//                y / 1000f,
-//                0.025f,10);
         shapeRenderer4.end();
 
     }

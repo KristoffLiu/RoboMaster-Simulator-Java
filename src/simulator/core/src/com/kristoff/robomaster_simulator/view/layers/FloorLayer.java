@@ -19,7 +19,7 @@ public class FloorLayer extends VisualLayer {
 
         envRenderer.view.getOrthographicCamera().position.x = envRenderer.width / 2f;
         envRenderer.view.getOrthographicCamera().position.y = envRenderer.height / 2f;
-        envRenderer.view.getOrthographicCamera().zoom = 1f;
+        envRenderer.view.getOrthographicCamera() .zoom = 1f;
     }
 
     public void resize(int width, int height) {

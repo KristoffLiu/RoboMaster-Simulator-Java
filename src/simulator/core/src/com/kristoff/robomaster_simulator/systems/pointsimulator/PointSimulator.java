@@ -182,7 +182,7 @@ public class PointSimulator extends Simulator {
                     }
                 }
                 else{
-                    for(int j = 0; j <= 250 * Math.sqrt(2) - i ; j++){
+                    for(int j = 0; j <= 250 * Math.sqrt(2) - i; j++){
                         staticObjectPointMatrix[i + 4068][2445 + j] = PointStatus.StaticObject;
                         staticObjectPointMatrix[i + 4068][2445 - j] = PointStatus.StaticObject;
                     }
