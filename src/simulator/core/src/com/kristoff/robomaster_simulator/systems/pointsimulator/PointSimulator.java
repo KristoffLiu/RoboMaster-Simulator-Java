@@ -1,6 +1,8 @@
 package com.kristoff.robomaster_simulator.systems.pointsimulator;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.Actor;
+import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.systems.simulators.Simulator;
@@ -62,6 +64,34 @@ public class PointSimulator extends Simulator {
         }
         else {
             return true;
+        }
+    }
+
+    public void clearPointStatus(PointStatus pointStatus){
+        int m = 0;
+        int n = 0;
+        int count = 0;
+        for(int i = 0; i < 849; i++){
+            for(int j = 0; j < 489; j++){
+                if(this.pointMatrix[i][j] == pointStatus){
+                    count ++;
+                }
+                if(count >= 25){
+                    m = i;
+                    n = j;
+                    break;
+                }
+            }
+            if(count >= 25){
+                break;
+            }
+        }
+        for(int i = -50; i < 50; i++){
+            for(int j = -50; j < 40; j++){
+                if(this.pointMatrix[i][j] == pointStatus){
+                    this.pointMatrix[i][j] = PointStatus.Empty;
+                }
+            }
         }
     }
 

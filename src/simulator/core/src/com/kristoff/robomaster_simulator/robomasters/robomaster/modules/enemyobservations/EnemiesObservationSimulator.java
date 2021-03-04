@@ -77,8 +77,8 @@ public class EnemiesObservationSimulator extends LoopThread {
                         }
                     }
 
-                    runnable.run();
-                    runnable2.run();
+                    enemyObservationOne.simulate3(matrix,eoArrayList);
+                    enemyObservationTwo.simulate3(matrix,eoArrayList);
 
                     for(int i=0; i<849; i+=10){
                         for(int j=0; j<489; j+=10){

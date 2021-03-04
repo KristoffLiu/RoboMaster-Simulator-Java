@@ -23,10 +23,10 @@ public class RoboMasters{
 
     public static void init(){
         if(all.size() == 0){
-            teamBlue.add(new AlexanderMasterII(teamBlue,"Blue1"  ));
-            teamBlue.add(new AlexanderMasterII(teamBlue,"Blue2"  ));
-            teamRed.add(new AlexanderMasterII(teamRed,"Red1"  ));
-            teamRed.add(new AlexanderMasterII(teamRed,"Red2"  ));
+            teamBlue.add(new AlexanderMasterII(teamBlue,"Blue1"));
+            teamBlue.add(new AlexanderMasterII(teamBlue,"Blue2"));
+            teamRed.add(new AlexanderMasterII(teamRed,"Red1"));
+            teamRed.add(new AlexanderMasterII(teamRed,"Red2"));
 
             all.addAll(teamBlue);
             all.addAll(teamRed);

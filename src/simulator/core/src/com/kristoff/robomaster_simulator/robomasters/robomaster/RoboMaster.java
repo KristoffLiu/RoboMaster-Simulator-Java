@@ -157,7 +157,7 @@ public abstract class RoboMaster {
     }
 
     public List<StatusPoint> getLidarObservation(){
-        return this.lidarObservation.other;
+        return this.lidarObservation.others;
     }
 
     public Vector2 getLinearVelocity() {

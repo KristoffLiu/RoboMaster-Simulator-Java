@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class LidarObservation extends LoopThread {
     RoboMaster thisRoboMaster;
     LidarMode mode;
-    public CopyOnWriteArrayList<StatusPoint> other;
+    public CopyOnWriteArrayList<StatusPoint> others;
     public PointSimulator.PointStatus[][] other_array;
 
     PointSimulator.PointStatus pointStatus;
@@ -41,13 +41,13 @@ public class LidarObservation extends LoopThread {
 
         switch (mode){
             case list -> {
-                other = new CopyOnWriteArrayList<>();
+                others = new CopyOnWriteArrayList<>();
             }
             case array -> {
                 other_array = new PointSimulator.PointStatus[8490][4890];
             }
             case both -> {
-                other = new CopyOnWriteArrayList<>();
+                others = new CopyOnWriteArrayList<>();
                 other_array = new PointSimulator.PointStatus[8490][4890];
             }
         }
@@ -65,19 +65,19 @@ public class LidarObservation extends LoopThread {
             if(Systems.pointSimulator != null){
                 switch (mode){
                     case list -> {
-                        other = lidarPointCloudSimulate(
-                                RoboMasters.teamBlue.get(0).getLidarPosition().x,
-                                RoboMasters.teamBlue.get(0).getLidarPosition().y);
+                        others = lidarPointCloudSimulate(
+                                this.thisRoboMaster.getLidarPosition().x,
+                                this.thisRoboMaster.getLidarPosition().y);
                     }
                     case array -> {
                         other_array = lidarPointCloudSimulateArray(
-                                RoboMasters.teamBlue.get(0).getLidarPosition().x,
-                                RoboMasters.teamBlue.get(0).getLidarPosition().y);
+                                this.thisRoboMaster.getLidarPosition().x,
+                                this.thisRoboMaster.getLidarPosition().y);
                     }
                     case both -> {
                         lidarSimulateInBothMode(
-                                RoboMasters.teamBlue.get(0).getLidarPosition().x,
-                                RoboMasters.teamBlue.get(0).getLidarPosition().y);
+                                this.thisRoboMaster.getLidarPosition().x,
+                                this.thisRoboMaster.getLidarPosition().y);
                     }
                 }
             }
@@ -343,7 +343,7 @@ public class LidarObservation extends LoopThread {
             x = 0;
             y = 0;
         }
-        other =  pointsArrayList;
+        others =  pointsArrayList;
         other_array = pointsArray;
     }
 

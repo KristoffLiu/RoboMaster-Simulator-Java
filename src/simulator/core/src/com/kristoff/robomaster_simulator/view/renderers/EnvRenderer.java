@@ -87,12 +87,14 @@ public class EnvRenderer implements Screen {
         renderedLayer.act();
         renderedLayer.draw();
 
-        lidarPointCloudLayer.act(delta);
-        lidarPointCloudLayer.draw();
 
 
         roboMasterLayer.act();
         roboMasterLayer.draw();
+
+        lidarPointCloudLayer.act(delta);
+        lidarPointCloudLayer.draw();
+
 
         switch (config.mode){
             case simulator,simulatorRLlib ->{

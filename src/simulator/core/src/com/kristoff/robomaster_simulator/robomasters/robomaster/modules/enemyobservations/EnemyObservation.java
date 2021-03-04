@@ -11,7 +11,7 @@ public class EnemyObservation{
     RoboMaster self;
     RoboMaster enemy;
     Position position = new Position();
-    int radius = 300;
+    int radius = 250;
     int weight = 0;
 
     public EnemyObservation(RoboMaster self, RoboMaster enemy, int value){

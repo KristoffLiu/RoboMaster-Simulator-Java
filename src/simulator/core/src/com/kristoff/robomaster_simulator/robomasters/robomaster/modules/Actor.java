@@ -94,19 +94,16 @@ public class Actor extends LoopThread {
         StatusPoint centrePoint = matrix[centre_x][centre_y];
         float centreX = x / 10;
         float centreY = y / 10;
-        float delta_x = (int)(centreX - centrePoint.x);
-        float delta_y = (int)(centreY - centrePoint.y);
-        float delta_rotation = rotation - previousRotation;
-        previousRotation = rotation;
+        float delta_rotation = rotation;
         for(int i = 0; i < 60 ; i++){
             for(int j = 0; j < 45 ; j++){
                 StatusPoint transformedPoint = matrix[i][j];
-                Systems.pointSimulator.getMatrix()[transformedPoint.x][transformedPoint.y] = PointSimulator.PointStatus.Empty;
-                transformedPoint.x += delta_x;
-                transformedPoint.y += delta_y;
-                transformedPoint.x = (int) (cos(delta_rotation) * (transformedPoint.x-centreX) - sin(delta_rotation) * (transformedPoint.y-centreY) + centreX);
-                transformedPoint.y = (int) (sin(delta_rotation) * (transformedPoint.x-centreX) + cos(delta_rotation) * (transformedPoint.y-centreY) + centreY);
-                Systems.pointSimulator.updatePoint(transformedPoint.x, transformedPoint.y, pointStatus);
+                Systems.pointSimulator.updatePoint(transformedPoint.x, transformedPoint.y, PointSimulator.PointStatus.Empty);
+                float tempX = centreX - 30 + i;
+                float tempY = centreY - 22.5f + j;
+                transformedPoint.x = (int) (cos(delta_rotation) * (tempX-centreX) - sin(delta_rotation) * (tempY-centreY) + centreX);
+                transformedPoint.y = (int) (sin(delta_rotation) * (tempX-centreX) + cos(delta_rotation) * (tempY-centreY) + centreY);
+                Systems.pointSimulator.updatePoint(transformedPoint.x, transformedPoint.y, this.pointStatus);
             }
         }
     }
