@@ -26,6 +26,15 @@ public class PathPlanning {
         this.results = new CopyOnWriteArrayList<>();
     }
 
+    //此节点的子节点查找路径及成本消耗
+    public static int[][] childrenNodesFindingCost =
+            new int[][]
+                    {
+                            { 1, 0, 1},{0, 1, 1},{-1, 0, 1},
+                            { 0, -1,1},{-1,-1,2},
+                            {-1, 1, 2},{1,-1, 2},{1, 1, 2}
+                    };
+
     public Position getPointToTheSafeZone(){
         synchronized(enemiesObservationGrid){
             long startTime = System.currentTimeMillis();//开始时间
@@ -57,7 +66,7 @@ public class PathPlanning {
                             if(        x>=0 && x<849
                                     && y>=0 && y<489
                                     && (enemiesObservationGrid[x][y] != 0
-                                    || Systems.pointSimulator.isPointNotEmptyLowResolution(x,y,thisRoboMaster.pointStatus))){
+                                    || Systems.pointSimulator.isPointNotEmpty(x,y,thisRoboMaster.pointStatus))){
                                 canStop = false;
                                 break;
                             }
@@ -117,7 +126,7 @@ public class PathPlanning {
                             if(        x>=0 && x<849
                                     && y>=0 && y<489
                                     && (enemiesObservationGrid[x][y] == 3
-                                    || Systems.pointSimulator.isPointNotEmptyLowResolution(x,y,thisRoboMaster.pointStatus))){
+                                    || Systems.pointSimulator.isPointNotEmpty(x,y,thisRoboMaster.pointStatus))){
                                 canStop = false;
                                 break;
                             }
@@ -152,7 +161,7 @@ public class PathPlanning {
             int x = node.position.x + childrenNodesFindingCost[i][0] ;
             int y = node.position.y + childrenNodesFindingCost[i][1] ;
             double cost = Math.sqrt(childrenNodesFindingCost[i][2]);
-            if(hasThisNodeNotBeenVisited(x, y, nodeGrid) && (!Systems.pointSimulator.isPointNotEmptyLowResolution(x,y,this.thisRoboMaster.pointStatus))){
+            if(hasThisNodeNotBeenVisited(x, y, nodeGrid) && (!Systems.pointSimulator.isPointNotEmpty(x,y,this.thisRoboMaster.pointStatus))){
                 PathPlanningNode childNode = new PathPlanningNode(x,y,node.index + 1, cost,node);
                 node.childrenNodes.add(childNode);
                 queue.offer(childNode);
@@ -175,12 +184,4 @@ public class PathPlanning {
             return true;
         }
     }
-
-    public static int[][] childrenNodesFindingCost =
-            new int[][]
-                    {
-                            { 1, 0, 1},{0, 1, 1},{-1, 0, 1},
-                            { 0, -1,1},{-1,-1,2},
-                            {-1, 1, 2},{1,-1, 2},{1, 1, 2}
-                    }; //此节点的子节点查找路径及成本消耗
 }

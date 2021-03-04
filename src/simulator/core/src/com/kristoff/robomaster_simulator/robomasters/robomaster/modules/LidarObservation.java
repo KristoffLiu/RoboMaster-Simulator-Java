@@ -86,15 +86,15 @@ public class LidarObservation extends LoopThread {
 
     public CopyOnWriteArrayList<StatusPoint> lidarPointCloudSimulate(float c_x, float c_y){
         CopyOnWriteArrayList<StatusPoint> pointsArray = new CopyOnWriteArrayList<>();
-        int centre_x = (int) (c_x);
-        int centre_y = (int) (c_y);
+        int centre_x = (int) (c_x / 10);
+        int centre_y = (int) (c_y / 10);
         float precisionOfDegree = 0.5f;
         int x = 0;
         int y = 0;
         for(float degree = 0;degree < 360; degree += precisionOfDegree){
             float radian = degree * MathUtils.degreesToRadians;
             if(degree == 0 || degree == 180){
-                for(y = 0;y <4800; y++){
+                for(y = 0;y <480; y++){
                     if(degree == 0){
                         if(Systems.pointSimulator.isPointNotEmpty(centre_x, centre_y + y,pointStatus)){
                             pointsArray.add(getPointFromMatrix(centre_x, centre_y + y));
@@ -110,7 +110,7 @@ public class LidarObservation extends LoopThread {
                 }
             }
             else if(degree == 90 || degree == 270){
-                for(x = 0;x <8400; x++){
+                for(x = 0;x <840; x++){
                     if(degree == 90){
                         if(Systems.pointSimulator.isPointNotEmpty(centre_x + x, centre_y,pointStatus)){
                             pointsArray.add(getPointFromMatrix(centre_x + x, centre_y));
@@ -126,7 +126,7 @@ public class LidarObservation extends LoopThread {
                 }
             }
             else if(degree > 315 || degree < 45 || (degree > 135 && degree < 225)){
-                for(y = 0;y <4800; y++){
+                for(y = 0;y <480; y++){
                     int offset_x = (int) (Math.tan(radian) * y);
                     int offset_y = y;
                     if(degree > 135 && degree < 180){
@@ -147,7 +147,7 @@ public class LidarObservation extends LoopThread {
                 }
             }
             else{
-                for(x = 0;x <8400; x++){
+                for(x = 0;x <840; x++){
                     int offset_x = x;
                     int offset_y = (int) (x / Math.tan(radian));
                     if(degree <= 135){

@@ -57,34 +57,34 @@ public class LidarPointCloudLayer extends VisualLayer {
             int j = point.y;
             Point a = new Point(i,j);
             Point b = new Point(
-                    (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().x),
-                    (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().y));
+                    (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().x / 10),
+                    (int)(environment.roboMasters.teamBlue.get(0).getLidarPosition().y / 10));
             float distance = (float) a.distance(b);
             float red;
             float green;
             float blue;
-            if(distance <= 7000){
-                red = - 1f/7000f * distance + 1.0f;
+            if(distance <= 700){
+                red = - 1f/700f * distance + 1.0f;
             }
             else {
                 red = 0f;
             }
-            if (distance <= 6000){
-                green = 1f/6000f * distance;
+            if (distance <= 600){
+                green = 1f/600f * distance;
             }
             else {
                 green = 1.0f;
             }
-            if (distance <= 5000 && distance >= 2000){
-                blue = -1f/3000f * distance + 5f/3f;
+            if (distance <= 500 && distance >= 200){
+                blue = -1f/300f * distance + 5f/3f;
             }
             else {
                 blue = 0f;
             }
             shapeRenderer.setColor(red,green,blue,1.0f);
             shapeRenderer.circle(
-                    i / 1000f,
-                    j / 1000f,
+                    i / 100f,
+                    j / 100f,
                     0.04f,10);
         }
         shapeRenderer.end();

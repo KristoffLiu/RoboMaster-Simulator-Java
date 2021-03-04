@@ -13,7 +13,7 @@ robomaster = entrypoint.getRoboMaster("Blue1") #直接获取RoboMaster对象
 # 一共有四辆Robomaster，分别叫 Blue1, Blue2, Red1, Red2。
 # robomaster.setPosition(5000,1000) #设置x, y坐标
 
-robomaster.setPosition(3500,1500,float(1.57)) #设置x, y, yaw数值。 yaw用radian数值表示, 且必须是float类型
+robomaster.setPosition(3300,1800,float(1.57)) #设置x, y, yaw数值。 yaw用radian数值表示, 且必须是float类型
 
 a = robomaster.getPosition() #获得roboMaster的坐标，类型为java的Position类
 b = robomaster.getX() #获得roboMaster的x坐标，类型为int整型

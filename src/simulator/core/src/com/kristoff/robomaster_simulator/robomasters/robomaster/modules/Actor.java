@@ -39,10 +39,10 @@ public class Actor extends LoopThread {
             }
         }
 
-        matrix = new StatusPoint[600][450];
-        for(int i = 0; i < 600 ; i++){
-            for(int j = 0; j < 450 ; j++){
-                matrix[i][j] = new StatusPoint(i+500,j+500,pointStatus);
+        matrix = new StatusPoint[60][45];
+        for(int i = 0; i < 60 ; i++){
+            for(int j = 0; j < 45 ; j++){
+                matrix[i][j] = new StatusPoint(i+50,j+50,pointStatus);
             }
         }
     }
@@ -85,21 +85,21 @@ public class Actor extends LoopThread {
         return (float) (- this.rotation);
     }
 
-    int centre_x = 300;
-    int centre_y = 225;
+    int centre_x = 30;
+    int centre_y = 22;
     float previousRotation = 0;
 
     @Override
     public void step(){
         StatusPoint centrePoint = matrix[centre_x][centre_y];
-        float centreX = x;
-        float centreY = y;
+        float centreX = x / 10;
+        float centreY = y / 10;
         float delta_x = (int)(centreX - centrePoint.x);
         float delta_y = (int)(centreY - centrePoint.y);
         float delta_rotation = rotation - previousRotation;
         previousRotation = rotation;
-        for(int i = 0; i < 600 ; i++){
-            for(int j = 0; j < 450 ; j++){
+        for(int i = 0; i < 60 ; i++){
+            for(int j = 0; j < 45 ; j++){
                 StatusPoint transformedPoint = matrix[i][j];
                 Systems.pointSimulator.getMatrix()[transformedPoint.x][transformedPoint.y] = PointSimulator.PointStatus.Empty;
                 transformedPoint.x += delta_x;

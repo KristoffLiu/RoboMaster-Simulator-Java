@@ -13,7 +13,6 @@ public class RenderedLayer extends VisualLayer {
         addBirthZones();
         addBlocks();
         addBuffZones();
-        renderRoboMasters();
     }
 
     public void addBirthZones(){
@@ -57,12 +56,6 @@ public class RenderedLayer extends VisualLayer {
             actor.setWidth(textureMapObject.getTextureRegion().getRegionWidth() * scale);
             actor.setHeight(textureMapObject.getTextureRegion().getRegionHeight() * scale);
             this.addActor(actor);
-        }
-    }
-
-    public void renderRoboMasters() {
-        for (RoboMaster roboMaster : RoboMasters.all) {
-            this.addActor(roboMaster.renderer);
         }
     }
 

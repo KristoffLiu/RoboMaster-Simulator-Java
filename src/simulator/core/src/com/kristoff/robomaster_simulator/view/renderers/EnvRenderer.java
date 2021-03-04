@@ -29,6 +29,7 @@ public class EnvRenderer implements Screen {
     public PhysicsDebugLayer physicsDebugLayer;
 
     public RenderedLayer renderedLayer;
+    public RoboMasterLayer roboMasterLayer;
     public LidarPointCloudLayer lidarPointCloudLayer;
 
     public FrameRate frameRate;
@@ -42,6 +43,7 @@ public class EnvRenderer implements Screen {
         floorLayer = new FloorLayer(this);
         floorLayer.addListener(new GlobalInputEventHandler(this));
         renderedLayer = new RenderedLayer(this);
+        roboMasterLayer = new RoboMasterLayer(this);
         lidarPointCloudLayer = new LidarPointCloudLayer(this);
         frameRate = new FrameRate();
 
@@ -87,6 +89,10 @@ public class EnvRenderer implements Screen {
 
         lidarPointCloudLayer.act(delta);
         lidarPointCloudLayer.draw();
+
+
+        roboMasterLayer.act();
+        roboMasterLayer.draw();
 
         switch (config.mode){
             case simulator,simulatorRLlib ->{

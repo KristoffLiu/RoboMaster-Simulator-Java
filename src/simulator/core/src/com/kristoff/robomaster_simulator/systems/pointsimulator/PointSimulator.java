@@ -20,8 +20,8 @@ public class PointSimulator extends Simulator {
 
         this.physicalSimulator = Systems.physicalSimulator;
 
-        pointMatrix = new PointStatus[8490][4890];
-        staticObjectPointMatrix = new PointStatus[8490][4890];
+        pointMatrix = new PointStatus[849][489];
+        staticObjectPointMatrix = new PointStatus[849][489];
     }
 
     @Override
@@ -77,37 +77,6 @@ public class PointSimulator extends Simulator {
         }
     }
 
-    public boolean isPointNotEmptyLowResolution(int lowX, int lowY, PointStatus pointStatus){
-        int x = lowX * 10;
-        int y = lowY * 10;
-        for(int i=0; i<10; i++){
-            for(int j=0; j<10; j++){
-                if(this.pointMatrix[x][y] == PointStatus.Empty
-                        || this.pointMatrix[x][y] == null
-                        || this.pointMatrix[x][y] == pointStatus){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public boolean isPointNotEmptyLowResolution(int lowX, int lowY, PointStatus pointStatus, PointStatus pointStatus2){
-        int x = lowX * 10;
-        int y = lowY * 10;
-        for(int i=0; i<10; i++){
-            for(int j=0; j<10; j++){
-                if(this.pointMatrix[x][y] == PointStatus.Empty
-                        || this.pointMatrix[x][y] == null
-                        || this.pointMatrix[x][y] == pointStatus
-                        || this.pointMatrix[x][y] == pointStatus2){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public static StatusPoint getRoboMasterPoint(int x, int y){
         return new StatusPoint(x,y,Systems.pointSimulator.pointMatrix[x][y]);
     }
@@ -128,18 +97,18 @@ public class PointSimulator extends Simulator {
 
     private void addInnerBoundary(){
 //        addRectangle(204,204,8080,4480);
-        addBlock(0, 0, 204, 4890, 0);
-        addBlock(205, 0, 8080, 204, 0);
-        addBlock(205, 4685, 8080, 205, 0);
-        addBlock(8284, 0, 204, 4890, 0);
+        addBlock(0, 0, 20, 489, 0);
+        addBlock(20, 0, 808, 20, 0);
+        addBlock(20, 468, 808, 20, 0);
+        addBlock(828, 0, 20, 489, 0);
     }
 
     private void addBlocks(){
         for(TextureMapObject textureMapObject : Systems.map.getBlocks()){
-            float x = textureMapObject.getX();
-            float y = textureMapObject.getY();
-            float width = textureMapObject.getTextureRegion().getRegionWidth();
-            float height = textureMapObject.getTextureRegion().getRegionHeight();;
+            float x = textureMapObject.getX() / 10;
+            float y = textureMapObject.getY() / 10;
+            float width = textureMapObject.getTextureRegion().getRegionWidth() / 10;
+            float height = textureMapObject.getTextureRegion().getRegionHeight() / 10;
 //            addRectangle( x,  y,  width, height);
             addBlock( (int)x,  (int)y,  (int)width, (int)height, textureMapObject.getRotation());
         }
@@ -174,17 +143,17 @@ public class PointSimulator extends Simulator {
             }
         }
         else{
-            for(int i = 0; i <= (250 * Math.sqrt(2)); i++){
-                if(i <= (250 / Math.sqrt(2))){
+            for(int i = 0; i <= (25 * Math.sqrt(2)); i++){
+                if(i <= (25 / Math.sqrt(2))){
                     for(int j = 0; j <= i ; j++){
-                        staticObjectPointMatrix[i + 4068][2445 + j] = PointStatus.StaticObject;
-                        staticObjectPointMatrix[i + 4068][2445 - j] = PointStatus.StaticObject;
+                        staticObjectPointMatrix[i + 407][245 + j] = PointStatus.StaticObject;
+                        staticObjectPointMatrix[i + 407][245 - j] = PointStatus.StaticObject;
                     }
                 }
                 else{
-                    for(int j = 0; j <= 250 * Math.sqrt(2) - i; j++){
-                        staticObjectPointMatrix[i + 4068][2445 + j] = PointStatus.StaticObject;
-                        staticObjectPointMatrix[i + 4068][2445 - j] = PointStatus.StaticObject;
+                    for(int j = 0; j <= 25 * Math.sqrt(2) - i; j++){
+                        staticObjectPointMatrix[i + 407][245 + j] = PointStatus.StaticObject;
+                        staticObjectPointMatrix[i + 407][245 - j] = PointStatus.StaticObject;
                     }
                 }
             }

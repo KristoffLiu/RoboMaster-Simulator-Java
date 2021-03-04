@@ -13,9 +13,9 @@ public class EnemiesObservationSimulator extends LoopThread {
     Mode mode;
 
     public Array<StatusPoint> eoArrayList;
-    public int[][] eoMatrix    = new int[8490][4890];
-    int[][] eoMatrix2    = new int[8490][4890];
-    int[][] emptyMatrix = new int[8490][4890];
+    public int[][] eoMatrix    = new int[849][489];
+    int[][] eoMatrix2    = new int[849][489];
+    int[][] emptyMatrix = new int[849][489];
 
     public int[][] matrix    = new int[849][489];
 
@@ -38,8 +38,8 @@ public class EnemiesObservationSimulator extends LoopThread {
         mode = Mode.self_observation;
         isStep = true;
         delta = 1/60f;
-        for(int i=0; i<8490; i++){
-            for(int j=0; j<4890; j++){
+        for(int i=0; i<849; i++){
+            for(int j=0; j<489; j++){
                 emptyMatrix[i][j] = 0;
             }
         }
@@ -64,8 +64,8 @@ public class EnemiesObservationSimulator extends LoopThread {
                 synchronized(matrix){
                     CopyOnWriteArrayList<EnemiesObservationPoint> arrayList = new CopyOnWriteArrayList<>();
 
-                    for(int i=0; i<8490; i++){
-                        for(int j=0; j<4890; j++){
+                    for(int i=0; i<849; i++){
+                        for(int j=0; j<489; j++){
                             eoMatrix2[i][j] = eoMatrix[i][j];
                             eoMatrix[i][j] = 0;
                         }
@@ -89,23 +89,23 @@ public class EnemiesObservationSimulator extends LoopThread {
                     }
                     dangerousZone = arrayList;
 
-                    for(int i=0; i<849; i+=1){
-                        for(int j=0; j<489; j+=1){
-                            boolean isBreak = false;
-                            for(int k=0; k<10; k+=1){
-                                for(int c=0; c<10; c+=1){
-                                    if(eoMatrix[i*10+k][j*10+c] != 0){
-                                        matrix[i][j] = eoMatrix[i*10+k][j*10+c];
-                                        isBreak = true;
-                                        break;
-                                    }
-                                }
-                                if (isBreak){
-                                    break;
-                                }
-                            }
-                        }
-                    }
+//                  for(int i=0; i<849; i+=1){
+//                      for(int j=0; j<489; j+=1){
+//                          boolean isBreak = false;
+//                          for(int k=0; k<10; k+=1){
+//                              for(int c=0; c<10; c+=1){
+//                                  if(eoMatrix[i*10+k][j*10+c] != 0){
+//                                      matrix[i][j] = eoMatrix[i*10+k][j*10+c];
+//                                      isBreak = true;
+//                                      break;
+//                                  }
+//                              }
+//                              if (isBreak){
+//                                  break;
+//                              }
+//                          }
+//                      }
+//                  }
                 }
             }
             case global_observation -> {
