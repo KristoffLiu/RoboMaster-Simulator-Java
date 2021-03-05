@@ -1,6 +1,7 @@
-package com.kristoff.robomaster_simulator.robomasters.robomaster.modules.enemyobservations;
+package com.kristoff.robomaster_simulator.robomasters.teams.enemyobservations;
 
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.StatusPoint;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
@@ -9,7 +10,7 @@ import com.kristoff.robomaster_simulator.utils.LoopThread;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EnemiesObservationSimulator extends LoopThread {
-    RoboMaster thisRoboMaster;
+    Team thisTeam;
     Mode mode;
 
     public Array<StatusPoint> eoArrayList;
@@ -33,8 +34,8 @@ public class EnemiesObservationSimulator extends LoopThread {
     Runnable runnable;
     Runnable runnable2;
 
-    public EnemiesObservationSimulator(RoboMaster roboMaster){
-        this.thisRoboMaster = roboMaster;
+    public EnemiesObservationSimulator(Team team){
+        thisTeam = team;
         mode = Mode.self_observation;
         isStep = true;
         delta = 1/60f;
@@ -109,7 +110,7 @@ public class EnemiesObservationSimulator extends LoopThread {
                 }
             }
             case global_observation -> {
-                if(thisRoboMaster.team == RoboMasters.teamBlue)
+                if(thisTeam == RoboMasters.teamBlue)
                 {
 
                 }
@@ -129,18 +130,18 @@ public class EnemiesObservationSimulator extends LoopThread {
     public void start(){
         switch (mode){
             case self_observation -> {
-                if(thisRoboMaster.team == RoboMasters.teamBlue)
+                if(thisTeam == RoboMasters.teamBlue)
                 {
-                    enemyObservationOne = new EnemyObservation(thisRoboMaster, RoboMasters.teamRed.get(0),1);
-                    enemyObservationTwo = new EnemyObservation(thisRoboMaster, RoboMasters.teamRed.get(1),2);
+                    enemyObservationOne = new EnemyObservation(thisTeam.get(0), thisTeam.get(1), RoboMasters.teamRed.get(0),1);
+                    enemyObservationTwo = new EnemyObservation(thisTeam.get(0), thisTeam.get(1), RoboMasters.teamRed.get(1),2);
                 }
                 else{
-                    enemyObservationOne = new EnemyObservation(thisRoboMaster, RoboMasters.teamBlue.get(0),1);
-                    enemyObservationTwo = new EnemyObservation(thisRoboMaster, RoboMasters.teamBlue.get(1),2);
+                    enemyObservationOne = new EnemyObservation(thisTeam.get(0), thisTeam.get(1), RoboMasters.teamBlue.get(0),1);
+                    enemyObservationTwo = new EnemyObservation(thisTeam.get(0), thisTeam.get(1), RoboMasters.teamBlue.get(1),2);
                 }
             }
             case global_observation -> {
-                if(thisRoboMaster.team == RoboMasters.teamBlue)
+                if(thisTeam == RoboMasters.teamBlue)
                 {
 
                 }

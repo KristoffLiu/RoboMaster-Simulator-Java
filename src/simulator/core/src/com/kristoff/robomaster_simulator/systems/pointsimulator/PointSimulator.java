@@ -3,6 +3,7 @@ package com.kristoff.robomaster_simulator.systems.pointsimulator;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.Actor;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
+import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.systems.simulators.Simulator;
@@ -37,6 +38,7 @@ public class PointSimulator extends Simulator {
     public void step(){
 
     }
+
 
     public enum PointStatus {
         Empty,
@@ -106,6 +108,20 @@ public class PointSimulator extends Simulator {
             return true;
         }
     }
+
+    public boolean isPointNotEmpty(int x, int y, PointStatus self1, PointStatus self2, PointStatus enemyPoint) {
+        if(this.pointMatrix[x][y] == PointStatus.Empty
+                || this.pointMatrix[x][y] == null
+                || this.pointMatrix[x][y] == self1
+                || this.pointMatrix[x][y] == self2
+                || this.pointMatrix[x][y] == enemyPoint){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
 
     public static StatusPoint getRoboMasterPoint(int x, int y){
         return new StatusPoint(x,y,Systems.pointSimulator.pointMatrix[x][y]);

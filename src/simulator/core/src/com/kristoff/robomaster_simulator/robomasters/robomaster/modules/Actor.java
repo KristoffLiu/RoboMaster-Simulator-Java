@@ -5,6 +5,7 @@ import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.StatusPoint;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
+import com.kristoff.robomaster_simulator.utils.Position;
 
 import static java.lang.Math.*;
 
@@ -16,7 +17,7 @@ public class Actor extends LoopThread {
     public float cannonAngle;
 
 
-    public StatusPoint[][] matrix;
+    public Position[][] matrix;
     PointSimulator.PointStatus pointStatus;
 
     public Actor(RoboMaster roboMaster){
@@ -39,10 +40,10 @@ public class Actor extends LoopThread {
             }
         }
 
-        matrix = new StatusPoint[60][45];
+        matrix = new Position[60][45];
         for(int i = 0; i < 60 ; i++){
             for(int j = 0; j < 45 ; j++){
-                matrix[i][j] = new StatusPoint(i+50,j+50,pointStatus);
+                matrix[i][j] = new Position();
             }
         }
     }
@@ -91,13 +92,13 @@ public class Actor extends LoopThread {
 
     @Override
     public void step(){
-        StatusPoint centrePoint = matrix[centre_x][centre_y];
+        Position centrePoint = matrix[centre_x][centre_y];
         float centreX = x / 10;
         float centreY = y / 10;
         float delta_rotation = rotation;
         for(int i = 0; i < 60 ; i++){
             for(int j = 0; j < 45 ; j++){
-                StatusPoint transformedPoint = matrix[i][j];
+                Position transformedPoint = matrix[i][j];
                 Systems.pointSimulator.updatePoint(transformedPoint.x, transformedPoint.y, PointSimulator.PointStatus.Empty);
                 float tempX = centreX - 30 + i;
                 float tempY = centreY - 22.5f + j;

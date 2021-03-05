@@ -1,4 +1,4 @@
-package com.kristoff.robomaster_simulator.robomasters.robomaster.modules.enemyobservations;
+package com.kristoff.robomaster_simulator.robomasters.teams.enemyobservations;
 
 import com.kristoff.robomaster_simulator.utils.Position;
 

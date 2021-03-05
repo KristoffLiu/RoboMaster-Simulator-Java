@@ -38,7 +38,7 @@ public class RoboMasters{
         all.forEach(x->{
             x.start();
         });
-        teamBlue.get(0).enemiesObservationSimulator.start();
+        teamBlue.start();
     }
 
     public void initPosition(){

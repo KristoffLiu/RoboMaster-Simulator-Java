@@ -1,7 +1,8 @@
-package com.kristoff.robomaster_simulator.robomasters.robomaster.strategies;
+package com.kristoff.robomaster_simulator.robomasters.robomaster.tactics;
 
 import com.badlogic.gdx.Gdx;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.TacticMaker;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.utils.Position;
 
@@ -9,41 +10,67 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class PathPlanning {
-    public RoboMaster thisRoboMaster;
+public class OneVSTwoPPTactic implements Tactic{
+    public TacticMaker tacticMaker;
+
     public int[][]                                          enemiesObservationGrid;
+
     public boolean[][]                                      nodeGrid;
-    public PathPlanningNode rootNode;
-    public Queue<PathPlanningNode>     queue;
-    public PathPlanningNode resultNode;
+    public OneVSTwoPPTacticNode                             rootNode;
+    public Queue<OneVSTwoPPTacticNode>                      queue;
+    public OneVSTwoPPTacticNode                             resultNode;
     public CopyOnWriteArrayList<Position>                   results;
 
-    public PathPlanning(int[][] enemiesObservationGrid, RoboMaster roboMaster){
-        this.thisRoboMaster = roboMaster;
-        this.enemiesObservationGrid = enemiesObservationGrid;
-        this.nodeGrid = new boolean[849][489];
-        this.queue = new LinkedList<>();
-        this.results = new CopyOnWriteArrayList<>();
+    Position destination = new Position();
+
+    public OneVSTwoPPTactic(TacticMaker tacticMaker){
+        this.tacticMaker = tacticMaker;
+
+        this.enemiesObservationGrid     = this.tacticMaker.getEnemiesObservationGrid();
+        this.nodeGrid                   = new boolean[849][489];
+        this.queue                      = new LinkedList<>();
+        this.results                    = new CopyOnWriteArrayList<>();
+    }
+
+    @Override
+    public void decide() {
+        getPointAvoidingFacingEnemies();
+    }
+
+    @Override
+    public Position getDestination() {
+        return null;
+    }
+
+    @Override
+    public boolean[][] getNodeGrid() {
+        return nodeGrid;
+    }
+
+    @Override
+    public CopyOnWriteArrayList<Position> getResults() {
+        return results;
     }
 
     //此节点的子节点查找路径及成本消耗
     public static int[][] childrenNodesFindingCost =
-            new int[][]
-                    {
-                            { 1, 0, 1},{0, 1, 1},{-1, 0, 1},
-                            { 0, -1,1},{-1,-1,2},
-                            {-1, 1, 2},{1,-1, 2},{1, 1, 2}
-                    };
+        new int[][]
+            {
+                { 1, 0, 1},{0, 1, 1},{-1, 0, 1},
+                { 0, -1, 1},          {-1, -1, 2},
+                {-1, 1, 2},{1, -1, 2},{1, 1, 2}
+            };
 
-    public Position getPointToTheSafeZone(){
+    public void getPointToTheSafeZone(){
         synchronized(enemiesObservationGrid){
             long startTime = System.currentTimeMillis();//开始时间
 
             nodeGrid = new boolean[849][489];
             queue.clear();
-            this.rootNode = new PathPlanningNode(
-                    thisRoboMaster.actor.x / 10,
-                    thisRoboMaster.actor.y / 10,
+            Position currentPosition = tacticMaker.getCurrentPosition();
+            this.rootNode = new OneVSTwoPPTacticNode(
+                    currentPosition.x,
+                    currentPosition.y,
                     -1,
                     0,
                     null);
@@ -66,7 +93,7 @@ public class PathPlanning {
                             if(        x>=0 && x<849
                                     && y>=0 && y<489
                                     && (enemiesObservationGrid[x][y] != 0
-                                    || Systems.pointSimulator.isPointNotEmpty(x,y,thisRoboMaster.pointStatus))){
+                                    || Systems.pointSimulator.isPointNotEmpty(x,y,tacticMaker.getPointStatus()))){
                                 canStop = false;
                                 break;
                             }
@@ -81,7 +108,7 @@ public class PathPlanning {
                 }
                 generateChildrenNodes(resultNode);
             }
-            PathPlanningNode node = resultNode;
+            OneVSTwoPPTacticNode node = resultNode;
             results.clear();
             while (true && node.parentNode != null){
                 results.add(node.position);
@@ -90,20 +117,21 @@ public class PathPlanning {
 
             long endTime = System.currentTimeMillis();//开始时间
             Gdx.app.log("", String.valueOf(endTime - startTime));
-            return resultNode.position;
+            destination = resultNode.position;
         }
     }
 
 
-    public Position getPointAvoidingFacingEnemies(){
+    public void getPointAvoidingFacingEnemies(){
         synchronized(enemiesObservationGrid){
             long startTime = System.currentTimeMillis();//开始时间
 
             nodeGrid = new boolean[849][489];
             queue.clear();
-            this.rootNode = new PathPlanningNode(
-                    thisRoboMaster.actor.x / 10,
-                    thisRoboMaster.actor.y / 10,
+            Position currentPosition = tacticMaker.getCurrentPosition();
+            this.rootNode = new OneVSTwoPPTacticNode(
+                    currentPosition.x,
+                    currentPosition.y,
                     -1,
                     0,
                     null);
@@ -126,7 +154,7 @@ public class PathPlanning {
                             if(        x>=0 && x<849
                                     && y>=0 && y<489
                                     && (enemiesObservationGrid[x][y] == 3
-                                    || Systems.pointSimulator.isPointNotEmpty(x,y,thisRoboMaster.pointStatus))){
+                                    || Systems.pointSimulator.isPointNotEmpty(x,y,tacticMaker.getPointStatus()))){
                                 canStop = false;
                                 break;
                             }
@@ -141,28 +169,26 @@ public class PathPlanning {
                 }
                 generateChildrenNodes(resultNode);
             }
-            PathPlanningNode node = resultNode;
+            OneVSTwoPPTacticNode node = resultNode;
             results.clear();
             while (true && node.parentNode != null){
                 results.add(node.position);
                 node = node.parentNode;
             }
 
-            long endTime = System.currentTimeMillis();//开始时间
-            Gdx.app.log("", String.valueOf(endTime - startTime));
-            return resultNode.position;
+            destination = resultNode.position;
         }
     }
 
     //查找并生成子节点，并返回队列对象
-    public void generateChildrenNodes(PathPlanningNode node){
+    public void generateChildrenNodes(OneVSTwoPPTacticNode node){
         nodeGrid[node.position.x][node.position.y] = true;
         for(int i=0; i < childrenNodesFindingCost.length; i++){
             int x = node.position.x + childrenNodesFindingCost[i][0] ;
             int y = node.position.y + childrenNodesFindingCost[i][1] ;
             double cost = Math.sqrt(childrenNodesFindingCost[i][2]);
-            if(hasThisNodeNotBeenVisited(x, y, nodeGrid) && (!Systems.pointSimulator.isPointNotEmpty(x,y,this.thisRoboMaster.pointStatus))){
-                PathPlanningNode childNode = new PathPlanningNode(x,y,node.index + 1, cost,node);
+            if(hasThisNodeNotBeenVisited(x, y, nodeGrid) && (!Systems.pointSimulator.isPointNotEmpty(x,y,tacticMaker.getPointStatus()))){
+                OneVSTwoPPTacticNode childNode = new OneVSTwoPPTacticNode(x,y,node.index + 1, cost,node);
                 node.childrenNodes.add(childNode);
                 queue.offer(childNode);
             }
