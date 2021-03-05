@@ -44,7 +44,7 @@ public class TacticMaker {
     }
 
     public Position getDecisionMade(){
-        return DecisionMade;
+        return this.tactic.getResults().get(this.tactic.getResults().size() - 1);
     }
 
     public void setCounterState(int counterState){

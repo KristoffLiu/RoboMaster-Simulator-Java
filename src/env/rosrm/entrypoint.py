@@ -26,6 +26,10 @@ d = robomaster.getRotation() #获得roboMaster的yaw数值，类型为float浮�
 #3 observeboth
 f = robomaster.getLidarObservation() #获得roboMaster的激光雷达观测结果，类型为java的List<RoboMasterPoint>列表
 
+decisionPoint = robomaster.getDecisionMade();
+print(decisionPoint.getX());
+print(decisionPoint.getY());
+
 blue2 = entrypoint.getRoboMaster("Blue2")
 blue2.setPosition(2500,3500,float(1)) #设置x, y, yaw数值。 yaw用radian数值表示, 且必须是float类型
 red1 = entrypoint.getRoboMaster("Red1")
@@ -39,7 +43,5 @@ red2.setPosition(5500,2000,float(1)) #设置x, y, yaw数值。 yaw用radian数�
 #     robomaster3.setPosition(robomaster3.getX() - 40, robomaster3.getY() - 40, float(0))
 #     robomaster4.setPosition(robomaster4.getX() - 40, robomaster4.getY() + 40, float(0))
 #     robomaster.getNextPredictedPosition()
-
-
 
 #robomaster.getPointAvoidingFacingEnemies()
