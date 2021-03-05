@@ -189,6 +189,19 @@ public class LidarPointCloudLayer extends VisualLayer {
                 }
             }
         }
+        for(int i = 0; i < RoboMasters.teamBlue.get(1).tacticMaker.getNodeGrid().length; i+=10){
+            for(int j = 0; j < RoboMasters.teamBlue.get(1).tacticMaker.getNodeGrid()[i].length; j+=10){
+                if(RoboMasters.teamBlue.get(1).tacticMaker.getNodeGrid()[i][j]){
+                    int x = i * 10;
+                    int y = j * 10;
+                    shapeRenderer5.setColor(1.0f,1.0f,1.0f,0.1f);
+                    shapeRenderer5.circle(
+                            x / 1000f,
+                            y / 1000f,
+                            0.025f,10);
+                }
+            }
+        }
         shapeRenderer5.end();
 
         shapeRenderer4.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
@@ -199,6 +212,17 @@ public class LidarPointCloudLayer extends VisualLayer {
                 int x = position.x * 10;
                 int y = position.y * 10;
                 shapeRenderer4.setColor(0.0f,1.0f,0f,1.0f);
+                shapeRenderer4.circle(
+                        x / 1000f,
+                        y / 1000f,
+                        0.025f,10);
+            }
+        }
+        for(Position position : RoboMasters.teamBlue.get(1).tacticMaker.getResults()){
+            if(position!=null){
+                int x = position.x * 10;
+                int y = position.y * 10;
+                shapeRenderer4.setColor(0.0f,0f,1f,1.0f);
                 shapeRenderer4.circle(
                         x / 1000f,
                         y / 1000f,
