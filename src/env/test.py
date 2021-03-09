@@ -95,12 +95,12 @@ class Brain:
             self.Red1.setPosition(int(enemy[0].center.x*1000), int(enemy[0].center.y*1000),float(1.57))
             self.Red2.setPosition(int(enemy[1].center.x*1000), int(enemy[1].center.y*1000),float(1.57))
         
-    def get_next_position(self):
+    def get_next_position1(self):
         # pos = self.Blue2.getPointAvoidingFacingEnemies()
-        pos = self.Blue2.getDecisionMade()
+        pos = self.Blue1.getDecisionMade()
         rx = pos.getX() / 100.0
         ry = pos.getY() / 100.0
-        print("------", self.cnt)
+        print("------Blue1", self.cnt)
         self.cnt = self.cnt+1
         print("x: ", rx)
         print("y: ", ry)
@@ -108,31 +108,23 @@ class Brain:
         goal.header.frame_id = "/map"
         goal.pose.position.x, goal.pose.position.y = rx, ry
         goal.pose.orientation.w = 1
-    
-        # yaw_angle = math.atan2(ry - self.robots[i].y, rx - self.robots[i].x)
 
-        # theta = 0
-        # if yaw_angle >= 0:
-        #     theta = yaw_angle - math.pi
-        # elif yaw_angle < 0:
-        #     theta = math.pi + yaw_angle
-        # else:
-        #     rospy.logerr("invalid yaw")
-        
-        # #if i == 1:
-        # #    theta += math.pi
-        
-        # theta = theta + np.random.uniform(-self._rangeAngle / 180 * math.pi, self._rangeAngle / 180 * math.pi)
-        # theta = np.clip(theta, -math.pi, math.pi)
-            
-        
-        # target.x, target.y = target.x + self._rho * math.cos(theta), target.y + self._rho * math.sin(theta)
+        self._decision_pub[0].publish(goal)
+        print("blue 1  -> send")
 
-        # [goal.pose.orientation.w,
-        #     goal.pose.orientation.x,
-        #     goal.pose.orientation.y,
-        #     goal.pose.orientation.z] = self._createQuaternionFromYaw(yaw_angle)
-
+    def get_next_position2(self):
+        # pos = self.Blue2.getPointAvoidingFacingEnemies()
+        pos = self.Blue2.getDecisionMade()
+        rx = pos.getX() / 100.0
+        ry = pos.getY() / 100.0
+        print("------Blue2", self.cnt)
+        self.cnt = self.cnt+1
+        print("x: ", rx)
+        print("y: ", ry)
+        goal = PoseStamped()
+        goal.header.frame_id = "/map"
+        goal.pose.position.x, goal.pose.position.y = rx, ry
+        goal.pose.orientation.w = 1
 
         self._decision_pub[1].publish(goal)
 
@@ -146,13 +138,14 @@ if __name__ == '__main__':
     try: 
         print(__file__ + " start!!")
         rospy.init_node('decision_node', anonymous=True)
-        rate = rospy.Rate(0.5)
+        rate = rospy.Rate(0.2)
         brain = Brain()
         print(brain)
         spin_thread = threading.Thread(target=call_rosspin).start()
 
         while not rospy.core.is_shutdown():
-            brain.get_next_position()
+            brain.get_next_position1()
+            # brain.get_next_position2()
             rate.sleep()
 
     except rospy.ROSInterruptException:
