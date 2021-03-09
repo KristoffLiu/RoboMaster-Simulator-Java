@@ -1,18 +1,17 @@
 package com.kristoff.robomaster_simulator.robomasters.robomaster.modules;
 
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
-import com.kristoff.robomaster_simulator.robomasters.robomaster.tactics.OneVSTwoPPTactic;
-import com.kristoff.robomaster_simulator.robomasters.robomaster.tactics.OneVSTwoPPTacticNode;
-import com.kristoff.robomaster_simulator.robomasters.robomaster.tactics.Tactic;
-import com.kristoff.robomaster_simulator.robomasters.teams.StrategyMaker;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.tactics.*;
+import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.utils.Position;
 
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class TacticMaker {
+public class TacticMaker extends LoopThread {
     RoboMaster roboMaster;
     Tactic tactic;
 
@@ -24,27 +23,84 @@ public class TacticMaker {
      * 3: 2 v 2 state
      */
     int counterState = -1;
-    Position DecisionMade;
+    Position decisionMade;
+    OneVSTwoPPTactic oneVSTwoPPTactic;
+    TwoVSTwoPPTatic twoVSTwoPPTatic;
+
+    public int[][]                                          enemiesObservationGrid;
+    public boolean[][]                                      nodeGrid;
+
+    public SearchNode                                       rootNode;
+    public SearchNode                                       decicionNode;
+
+
+    public Queue<SearchNode>                                queue;
+
+
+    public CopyOnWriteArrayList<SearchNode>                 resultNodes;
+    public CopyOnWriteArrayList<SearchNode>                 pathNodes;
+
+
 
     public TacticMaker(RoboMaster roboMaster){
         this.roboMaster = roboMaster;
-        this.tactic = new OneVSTwoPPTactic(this);
+        enemiesObservationGrid = Team.getEnemiesObservationGrid()      ;
+        nodeGrid               = new boolean[849][489]                 ;
+        rootNode               = new SearchNode()                      ;
+        decicionNode             = new SearchNode()                      ;
+        queue                  = new LinkedList<>()                    ;
+        resultNodes            = new CopyOnWriteArrayList<SearchNode>();
+        pathNodes              = new CopyOnWriteArrayList<SearchNode>();
+
+        oneVSTwoPPTactic = new OneVSTwoPPTactic(this);
+        twoVSTwoPPTatic = new TwoVSTwoPPTatic(this);;
+
+        counterState = 3;
+        this.tactic = twoVSTwoPPTatic;
+        this.delta = 2f;
+        this.isStep = true;
     }
 
-    public void makeDecision(int counterState){
+    @Override
+    public void step(){
         switch (counterState){
             case -1 ->  { }
             case 0  ->  { }
-            case 1  ->  { }
+            case 1  ->  { tactic = oneVSTwoPPTactic;}
             case 2  ->  { }
-            case 3  ->  { }
+            case 3  ->  { tactic = twoVSTwoPPTatic;}
             default ->  { }
         }
         tactic.decide();
+//        for(int i = 0; i < enemiesObservationGrid.length; i ++){
+//            for(int j = 0; j < enemiesObservationGrid[0].length; j ++){
+//                this.nodeGrid[i][j] = false;
+//            }
+//        }
+    }
+
+    public void updateCounterState(int counterState){
+        this.counterState = counterState;
+    }
+
+    public void makeDecision(int counterState){
+
+    }
+
+    public void setDecisionNode(SearchNode node){
+        this.decicionNode = node;
     }
 
     public Position getDecisionMade(){
-        return this.tactic.getResults().get(this.tactic.getResults().size() - 1);
+        return this.decicionNode.position;
+    }
+
+    public CopyOnWriteArrayList<SearchNode> getPathNodes(){
+        return this.pathNodes;
+    }
+
+    public CopyOnWriteArrayList<SearchNode> getResultNodes(){
+        return this.resultNodes;
     }
 
     public void setCounterState(int counterState){
@@ -63,11 +119,31 @@ public class TacticMaker {
         return this.roboMaster.pointStatus;
     }
 
-    public boolean[][] getNodeGrid(){
-        return this.tactic.getNodeGrid();
+    public boolean isOutOfDangerousZone(int x, int y){
+        return enemiesObservationGrid[x][y] == 0;
     }
 
-    public CopyOnWriteArrayList<Position> getResults(){
-        return this.tactic.getResults();
+    public boolean isInFirstEnemiesView(int x, int y){
+        return enemiesObservationGrid[x][y] == 1;
+    }
+
+    public boolean isInSecondEnemiesView(int x, int y){
+        return enemiesObservationGrid[x][y] == 2;
+    }
+
+    public boolean isInBothEnemiesView(int x, int y){
+        return enemiesObservationGrid[x][y] == 3;
+    }
+
+    public void clearNodeGrid(){
+        nodeGrid = new boolean[849][489];
+    }
+
+    public boolean[][] getNodeGrid(){
+        return nodeGrid;
+    }
+
+    public boolean isVisited(int x, int y){
+        return nodeGrid[x][y];
     }
 }

@@ -20,7 +20,6 @@ public class EnemiesObservationSimulator extends LoopThread {
 
     public int[][] matrix    = new int[849][489];
 
-
     public CopyOnWriteArrayList<EnemiesObservationPoint> dangerousZone = new CopyOnWriteArrayList<>();
 
     // 0 = none,
@@ -89,24 +88,6 @@ public class EnemiesObservationSimulator extends LoopThread {
                         }
                     }
                     dangerousZone = arrayList;
-
-//                  for(int i=0; i<849; i+=1){
-//                      for(int j=0; j<489; j+=1){
-//                          boolean isBreak = false;
-//                          for(int k=0; k<10; k+=1){
-//                              for(int c=0; c<10; c+=1){
-//                                  if(eoMatrix[i*10+k][j*10+c] != 0){
-//                                      matrix[i][j] = eoMatrix[i*10+k][j*10+c];
-//                                      isBreak = true;
-//                                      break;
-//                                  }
-//                              }
-//                              if (isBreak){
-//                                  break;
-//                              }
-//                          }
-//                      }
-//                  }
                 }
             }
             case global_observation -> {
@@ -151,5 +132,21 @@ public class EnemiesObservationSimulator extends LoopThread {
             }
         }
         super.start();
+    }
+
+    public boolean isOutOfDangerousZone(int x, int y){
+        return matrix[x][y] == 0;
+    }
+
+    public boolean isInFirstEnemiesView(int x, int y){
+        return matrix[x][y] == 1;
+    }
+
+    public boolean isInSecondEnemiesView(int x, int y){
+        return matrix[x][y] == 2;
+    }
+
+    public boolean isInBothEnemiesView(int x, int y){
+        return matrix[x][y] == 3;
     }
 }

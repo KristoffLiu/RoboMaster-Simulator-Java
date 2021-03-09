@@ -273,7 +273,7 @@ public class EnemyObservation{
         }
     }
 
-    public void addPoint(int[][] pointsArray, int x, int y){
+    private void addPoint(int[][] pointsArray, int x, int y){
         int pointValue = pointsArray[x][y];
         if(pointValue != this.weight){
             if(pointValue != 3){
@@ -281,5 +281,4 @@ public class EnemyObservation{
             }
         }
     }
-
 }

@@ -21,4 +21,12 @@ public class Position {
     public int getY(){
         return y;
     }
+
+    public float distanceTo(Position position){
+        return distanceTo(position.x, position.y);
+    }
+
+    public float distanceTo(int x, int y){
+        return (float)Math.hypot((this.x - x), (this.y - y));
+    }
 }

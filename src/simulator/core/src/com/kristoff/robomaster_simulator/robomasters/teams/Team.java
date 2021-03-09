@@ -34,7 +34,17 @@ public class Team extends CopyOnWriteArrayList<RoboMaster> {
         return count;
     }
 
-    public int[][] getEnemiesObservationGrid(){
-        return enemiesObservationSimulator.matrix;
+    public static Team me(){
+        return RoboMasters.teamBlue;
     }
+
+    public static Team enemy(){
+        return RoboMasters.teamBlue;
+    }
+
+    public static int[][] getEnemiesObservationGrid(){
+        return me().enemiesObservationSimulator.matrix;
+    }
+
+
 }

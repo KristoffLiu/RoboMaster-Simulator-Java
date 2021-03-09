@@ -30,6 +30,7 @@ public class EnvRenderer implements Screen {
 
     public RenderedLayer renderedLayer;
     public RoboMasterLayer roboMasterLayer;
+    public BlocksLayer blocksLayer;
     public LidarPointCloudLayer lidarPointCloudLayer;
 
     public FrameRate frameRate;
@@ -45,6 +46,8 @@ public class EnvRenderer implements Screen {
         renderedLayer = new RenderedLayer(this);
         roboMasterLayer = new RoboMasterLayer(this);
         lidarPointCloudLayer = new LidarPointCloudLayer(this);
+
+        blocksLayer = new BlocksLayer(this);
         frameRate = new FrameRate();
 
         switch (config.mode){
@@ -93,7 +96,8 @@ public class EnvRenderer implements Screen {
         roboMasterLayer.act();
         roboMasterLayer.draw();
 
-
+        blocksLayer.act();
+        blocksLayer.draw();
 
 
         switch (config.mode){

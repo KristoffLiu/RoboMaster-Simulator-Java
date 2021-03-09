@@ -11,7 +11,6 @@ public class RenderedLayer extends VisualLayer {
     public RenderedLayer(EnvRenderer envRenderer) {
         super(envRenderer);
         addBirthZones();
-        addBlocks();
         addBuffZones();
     }
 
@@ -23,26 +22,6 @@ public class RenderedLayer extends VisualLayer {
             actor.setY(textureMapObject.getY() * scale);
             actor.setWidth(textureMapObject.getTextureRegion().getRegionWidth() * scale);
             actor.setHeight(textureMapObject.getTextureRegion().getRegionHeight() * scale);
-            this.addActor(actor);
-        }
-    }
-
-    public void addBlocks(){
-        for(TextureMapObject textureMapObject : environment.map.getBlocks()){
-            float scale = 1f / 1000f;
-            float textureX = textureMapObject.getX();
-            float textureY = textureMapObject.getY();
-            float textureWidth = textureMapObject.getTextureRegion().getRegionWidth();
-            float textureHeight = textureMapObject.getTextureRegion().getRegionHeight();
-            float textureRotation = textureMapObject.getRotation();
-            float textureRotationInRadian = (float)Math.toRadians(textureRotation);
-
-            CustomActor actor = new CustomActor(textureMapObject.getTextureRegion());
-            actor.setX((textureX + textureWidth * (float)Math.sin(textureRotationInRadian)) * scale);
-            actor.setY((textureY - textureHeight * (float)Math.sin(textureRotationInRadian)) * scale);
-            actor.setRotation(textureRotation);
-            actor.setWidth(textureWidth * scale);
-            actor.setHeight(textureHeight * scale);
             this.addActor(actor);
         }
     }
@@ -69,5 +48,4 @@ public class RenderedLayer extends VisualLayer {
     public void draw(){
         super.draw();
     }
-
 }

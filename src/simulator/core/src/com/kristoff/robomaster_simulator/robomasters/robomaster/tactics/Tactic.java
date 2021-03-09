@@ -6,7 +6,4 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public interface Tactic {
     void decide();
-    Position getDestination();
-    boolean[][] getNodeGrid();
-    CopyOnWriteArrayList<Position> getResults();
 }

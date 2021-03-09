@@ -6,71 +6,82 @@ import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.utils.Position;
 
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class OneVSTwoPPTactic implements Tactic{
+/***
+ * Based On RRT Algorithm 基于快速随机扩展树算法
+ */
+public class TwoVSTwoPPTatic implements Tactic{
     public TacticMaker tacticMaker;
 
     public int[][]                                          enemiesObservationGrid;
 
     public SearchNode rootNode;
-    public Queue<SearchNode>                      queue;
+    public Queue<SearchNode> queue;
     public SearchNode resultNode;
-    public CopyOnWriteArrayList<SearchNode>                   resultNodes;
-    public CopyOnWriteArrayList<SearchNode>                   pathNodes;
+    public CopyOnWriteArrayList<SearchNode>                 resultNodes;
+    public CopyOnWriteArrayList<SearchNode>                 pathNodes;
 
     Position destination = new Position();
 
-    public OneVSTwoPPTactic(TacticMaker tacticMaker){
+    public TwoVSTwoPPTatic(TacticMaker tacticMaker){
         this.tacticMaker = tacticMaker;
 
         this.enemiesObservationGrid     = this.tacticMaker.enemiesObservationGrid;
         this.queue                      = this.tacticMaker.queue;
         this.resultNodes                = this.tacticMaker.resultNodes;
-        this.pathNodes                  = this.tacticMaker.pathNodes;
+        this.pathNodes = this.tacticMaker.pathNodes;
     }
 
     @Override
     public void decide() {
         synchronized(enemiesObservationGrid){
             long startTime = System.currentTimeMillis();//开始时间
+            Position currentPosition = tacticMaker.getCurrentPosition();
+            if(!Team.me().enemiesObservationSimulator.isInBothEnemiesView(currentPosition.x,currentPosition.y)){
+                return;
+            }
 
             this.tacticMaker.clearNodeGrid();
             queue.clear();
-            Position currentPosition = tacticMaker.getCurrentPosition();
+            resultNodes.clear();
+
             this.rootNode = new SearchNode(
                     currentPosition.x,
                     currentPosition.y,
                     -1,
                     0,
                     null);
-            this.resultNode = rootNode;
+            resultNode = rootNode;
             queue.offer(rootNode);
             this.tacticMaker.getNodeGrid()[rootNode.position.x][rootNode.position.y] = true;
 
             int count = 0;
-            while (!this.queue.isEmpty()){
+            int limit = 10;
+            while (!this.queue.isEmpty() && resultNodes.size() < 5){
                 resultNode = this.queue.poll();
-                if(enemiesObservationGrid[resultNode.position.x][resultNode.position.y] != 3){
+
+                if(!tacticMaker.isInBothEnemiesView(resultNode.position.x, resultNode.position.y)){
                     count ++;
                 }
-                if(count > 10){
+                if(count > limit){
                     if(isAvailable()) {
-                        break;
+                        resultNodes.add(resultNode);
+                        count = 0;
                     }
                 }
-                generateChildrenNodes(resultNode);
+                if(resultNodes.size() < 4) generateChildrenNodes(resultNode);
             }
-            SearchNode node = resultNode;
             pathNodes.clear();
-            while (true && node.parentNode != null){
-                pathNodes.add(node);
-                node = node.parentNode;
+            for(SearchNode node : resultNodes){
+                while (true && node.parentNode != null){
+                    pathNodes.add(node);
+                    node = node.parentNode;
+                }
             }
-
-            this.tacticMaker.setDecisionNode(resultNode);
+            long endtime = System.currentTimeMillis();//开始时间
+            System.out.println(endtime - startTime);
         }
     }
 
@@ -79,13 +90,22 @@ public class OneVSTwoPPTactic implements Tactic{
             for(int j=0;j<70;j++){
                 int x = resultNode.position.x + i - 35;
                 int y = resultNode.position.y + j - 35;
-                if(   !(x>=0 && x<849)
-                        || !(y>=0 && y<489)
-                        || Team.me().enemiesObservationSimulator.isInBothEnemiesView(x,y)
-                        || Systems.pointSimulator.isPointNotEmpty(x,y,tacticMaker.getPointStatus())){
+                if(   !(x>=20 && x<829)
+                        || !(y>=20 && y<469)
+                        || tacticMaker.isInBothEnemiesView(x,y)
+                        || Systems.pointSimulator.isPointNotEmpty(x,y,tacticMaker.getPointStatus())
+                        || !isFarAwayFromExistingResults(x, y)){
                     return false;
                 }
             }
+        }
+        return true;
+    }
+
+    public boolean isFarAwayFromExistingResults(int x, int y){
+        if(resultNodes.size() == 0) return true;
+        for(SearchNode result : resultNodes){
+            if(result.position.distanceTo(x, y) < 60) return false;
         }
         return true;
     }
@@ -96,6 +116,10 @@ public class OneVSTwoPPTactic implements Tactic{
         for(int i=0; i < SearchNode.childrenNodesFindingCost.length; i++){
             int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;
             int y = node.position.y + SearchNode.childrenNodesFindingCost[i][1] ;
+            if(    !(x>=20 && x<829)
+                || !(y>=20 && y<469)){
+                return;
+            }
             double cost = Math.sqrt(SearchNode.childrenNodesFindingCost[i][2]);
             if(hasThisNodeNotBeenVisited(x, y, this.tacticMaker.getNodeGrid()) && (!Systems.pointSimulator.isPointNotEmpty(x,y,tacticMaker.getPointStatus()))){
                 SearchNode childNode = new SearchNode(x,y,node.index + 1, cost,node);
