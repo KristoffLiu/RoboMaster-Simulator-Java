@@ -50,8 +50,7 @@ class Brain:
                               rospy.Publisher("/CAR2/move_base_simple/goal", PoseStamped, queue_size=10)]
         self._robots_subscriber = [rospy.Subscriber("/CAR1/amcl_pose", PoseStamped, self.ownPositionCB0),
                                    rospy.Subscriber("/CAR2/amcl_pose", PoseStamped, self.ownPositionCB1)]
-        self._enemies_subscriber = [rospy.Subscriber("/CAR1/obstacle_filtered", Obstacles, self.ownObservationCB0),
-                                    rospy.Subscriber("/CAR2/obstacle_filtered", Obstacles, self.ownObservationCB1)]
+        self._enemies_subscriber = [rospy.Subscriber("/obstacle_preprocessed", Obstacles, self.ownObservationCB0)]
         # self._decision_pub = [rospy.Publisher("/jackal0/move_base_simple/goal", PoseStamped, queue_size=10),
         #                       rospy.Publisher("/jackal1/move_base_simple/goal", PoseStamped, queue_size=10)]
         # self._debuff_subscriber = rospy.Subscriber("/debuff", String, self.receiveDebuffSignal)
@@ -97,7 +96,8 @@ class Brain:
             self.Red2.setPosition(int(enemy[1].center.x*1000), int(enemy[1].center.y*1000),float(1.57))
         
     def get_next_position(self):
-        pos = self.Blue2.getPointAvoidingFacingEnemies()
+        # pos = self.Blue2.getPointAvoidingFacingEnemies()
+        pos = self.Blue2.getDecisionMade()
         rx = pos.getX() / 100.0
         ry = pos.getY() / 100.0
         print("------", self.cnt)
