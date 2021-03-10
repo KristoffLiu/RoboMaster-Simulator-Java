@@ -1,7 +1,9 @@
 package com.kristoff.robomaster_simulator.view.layers;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.RendererInputListener;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.view.actors.CustomActor;
 import com.kristoff.robomaster_simulator.view.layers.VisualLayer;
@@ -16,6 +18,7 @@ public class RoboMasterLayer extends VisualLayer {
 
     public void renderRoboMasters() {
         for (RoboMaster roboMaster : RoboMasters.all) {
+            roboMaster.renderer.addListener(new RendererInputListener(roboMaster));
             this.addActor(roboMaster.renderer);
         }
     }

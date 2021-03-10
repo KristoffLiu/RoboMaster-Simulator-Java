@@ -1,9 +1,6 @@
 package com.kristoff.robomaster_simulator.systems.pointsimulator;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.Actor;
-import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
-import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
 import com.kristoff.robomaster_simulator.systems.simulators.Simulator;
@@ -58,7 +55,12 @@ public class PointSimulator extends Simulator {
         }
     }
 
+    public static boolean isPoiontInsideMap(int x, int y){
+        return !(x < 20 || x > 829 || y < 20 || y > 469);
+    }
+
     public boolean isPointNotEmpty(int x, int y, PointStatus pointStatus){
+//        if(!isPoiontInsideMap(x, y)) return false;
         if(this.pointMatrix[x][y] == PointStatus.Empty
                 || this.pointMatrix[x][y] == null
                 || this.pointMatrix[x][y] == pointStatus){
@@ -122,6 +124,10 @@ public class PointSimulator extends Simulator {
         }
     }
 
+    public boolean isPointOnEnemies(int x, int y){
+        return this.pointMatrix[x][y] == PointStatus.Red1 || this.pointMatrix[x][y] == PointStatus.Red2;
+    }
+
 
     public static StatusPoint getRoboMasterPoint(int x, int y){
         return new StatusPoint(x,y,Systems.pointSimulator.pointMatrix[x][y]);
@@ -136,6 +142,7 @@ public class PointSimulator extends Simulator {
     }
 
     public void updatePoint(int x, int y, PointStatus status) {
+        if(!isPoiontInsideMap(x, y)) return;
         if(getMatrix()[x][y] != PointStatus.StaticObject){
             getMatrix()[x][y] = status;
         }

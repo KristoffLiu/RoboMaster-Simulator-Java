@@ -46,7 +46,7 @@ public class Simulator extends Game {
 		rendererConfig.width = (int) (this.config.width * this.config.scaleFactor);
 		rendererConfig.height = (int) (this.config.height * this.config.scaleFactor);
 		rendererConfig.foregroundFPS = this.config.renderedFrameRate;
-		rendererConfig.backgroundFPS = 120;
+		rendererConfig.backgroundFPS = 60;
 		rendererConfig.useGL30 = false;
 	}
 

@@ -42,9 +42,10 @@ public class EnvRenderer implements Screen {
         map = Systems.map;
 
         floorLayer = new FloorLayer(this);
-        floorLayer.addListener(new GlobalInputEventHandler(this));
         renderedLayer = new RenderedLayer(this);
         roboMasterLayer = new RoboMasterLayer(this);
+        roboMasterLayer.addListener(new GlobalInputEventHandler(this));
+
         lidarPointCloudLayer = new LidarPointCloudLayer(this);
 
         blocksLayer = new BlocksLayer(this);
@@ -60,7 +61,7 @@ public class EnvRenderer implements Screen {
         }
 
         InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(floorLayer);
+        multiplexer.addProcessor(roboMasterLayer);
         Gdx.input.setInputProcessor(multiplexer);
     }
 

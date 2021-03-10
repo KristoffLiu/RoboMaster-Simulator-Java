@@ -150,4 +150,6 @@ public abstract class RoboMaster {
     public Position getDecisionMade(){
         return this.tacticMaker.getDecisionMade();
     }
+
+    public Position getPointPosition(){return new Position(this.actor.x / 10,this.actor.y / 10);};
 }

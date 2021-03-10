@@ -1,16 +1,14 @@
 package com.kristoff.robomaster_simulator.robomasters.robomaster.tactics;
 
-import com.badlogic.gdx.Gdx;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.TacticMaker;
 import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.utils.Position;
 
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class OneVSTwoPPTactic implements Tactic{
+public class TraditionalBFSPPTactic implements Tactic{
     public TacticMaker tacticMaker;
 
     public int[][]                                          enemiesObservationGrid;
@@ -23,7 +21,7 @@ public class OneVSTwoPPTactic implements Tactic{
 
     Position destination = new Position();
 
-    public OneVSTwoPPTactic(TacticMaker tacticMaker){
+    public TraditionalBFSPPTactic(TacticMaker tacticMaker){
         this.tacticMaker = tacticMaker;
 
         this.enemiesObservationGrid     = this.tacticMaker.enemiesObservationGrid;

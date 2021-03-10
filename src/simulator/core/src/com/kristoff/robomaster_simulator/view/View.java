@@ -132,30 +132,30 @@ public class View{
 
     public void setHorizontalTranslation(boolean bool){
         if(bool){
-            this.horizontalTranslationOffset = 1f;
+            this.horizontalTranslationOffset = 0.6f;
         }
         else{
-            this.horizontalTranslationOffset = -1f;
+            this.horizontalTranslationOffset = -0.6f;
         }
         isHorizontallyTranslating = true;
     }
 
     public void setVerticalTranslation(boolean bool){
         if(bool){
-            this.verticalTranslationOffset = 1f;
+            this.verticalTranslationOffset = 0.6f;
         }
         else{
-            this.verticalTranslationOffset = -1f;
+            this.verticalTranslationOffset = -0.6f;
         }
         isVerticallyTranslating = true;
     }
 
     public void setZoom(float zoomOffset){
         if(zoomOffset > 0){
-            this.zoomOffset = 0.1f;
+            this.zoomOffset = 0.02f;
         }
         else if(zoomOffset < 0){
-            this.zoomOffset = -0.1f;
+            this.zoomOffset = -0.02f;
         }
         isZooming = true;
     }

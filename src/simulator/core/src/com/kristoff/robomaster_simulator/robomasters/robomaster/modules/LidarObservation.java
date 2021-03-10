@@ -88,7 +88,7 @@ public class LidarObservation extends LoopThread {
         CopyOnWriteArrayList<StatusPoint> pointsArray = new CopyOnWriteArrayList<>();
         int centre_x = (int) (c_x / 10);
         int centre_y = (int) (c_y / 10);
-        float precisionOfDegree = 0.5f;
+        float precisionOfDegree = 1.0f;
         int x = 0;
         int y = 0;
         for(float degree = 0;degree < 360; degree += precisionOfDegree){

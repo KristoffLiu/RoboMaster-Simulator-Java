@@ -43,10 +43,6 @@ public class TwoVSTwoPPTatic implements Tactic{
                 return;
             }
 
-            this.tacticMaker.clearNodeGrid();
-            queue.clear();
-            resultNodes.clear();
-
             this.rootNode = new SearchNode(
                     currentPosition.x,
                     currentPosition.y,
