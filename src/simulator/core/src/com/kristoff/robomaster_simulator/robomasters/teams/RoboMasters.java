@@ -1,6 +1,7 @@
 package com.kristoff.robomaster_simulator.robomasters.teams;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.kristoff.robomaster_simulator.core.Simulator;
 import com.kristoff.robomaster_simulator.core.SimulatorConfiguration;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.Actor;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.LidarObservation;

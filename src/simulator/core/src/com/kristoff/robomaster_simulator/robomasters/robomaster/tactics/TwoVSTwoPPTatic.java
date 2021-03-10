@@ -40,6 +40,7 @@ public class TwoVSTwoPPTatic implements Tactic{
             long startTime = System.currentTimeMillis();//开始时间
             Position currentPosition = tacticMaker.getCurrentPosition();
             if(!Team.me().enemiesObservationSimulator.isInBothEnemiesView(currentPosition.x,currentPosition.y)){
+                pathNodes.clear();
                 return;
             }
 

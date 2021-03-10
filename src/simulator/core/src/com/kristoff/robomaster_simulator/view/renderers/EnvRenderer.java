@@ -32,6 +32,7 @@ public class EnvRenderer implements Screen {
     public RoboMasterLayer roboMasterLayer;
     public BlocksLayer blocksLayer;
     public LidarPointCloudLayer lidarPointCloudLayer;
+    public HUD HUD;
 
     public FrameRate frameRate;
 
@@ -49,6 +50,7 @@ public class EnvRenderer implements Screen {
         lidarPointCloudLayer = new LidarPointCloudLayer(this);
 
         blocksLayer = new BlocksLayer(this);
+        HUD = new HUD(this);
         frameRate = new FrameRate();
 
         switch (config.mode){
@@ -100,6 +102,8 @@ public class EnvRenderer implements Screen {
         blocksLayer.act();
         blocksLayer.draw();
 
+        HUD.act(delta);
+        HUD.draw();
 
         switch (config.mode){
             case simulator,simulatorRLlib ->{

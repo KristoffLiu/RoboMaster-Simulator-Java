@@ -16,8 +16,8 @@ public class Simulator extends Game {
 
 	public RendererConfiguration rendererConfig = new RendererConfiguration();
 
-	public final float VIEW_WIDTH = 1920;
-	public final float VIEW_HEIGHT = 1080;
+	public static final float VIEW_WIDTH = 1920;
+	public static final float VIEW_HEIGHT = 1080;
 
 	public Systems systems;
 	public RoboMasters roboMasters;
