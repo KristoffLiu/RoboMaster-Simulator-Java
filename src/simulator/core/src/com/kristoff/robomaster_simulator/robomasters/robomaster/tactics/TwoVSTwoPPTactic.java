@@ -78,6 +78,7 @@ public class TwoVSTwoPPTactic implements Tactic{
         }
 
         this.tacticMaker.setDecisionNode(resultNode);
+        this.tacticMaker.updateDecisionForFriend(resultNode);
     }
 
     public boolean isAvailable(){
@@ -90,9 +91,9 @@ public class TwoVSTwoPPTactic implements Tactic{
                         || Team.me().enemiesObservationSimulator.isInBothEnemiesView(x,y)
                         || !this.tacticMaker.isOnTargetedEnemyView(x,y)
                         || Systems.pointSimulator.isPointNotEmpty(x,y,tacticMaker.getPointStatus())
-                        || this.tacticMaker.getUnTargeted().getPointPosition().distanceTo(x,y) < 100
-                        || this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y) < 50
-                        || this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y) > 300
+                        || this.tacticMaker.getUnlockedEnemy().getPointPosition().distanceTo(x,y) < 100
+                        || this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y) < 50
+                        || this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y) > 200
                 ){
                     return false;
                 }
@@ -109,20 +110,23 @@ public class TwoVSTwoPPTactic implements Tactic{
             int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;
             int y = node.position.y + SearchNode.childrenNodesFindingCost[i][1] ;
             double cost = Math.sqrt(SearchNode.childrenNodesFindingCost[i][2]);
-            if(this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y) < 50){
-                if(node.position.distanceTo(this.tacticMaker.getTargeted().getPointPosition()) > this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y)){
+            if(this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y) < 50){
+                if(node.position.distanceTo(this.tacticMaker.getLockedEnemy().getPointPosition()) > this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y)){
                     continue;
                 }
             }
-            if(this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y) > 200){
-                if(node.position.distanceTo(this.tacticMaker.getTargeted().getPointPosition()) < this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y)){
+            if(this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y) > 200){
+                if(node.position.distanceTo(this.tacticMaker.getLockedEnemy().getPointPosition()) < this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y)){
                     continue;
                 }
             }
-            if(this.tacticMaker.getUnTargeted().getPointPosition().distanceTo(x,y) < 100){
-                if(node.position.distanceTo(this.tacticMaker.getUnTargeted().getPointPosition()) > this.tacticMaker.getUnTargeted().getPointPosition().distanceTo(x,y)){
+            if(this.tacticMaker.getUnlockedEnemy().getPointPosition().distanceTo(x,y) < 100){
+                if(node.position.distanceTo(this.tacticMaker.getUnlockedEnemy().getPointPosition()) > this.tacticMaker.getUnlockedEnemy().getPointPosition().distanceTo(x,y)){
                     continue;
                 }
+            }
+            if(this.tacticMaker.getFriendRoboMaster().getPointPosition().distanceTo(x,y) < 200){
+                continue;
             }
             if(hasThisNodeNotBeenVisited(x, y, this.tacticMaker.getNodeGrid()) && (!Systems.pointSimulator.isPointNotEmpty(x,y,tacticMaker.getPointStatus()))){
                 SearchNode childNode = new SearchNode(x,y,node.index + 1, cost,node);

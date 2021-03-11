@@ -6,9 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.types.Enemy;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
+import com.kristoff.robomaster_simulator.view.ui.controls.Image;
 import com.kristoff.robomaster_simulator.view.ui.controls.TextBlock;
 import com.kristoff.robomaster_simulator.view.ui.controls.UIElement;
 import com.kristoff.robomaster_simulator.view.ui.pages.UIPage;
@@ -17,35 +19,57 @@ import java.util.ArrayList;
 
 public class HUD extends UIPage {
     EnvRenderer envRenderer;
-    ArrayList<TextBlock> roboMastersIDList = new ArrayList<>();
+    ArrayList<Image> roboMastersIDList = new ArrayList<>();
+    ArrayList<Image> enemyInViewIndicators = new ArrayList<>();
+    Image lockedIndicator = new Image();
 
     public HUD(EnvRenderer envRenderer) {
         super(envRenderer.view.getViewport());
         this.envRenderer = envRenderer;
         for(RoboMaster roboMaster : RoboMasters.all){
-            TextBlock textBlock = new TextBlock();
-            textBlock.setTag(roboMaster);
-            textBlock.setText(roboMaster.name);
-            textBlock.setFontSize(1.4f);
-            textBlock.setFontColor(1,1,1,1);
-            textBlock.setRelativePosition(100,100, UIElement.HorizontalAlignment.LEFT_ALIGNMENT, UIElement.VerticalAlignment.TOP_ALIGNMENT);
-            this.addUIElement(textBlock);
-            roboMastersIDList.add(textBlock);
+            Image roboImage = new Image();
+            roboImage.setTextureRegion("RoboMasters/Indicators/" + roboMaster.name + ".png");
+            roboImage.setTag(roboMaster);
+            roboImage.setScale(0.02f);
+            roboMastersIDList.add(roboImage);
+            this.addUIElement(roboImage);
+
+            if(RoboMasters.teamRed.contains(roboMaster)){
+                Image enemyInViewIndicatorImage = new Image();
+                enemyInViewIndicatorImage.setTextureRegion("RoboMasters/Indicators/InView.png");
+                enemyInViewIndicatorImage.setTag(roboMaster);
+                enemyInViewIndicatorImage.setScaleX(0.015f);
+                enemyInViewIndicatorImage.setScaleY(0.018f);
+                enemyInViewIndicators.add(enemyInViewIndicatorImage);
+                this.addUIElement(enemyInViewIndicatorImage);
+            }
         }
-    }
-
-    public void addID(){
-
+        lockedIndicator = new Image();
+        lockedIndicator.setTextureRegion("RoboMasters/Indicators/IsLocked.png");
+        lockedIndicator.setScaleX(0.015f);
+        lockedIndicator.setScaleY(0.018f);
+        this.addUIElement(lockedIndicator);
     }
 
     @Override
     public void act(float delta){
         super.act(delta);
-        for(TextBlock textBlock : this.roboMastersIDList){
-            RoboMaster roboMaster = (RoboMaster) textBlock.getTag();
-            textBlock.setRelativePosition(100,100, UIElement.HorizontalAlignment.LEFT_ALIGNMENT, UIElement.VerticalAlignment.TOP_ALIGNMENT);
-            System.out.println(textBlock.label.getX());
-            System.out.println(textBlock.label.getY());
+        for(Image roboImage : this.roboMastersIDList){
+            RoboMaster roboMaster = (RoboMaster) roboImage.getTag();
+            roboImage.setPosition((roboMaster.getX() - 310f) / 1000f , (roboMaster.getY() + 210f) / 1000f );
+        }
+        for(Image inViewImage : this.enemyInViewIndicators){
+            setInViewImage(inViewImage);
+        }
+    }
+
+    public void setInViewImage(Image inViewImage){
+        Enemy enemy = (Enemy) inViewImage.getTag();
+        if(enemy.isInTheView()) inViewImage.setTextureRegion("RoboMasters/Indicators/InView.png");
+        else inViewImage.setTextureRegion("RoboMasters/Indicators/Lost.png");
+        inViewImage.setPosition((enemy.getX() + 320f) / 1000f , (enemy.getY() - 220f) / 1000f );
+        if(enemy.isLocked()){
+            lockedIndicator.setPosition((enemy.getX() + 320f) / 1000f , (enemy.getY() - 0f) / 1000f );
         }
     }
 }

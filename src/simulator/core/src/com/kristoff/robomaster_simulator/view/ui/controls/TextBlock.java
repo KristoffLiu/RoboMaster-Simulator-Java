@@ -69,7 +69,6 @@ public class TextBlock extends UIElement {
     @Override
     public void act(float delta) {
         super.act(delta);
-        label.setPosition(this.getX(), this.getY() - label.getHeight());
     }
 
     /**

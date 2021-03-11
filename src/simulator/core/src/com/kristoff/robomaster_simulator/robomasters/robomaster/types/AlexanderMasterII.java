@@ -6,8 +6,7 @@ import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 public class AlexanderMasterII extends RoboMaster {
     public AlexanderMasterII(Team team, String name){
         super("RoboMasters/AlexanderMaster.png",
-                team,
-                        name);
+                team, name);
     }
 //    private double weight = 17.1;           //Kg
 //    private int max_forward_speed = 3;      //m/s

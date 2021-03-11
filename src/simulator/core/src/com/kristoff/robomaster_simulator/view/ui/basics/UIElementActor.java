@@ -1,6 +1,7 @@
 package com.kristoff.robomaster_simulator.view.ui.basics;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -55,6 +56,19 @@ public class UIElementActor extends Actor {
      */
     public void setTextureRegion(TextureRegion textureRegion) {
         this.textureRegion = textureRegion;
+        // reset the width and height after resetting the texture region.
+
+        if(this.getWidth() == 0 && this.getHeight() == 0){
+            setSize(this.textureRegion.getRegionWidth(), this.textureRegion.getRegionHeight());
+        }
+    }
+
+    /**
+     * Sets the texture of the actor
+     * @param string The path of the texture of the actor
+     */
+    public void setTextureRegion(String string) {
+        this.textureRegion = new TextureRegion(new Texture(string));
         // reset the width and height after resetting the texture region.
 
         if(this.getWidth() == 0 && this.getHeight() == 0){

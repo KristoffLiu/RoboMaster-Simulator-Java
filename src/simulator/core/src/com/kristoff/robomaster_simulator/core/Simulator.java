@@ -1,7 +1,6 @@
 package com.kristoff.robomaster_simulator.core;
 
 import com.badlogic.gdx.*;
-import com.kristoff.robomaster_simulator.enemies.Enemies;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
@@ -21,7 +20,6 @@ public class Simulator extends Game {
 
 	public Systems systems;
 	public RoboMasters roboMasters;
-	public Enemies enemies;
 	public Renderer renderer;
 	public EnvRenderer envRenderer;
 
@@ -61,7 +59,6 @@ public class Simulator extends Game {
 	public void create() {
 		systems = new Systems(config);
 		roboMasters = new RoboMasters(config);
-		enemies = new Enemies(config);
 		systems.start();
 		roboMasters.start();
 		envRenderer = new EnvRenderer(this.config);

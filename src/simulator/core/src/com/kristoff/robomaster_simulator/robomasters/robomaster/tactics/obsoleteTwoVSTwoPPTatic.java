@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /***
  * Based On RRT Algorithm 基于快速随机扩展树算法
  */
-public class TwoVSTwoPPTatic implements Tactic{
+public class obsoleteTwoVSTwoPPTatic implements Tactic{
     public TacticMaker tacticMaker;
 
     public int[][]                                          enemiesObservationGrid;
@@ -25,7 +25,7 @@ public class TwoVSTwoPPTatic implements Tactic{
 
     Position destination = new Position();
 
-    public TwoVSTwoPPTatic(TacticMaker tacticMaker){
+    public obsoleteTwoVSTwoPPTatic(TacticMaker tacticMaker){
         this.tacticMaker = tacticMaker;
 
         this.enemiesObservationGrid     = this.tacticMaker.enemiesObservationGrid;

@@ -1,17 +1,15 @@
 package com.kristoff.robomaster_simulator.robomasters.robomaster.tactics;
 
-import com.badlogic.gdx.Gdx;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.TacticMaker;
 import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.utils.Position;
 
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class OneVSTwoPPTactic implements Tactic{
+public class OneVSOnePPTactic implements Tactic{
     public TacticMaker tacticMaker;
 
     public int[][]                                          enemiesObservationGrid;
@@ -24,7 +22,7 @@ public class OneVSTwoPPTactic implements Tactic{
 
     Position destination = new Position();
 
-    public OneVSTwoPPTactic(TacticMaker tacticMaker){
+    public OneVSOnePPTactic(TacticMaker tacticMaker){
         this.tacticMaker = tacticMaker;
 
         this.enemiesObservationGrid     = this.tacticMaker.enemiesObservationGrid;
@@ -86,9 +84,9 @@ public class OneVSTwoPPTactic implements Tactic{
                         || Team.me().enemiesObservationSimulator.isInBothEnemiesView(x,y)
                         || !this.tacticMaker.isOnTargetedEnemyView(x,y)
                         || Systems.pointSimulator.isPointNotEmpty(x,y,tacticMaker.getPointStatus())
-                        || this.tacticMaker.getUnTargeted().getPointPosition().distanceTo(x,y) < 100
-                        || this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y) < 50
-                        || this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y) > 300
+                        || this.tacticMaker.getUnlockedEnemy().getPointPosition().distanceTo(x,y) < 100
+                        || this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y) < 50
+                        || this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y) > 300
                 ){
                     return false;
                 }
@@ -105,18 +103,18 @@ public class OneVSTwoPPTactic implements Tactic{
             int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;
             int y = node.position.y + SearchNode.childrenNodesFindingCost[i][1] ;
             double cost = Math.sqrt(SearchNode.childrenNodesFindingCost[i][2]);
-            if(this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y) < 50){
-                if(node.position.distanceTo(this.tacticMaker.getTargeted().getPointPosition()) > this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y)){
+            if(this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y) < 50){
+                if(node.position.distanceTo(this.tacticMaker.getLockedEnemy().getPointPosition()) > this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y)){
                     continue;
                 }
             }
-            if(this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y) > 200){
-                if(node.position.distanceTo(this.tacticMaker.getTargeted().getPointPosition()) < this.tacticMaker.getTargeted().getPointPosition().distanceTo(x,y)){
+            if(this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y) > 200){
+                if(node.position.distanceTo(this.tacticMaker.getLockedEnemy().getPointPosition()) < this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y)){
                     continue;
                 }
             }
-            if(this.tacticMaker.getUnTargeted().getPointPosition().distanceTo(x,y) < 100){
-                if(node.position.distanceTo(this.tacticMaker.getUnTargeted().getPointPosition()) > this.tacticMaker.getUnTargeted().getPointPosition().distanceTo(x,y)){
+            if(this.tacticMaker.getUnlockedEnemy().getPointPosition().distanceTo(x,y) < 100){
+                if(node.position.distanceTo(this.tacticMaker.getUnlockedEnemy().getPointPosition()) > this.tacticMaker.getUnlockedEnemy().getPointPosition().distanceTo(x,y)){
                     continue;
                 }
             }

@@ -65,7 +65,8 @@ public class RendererInputListener extends InputListener {
      */
     @Override
     public void touchDragged(InputEvent event, float x, float y, int pointer) {
-        Position position = this.roboMaster.getPosition();
+        Position current = this.roboMaster.getPosition();
+        Position position = new Position(current.x, current.y);
         float currentX = Gdx.input.getX();
         float currentY = Gdx.input.getY();
         float offsetX = currentX - preX;
@@ -74,7 +75,7 @@ public class RendererInputListener extends InputListener {
         position.y -= offsetY * 7;
         preX = currentX;
         preY = currentY;
-        this.roboMaster.setPosition(position.x, position.y);
+        if(position.isInsideTheMap()) this.roboMaster.setPosition(position.x , position.y);
     }
 
     /**

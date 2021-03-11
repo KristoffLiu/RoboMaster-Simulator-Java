@@ -142,9 +142,13 @@ public class PointSimulator extends Simulator {
     }
 
     public void updatePoint(int x, int y, PointStatus status) {
-        if(!isPoiontInsideMap(x, y)) return;
-        if(getMatrix()[x][y] != PointStatus.StaticObject){
-            getMatrix()[x][y] = status;
+        try{
+            if(!isPoiontInsideMap(x, y)) return;
+            if(getMatrix()[x][y] != PointStatus.StaticObject){
+                getMatrix()[x][y] = status;
+            }
+        }
+        catch(ArrayIndexOutOfBoundsException e){
         }
     }
 

@@ -7,6 +7,8 @@ import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.Actor;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.modules.LidarObservation;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.types.AlexanderMasterII;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.types.Enemy;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.types.ShanghaiTechMasterIII;
 import com.kristoff.robomaster_simulator.systems.Systems;
 
 public class RoboMasters{
@@ -24,11 +26,11 @@ public class RoboMasters{
 
     public static void init(){
         if(all.size() == 0){
-            teamBlue.add(new AlexanderMasterII(teamBlue,"Blue1"));
-            teamBlue.add(new AlexanderMasterII(teamBlue,"Blue2"));
-            teamRed.add(new AlexanderMasterII(teamRed,"Red1"));
-            teamRed.add(new AlexanderMasterII(teamRed,"Red2"));
-
+            teamBlue.add(new ShanghaiTechMasterIII(teamBlue,"Blue1"));
+            teamBlue.add(new ShanghaiTechMasterIII(teamBlue,"Blue2"));
+            teamRed.add(new Enemy(teamRed,"Red1"));
+            teamRed.add(new Enemy(teamRed,"Red2"));
+            ((ShanghaiTechMasterIII)teamBlue.get(1)).setAsRoamer();
             all.addAll(teamBlue);
             all.addAll(teamRed);
         }

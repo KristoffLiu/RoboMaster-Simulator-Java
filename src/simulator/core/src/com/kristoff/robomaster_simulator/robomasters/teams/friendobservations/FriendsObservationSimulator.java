@@ -35,7 +35,7 @@ public class FriendsObservationSimulator extends LoopThread {
     public FriendsObservationSimulator(Team team){
         thisTeam = team;
         mode = Mode.self_observation;
-        isStep = true;
+        isStep = false;
         delta = 1/60f;
         for(int i=0; i<849; i++){
             for(int j=0; j<489; j++){
@@ -44,10 +44,10 @@ public class FriendsObservationSimulator extends LoopThread {
         }
 
         runnable = () -> {
-            friendsObservationOne.simulate3(matrix,eoArrayList);
+            friendsObservationOne.simulate(matrix,eoArrayList);
         };
         runnable2 = () -> {
-            friendsObservationTwo.simulate3(matrix,eoArrayList);
+            friendsObservationTwo.simulate(matrix,eoArrayList);
         };
     }
 
@@ -76,8 +76,8 @@ public class FriendsObservationSimulator extends LoopThread {
                         }
                     }
 
-                    friendsObservationOne.simulate3(matrix,eoArrayList);
-                    friendsObservationTwo.simulate3(matrix,eoArrayList);
+                    friendsObservationOne.simulate(matrix,eoArrayList);
+                    friendsObservationTwo.simulate(matrix,eoArrayList);
 
                     for(int i=0; i<849; i+=10){
                         for(int j=0; j<489; j+=10){
@@ -112,12 +112,8 @@ public class FriendsObservationSimulator extends LoopThread {
             case self_observation -> {
                 if(thisTeam == RoboMasters.teamBlue)
                 {
-                    friendsObservationOne = new FriendsObservation(thisTeam.get(0), thisTeam.get(1), RoboMasters.teamRed.get(0),1);
-                    friendsObservationTwo = new FriendsObservation(thisTeam.get(0), thisTeam.get(1), RoboMasters.teamRed.get(1),2);
-                }
-                else{
-                    friendsObservationOne = new FriendsObservation(thisTeam.get(0), thisTeam.get(1), RoboMasters.teamBlue.get(0),1);
-                    friendsObservationTwo = new FriendsObservation(thisTeam.get(0), thisTeam.get(1), RoboMasters.teamBlue.get(1),2);
+                    friendsObservationOne = new FriendsObservation(RoboMasters.teamRed.get(0), RoboMasters.teamRed.get(1), this.thisTeam.get(0),1);
+                    friendsObservationTwo = new FriendsObservation(RoboMasters.teamRed.get(0), RoboMasters.teamRed.get(1), this.thisTeam.get(1),2);
                 }
             }
             case global_observation -> {

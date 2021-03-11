@@ -24,6 +24,7 @@ import java.util.List;
 public abstract class RoboMaster {
     public int PIN;                                             //PIN
     public Team team;                                           //归属队伍 team
+    public boolean isAlive = true;
 
     public Property                  property;                  //基本属性 Basic Property
     public Actor                     actor;                     //行为器 Acting System
@@ -101,9 +102,11 @@ public abstract class RoboMaster {
     public float getRotation() {
         return this.actor.rotation;
     }
+
     public void setPosition(int x, int y) {
         this.actor.update(x, y);
     }
+
     public void setPosition(int x, int y, float rotation) {
         this.actor.update(x, y, rotation);
     }
@@ -111,6 +114,7 @@ public abstract class RoboMaster {
     public Position getPosition() {
         return new Position(this.actor.x,this.actor.y);
     }
+
     public int getX() {
         return this.actor.x;
     }
@@ -144,7 +148,7 @@ public abstract class RoboMaster {
     }
 
     public boolean isAlive(){
-        return true;
+        return isAlive;
     }
 
     public Position getDecisionMade(){
@@ -152,4 +156,8 @@ public abstract class RoboMaster {
     }
 
     public Position getPointPosition(){return new Position(this.actor.x / 10,this.actor.y / 10);};
+
+    public void die(){
+        this.isAlive = false;
+    }
 }

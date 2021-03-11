@@ -2,6 +2,7 @@ package com.kristoff.robomaster_simulator.robomasters.teams.enemyobservations;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.types.Enemy;
 import com.kristoff.robomaster_simulator.robomasters.teams.Team;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.StatusPoint;
@@ -13,7 +14,7 @@ public class EnemyObservation{
     RoboMaster self2;
     RoboMaster enemy;
     Position position = new Position();
-    int radius = 250;
+    int radius = 300;
     int weight = 0;
 
     public EnemyObservation(RoboMaster self1, RoboMaster self2, RoboMaster enemy, int value){
@@ -179,6 +180,8 @@ public class EnemyObservation{
     }
     
     public void simulate3(int[][] EnemyObservationMapPoints, Array<StatusPoint> eoArrayList){
+        if(((Enemy)enemy).isLocked()) radius = 250;
+        else radius = 250;
         int[][] pointsArray = EnemyObservationMapPoints;
         Array<StatusPoint> pointsArrayList = new Array<>();
         this.setPosition(enemy.getLidarPosition());

@@ -1,11 +1,11 @@
-package com.kristoff.robomaster_simulator.robomasters.robomaster.types.enemyobservations;
+package com.kristoff.robomaster_simulator.robomasters.teams.friendobservations;
 
 import com.kristoff.robomaster_simulator.utils.Position;
 
-public class EnemiesObservationPoint extends Position {
+public class FriendsObservationPoint extends Position {
     public int observationStatus = 0;
 
-    public EnemiesObservationPoint(int x, int y, int observationStatus){
+    public FriendsObservationPoint(int x, int y, int observationStatus){
         this.x = x;
         this.y = y;
         this.observationStatus = observationStatus;

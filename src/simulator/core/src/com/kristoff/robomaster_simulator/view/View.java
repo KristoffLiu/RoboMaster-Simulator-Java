@@ -10,8 +10,8 @@ public class View{
 
     boolean isZooming                   = false;
     private final float zoomTimeLock    = 0.1f;
-    private final float zoomMax         = 4f;
-    private final float zoomMin         = 0.5f;
+    private final float zoomMax         = 400f;
+    private final float zoomMin         = 0.4f;
     private       float zoomOffset = 0.001f;
     private       float zoomTimeCount   = 0f;
 

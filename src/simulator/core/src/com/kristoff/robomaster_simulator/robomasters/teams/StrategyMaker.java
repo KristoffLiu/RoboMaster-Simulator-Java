@@ -2,7 +2,11 @@ package com.kristoff.robomaster_simulator.robomasters.teams;
 
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.tactics.SearchNode;
+import com.kristoff.robomaster_simulator.robomasters.robomaster.types.Enemy;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /***
  *
@@ -13,8 +17,6 @@ public class StrategyMaker extends LoopThread {
 
     public RoboMaster blue1;
     public RoboMaster blue2;
-
-
 
     /***
      * -1: Not Working
@@ -42,7 +44,7 @@ public class StrategyMaker extends LoopThread {
     @Override
     public void start(){
         super.start();
-        this.enemyTeam = RoboMasters.teamBlue;
+        this.enemyTeam = RoboMasters.teamRed;
         blue1 = RoboMasters.getRoboMaster("Blue1");
         blue2 = RoboMasters.getRoboMaster("Blue2");
         blue1.tacticMaker.start();
@@ -67,34 +69,57 @@ public class StrategyMaker extends LoopThread {
             default -> {}
         }
 
-        for(RoboMaster roboMaster : this.thisTeam){
-            if(roboMaster.isAlive()) roboMaster.tacticMaker.updateCounterState(counterState);
-        }
-
         switch (counterState){
-            case 3 ->{
-                RoboMaster target = RoboMasters.getRoboMaster("Red1");
-                RoboMaster notTargeted = RoboMasters.getRoboMaster("Red2");
-                SearchNode node1;
-                SearchNode node2;
-                boolean stop = false;
-                for(int i = 0; i < blue1.tacticMaker.resultNodes.size(); i++){
-                    for(int j = 0; j < blue2.tacticMaker.resultNodes.size(); j++){
-                        SearchNode temp1 = blue1.tacticMaker.resultNodes.get(i);
-                        SearchNode temp2 = blue2.tacticMaker.resultNodes.get(j);
-                        float distance = temp1.position.distanceTo(temp2.position);
-                        if(distance < 400 && distance > 150
-                           && temp1.position.distanceTo(notTargeted.getPosition()) > 200
-                           && temp2.position.distanceTo(notTargeted.getPosition()) > 200){
-                            blue1.tacticMaker.setDecisionNode(temp1);
-                            blue2.tacticMaker.setDecisionNode(temp2);
-                            stop = true;
-                            break;
-                        }
-                    }
-                    if(stop) break;
+            case 0,2 ->{
+                for(RoboMaster roboMaster : this.enemyTeam){
+                    ((Enemy)roboMaster).lock();
                 }
             }
+            case 1 ->{
+                for(RoboMaster roboMaster : this.thisTeam){
+                    float distance1 = roboMaster.getPosition().distanceTo(this.enemyTeam.get(0).getPosition());
+                    float distance2 = roboMaster.getPosition().distanceTo(this.enemyTeam.get(1).getPosition());
+                    if(distance1 < distance2) {
+                        ((Enemy)this.enemyTeam.get(0)).lock();
+                        ((Enemy)this.enemyTeam.get(1)).unlock();
+                    }
+                    else {
+                        ((Enemy)this.enemyTeam.get(1)).lock();
+                        ((Enemy)this.enemyTeam.get(0)).unlock();
+                    }
+                }
+            }
+            case 3 ->{
+                for(RoboMaster roboMaster : this.thisTeam){
+                    float distance1 = roboMaster.getPosition().distanceTo(this.enemyTeam.get(0).getPosition());
+                    float distance2 = roboMaster.getPosition().distanceTo(this.enemyTeam.get(1).getPosition());
+                    if(distance1 < distance2) {
+                        ((Enemy)this.enemyTeam.get(0)).lock();
+                        ((Enemy)this.enemyTeam.get(1)).unlock();
+                    }
+                    else {
+                        ((Enemy)this.enemyTeam.get(1)).lock();
+                        ((Enemy)this.enemyTeam.get(0)).unlock();
+                    }
+                }
+//                List<Float> distances = new LinkedList<>();
+//                for(RoboMaster enemy : this.enemyTeam){
+//                    distances.add(enemy.getPosition().distanceTo(this.thisTeam.get(0).getPosition()) +
+//                            enemy.getPosition().distanceTo(this.thisTeam.get(1).getPosition()));
+//                }
+//                if(distances.get(0) < distances.get(1)) {
+//                    ((Enemy)this.enemyTeam.get(0)).lock();
+//                    ((Enemy)this.enemyTeam.get(1)).unlock();
+//                }
+//                else {
+//                    ((Enemy)this.enemyTeam.get(1)).lock();
+//                    ((Enemy)this.enemyTeam.get(0)).unlock();
+//                }
+            }
+        }
+
+        for(RoboMaster roboMaster : this.thisTeam){
+            if(roboMaster.isAlive()) roboMaster.tacticMaker.updateCounterState(counterState);
         }
     }
 }

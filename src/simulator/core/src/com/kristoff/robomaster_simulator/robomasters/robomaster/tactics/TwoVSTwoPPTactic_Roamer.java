@@ -9,7 +9,7 @@ import com.kristoff.robomaster_simulator.utils.Position;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class TwoVSTwoPPTactic_Ganker implements Tactic{
+public class TwoVSTwoPPTactic_Roamer implements Tactic{
     public TacticMaker tacticMaker;
 
     public int[][]                                          enemiesObservationGrid;
@@ -22,7 +22,7 @@ public class TwoVSTwoPPTactic_Ganker implements Tactic{
 
     Position destination = new Position();
 
-    public TwoVSTwoPPTactic_Ganker(TacticMaker tacticMaker){
+    public TwoVSTwoPPTactic_Roamer(TacticMaker tacticMaker){
         this.tacticMaker = tacticMaker;
 
         this.enemiesObservationGrid     = this.tacticMaker.enemiesObservationGrid;
@@ -90,9 +90,11 @@ public class TwoVSTwoPPTactic_Ganker implements Tactic{
                         || Team.me().enemiesObservationSimulator.isInBothEnemiesView(x,y)
                         || !this.tacticMaker.isOnTargetedEnemyView(x,y)
                         || Systems.pointSimulator.isPointNotEmpty(x,y,tacticMaker.getPointStatus())
-                        || this.tacticMaker.getUnlockedEnemy().getPointPosition().distanceTo(x,y) < 100
                         || this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y) < 50
-                        || this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y) > 300
+                        || this.tacticMaker.getLockedEnemy().getPointPosition().distanceTo(x,y) > 200
+                        || this.tacticMaker.getFriendDecision().position.distanceTo(x,y) < 150
+//                        || this.tacticMaker.getAngularSeparation(x, y) < 30
+//                        || this.tacticMaker.getAngularSeparation(x, y) > 330
                 ){
                     return false;
                 }
@@ -123,6 +125,9 @@ public class TwoVSTwoPPTactic_Ganker implements Tactic{
                 if(node.position.distanceTo(this.tacticMaker.getUnlockedEnemy().getPointPosition()) > this.tacticMaker.getUnlockedEnemy().getPointPosition().distanceTo(x,y)){
                     continue;
                 }
+            }
+            if(this.tacticMaker.getFriendRoboMaster().getPointPosition().distanceTo(x,y) < 200){
+                continue;
             }
             if(hasThisNodeNotBeenVisited(x, y, this.tacticMaker.getNodeGrid()) && (!Systems.pointSimulator.isPointNotEmpty(x,y,tacticMaker.getPointStatus()))){
                 SearchNode childNode = new SearchNode(x,y,node.index + 1, cost,node);

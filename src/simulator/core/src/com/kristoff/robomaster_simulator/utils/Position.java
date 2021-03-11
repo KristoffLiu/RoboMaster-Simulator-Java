@@ -29,4 +29,8 @@ public class Position {
     public float distanceTo(int x, int y){
         return (float)Math.hypot((this.x - x), (this.y - y));
     }
+
+    public boolean isInsideTheMap(){
+        return (x > 205 && x < 8285 && y > 205 && y < 4685);
+    }
 }

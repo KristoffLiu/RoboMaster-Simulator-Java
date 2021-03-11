@@ -67,7 +67,7 @@ class Brain:
                                  msg.pose.orientation.z,
                                  msg.pose.orientation.w]).as_euler('zyx', degrees=True)
         self.robots[0].yaw = y
-        self.Blue1.setPosition(int(msg.pose.position.x*1000), int(msg.pose.position.y*1000),float(1.57))
+        self.Blue1.setPosition(int(msg.pose.position.x*1000), int(msg.pose.position.y*1000),float(y))
 
     def ownPositionCB1(self, msg):
         self.robots[1].x = msg.pose.position.x
@@ -77,7 +77,7 @@ class Brain:
                                  msg.pose.orientation.z,
                                  msg.pose.orientation.w]).as_euler('zyx', degrees=True)
         self.robots[1].yaw = y
-        self.Blue2.setPosition(int(msg.pose.position.x*1000), int(msg.pose.position.y*1000),float(1.57))
+        self.Blue2.setPosition(int(msg.pose.position.x*1000), int(msg.pose.position.y*1000),float(y))
 
     def ownObservationCB0(self, data):
         enemy = data.circles
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     try: 
         print(__file__ + " start!!")
         rospy.init_node('decision_node', anonymous=True)
-        rate = rospy.Rate(0.2)
+        rate = rospy.Rate(1)
         brain = Brain()
         print(brain)
         spin_thread = threading.Thread(target=call_rosspin).start()

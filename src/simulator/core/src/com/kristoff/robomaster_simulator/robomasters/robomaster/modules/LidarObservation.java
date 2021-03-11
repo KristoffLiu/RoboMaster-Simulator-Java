@@ -21,7 +21,7 @@ public class LidarObservation extends LoopThread {
     public LidarObservation(RoboMaster roboMaster){
         this.thisRoboMaster = roboMaster;
         mode = RoboMasters.lidarMode;
-        isStep = true;
+        isStep = false;
         delta = 1/60f;
 
         switch (thisRoboMaster.No){
