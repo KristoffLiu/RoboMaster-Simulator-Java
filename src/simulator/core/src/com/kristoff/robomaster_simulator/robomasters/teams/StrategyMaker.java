@@ -27,6 +27,8 @@ public class StrategyMaker extends LoopThread {
      */
     public int counterState = -1;
 
+    public float lockingWeight = 2.0f;
+
     /***
      * -1: No decision making
      * 0: countering 对抗模式
@@ -90,31 +92,19 @@ public class StrategyMaker extends LoopThread {
                 }
             }
             case 3 ->{
-                for(RoboMaster roboMaster : this.thisTeam){
-                    float distance1 = roboMaster.getPosition().distanceTo(this.enemyTeam.get(0).getPosition());
-                    float distance2 = roboMaster.getPosition().distanceTo(this.enemyTeam.get(1).getPosition());
-                    if(distance1 < distance2) {
-                        ((Enemy)this.enemyTeam.get(0)).lock();
-                        ((Enemy)this.enemyTeam.get(1)).unlock();
-                    }
-                    else {
-                        ((Enemy)this.enemyTeam.get(1)).lock();
-                        ((Enemy)this.enemyTeam.get(0)).unlock();
-                    }
+                List<Float> distances = new LinkedList<>();
+                for(RoboMaster enemy : this.enemyTeam){
+                    distances.add(enemy.getPosition().distanceTo(this.thisTeam.get(0).getPosition()) +
+                            enemy.getPosition().distanceTo(this.thisTeam.get(1).getPosition()));
                 }
-//                List<Float> distances = new LinkedList<>();
-//                for(RoboMaster enemy : this.enemyTeam){
-//                    distances.add(enemy.getPosition().distanceTo(this.thisTeam.get(0).getPosition()) +
-//                            enemy.getPosition().distanceTo(this.thisTeam.get(1).getPosition()));
-//                }
-//                if(distances.get(0) < distances.get(1)) {
-//                    ((Enemy)this.enemyTeam.get(0)).lock();
-//                    ((Enemy)this.enemyTeam.get(1)).unlock();
-//                }
-//                else {
-//                    ((Enemy)this.enemyTeam.get(1)).lock();
-//                    ((Enemy)this.enemyTeam.get(0)).unlock();
-//                }
+                if(distances.get(0) < distances.get(1)) {
+                    ((Enemy)this.enemyTeam.get(0)).lock();
+                    ((Enemy)this.enemyTeam.get(1)).unlock();
+                }
+                else {
+                    ((Enemy)this.enemyTeam.get(1)).lock();
+                    ((Enemy)this.enemyTeam.get(0)).unlock();
+                }
             }
         }
 

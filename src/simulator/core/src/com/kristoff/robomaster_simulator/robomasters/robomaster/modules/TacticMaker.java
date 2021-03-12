@@ -6,7 +6,7 @@ import com.kristoff.robomaster_simulator.robomasters.robomaster.tactics.*;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.types.Enemy;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.types.ShanghaiTechMasterIII;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
-import com.kristoff.robomaster_simulator.robomasters.teams.Team;
+import com.kristoff.robomaster_simulator.robomasters.teams.enemyobservations.EnemiesObservationSimulator;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.utils.Position;
@@ -31,15 +31,14 @@ public class TacticMaker extends LoopThread {
     OneVSOnePPTactic oneVSOnePPTactic;
     OneVSTwoPPTactic oneVSTwoPPTactic;
     TwoVSOnePPTactic twoVSOnePPTactic;
-    TwoVSTwoPPTactic twoVSTwoPPTactic;
+    TwoVSTwoPPTactic_Striker twoVSTwoPPTacticStriker;
     TwoVSTwoPPTactic_Roamer twoVSTwoPPTactic_roamer;
     SearchNode friendDecision;
 
-    public int[][]                                          enemiesObservationGrid;
-    public boolean[][]                                      nodeGrid;
+    public boolean[][] visitedGrid;
 
     public SearchNode                                       rootNode;
-    public SearchNode                                       decicionNode;
+    public SearchNode decisionNode;
 
     public Queue<SearchNode>                                queue;
     public CopyOnWriteArrayList<SearchNode>                 resultNodes;
@@ -50,10 +49,9 @@ public class TacticMaker extends LoopThread {
 
     public TacticMaker(RoboMaster roboMaster){
         this.roboMaster = (ShanghaiTechMasterIII)roboMaster;
-        enemiesObservationGrid = Team.getEnemiesObservationGrid()      ;
-        nodeGrid               = new boolean[849][489]                 ;
+        visitedGrid = new boolean[849][489]                 ;
         rootNode               = new SearchNode()                      ;
-        decicionNode             = new SearchNode()                      ;
+        decisionNode = new SearchNode()                      ;
         queue                  = new LinkedList<>()                    ;
         resultNodes            = new CopyOnWriteArrayList<SearchNode>();
         pathNodes              = new CopyOnWriteArrayList<SearchNode>();
@@ -62,13 +60,13 @@ public class TacticMaker extends LoopThread {
         oneVSOnePPTactic = new OneVSOnePPTactic(this);
         oneVSTwoPPTactic = new OneVSTwoPPTactic(this);
         twoVSOnePPTactic = new TwoVSOnePPTactic(this);
-        twoVSTwoPPTactic = new TwoVSTwoPPTactic(this);
+        twoVSTwoPPTacticStriker = new TwoVSTwoPPTactic_Striker(this);
         twoVSTwoPPTactic_roamer = new TwoVSTwoPPTactic_Roamer(this);
 
 
         counterState = 3;
-        this.tactic = twoVSTwoPPTactic;
-        this.delta = 2f;
+        this.tactic = twoVSTwoPPTacticStriker;
+        this.delta = 1/2f;
         this.isStep = true;
     }
 
@@ -85,13 +83,22 @@ public class TacticMaker extends LoopThread {
             case 1  ->  { tactic = oneVSTwoPPTactic;}
             case 2  ->  { tactic = twoVSOnePPTactic;}
             case 3  ->  {
-                tactic = oneVSTwoPPTactic;
-                //tactic = this.roboMaster.isRoamer() ? twoVSTwoPPTactic_roamer : twoVSTwoPPTactic;
+                tactic = this.roboMaster.isRoamer() ? twoVSTwoPPTactic_roamer : twoVSTwoPPTacticStriker;
             }
             default ->  { }
         }
-        this.clearCache();
+        queue.clear();
         tactic.decide();
+    }
+
+    public void update(SearchNode decisionNode,
+                       boolean[][] visitedGrid,
+                       CopyOnWriteArrayList<SearchNode> resultNodes,
+                       CopyOnWriteArrayList<SearchNode> pathNodes){
+        this.decisionNode = decisionNode;
+        this.visitedGrid = visitedGrid;
+        this.resultNodes = resultNodes;
+        this.pathNodes = pathNodes;
     }
 
     public RoboMaster getLockedEnemy(){
@@ -103,7 +110,7 @@ public class TacticMaker extends LoopThread {
     }
 
     public void updateDecisionForFriend(SearchNode node){
-        this.getFriendRoboMaster().tacticMaker.setFriendDecision(node);
+        this.getFriendRoboMaster().tacticMaker.setFriendDecision(new SearchNode(node.position.x, node.position.y));
     }
 
     public void setFriendDecision(SearchNode node){
@@ -112,12 +119,6 @@ public class TacticMaker extends LoopThread {
 
     public SearchNode getFriendDecision(){
         return this.friendDecision;
-    }
-
-    public void clearCache(){
-        this.clearNodeGrid();
-        this.queue.clear();
-        this.resultNodes.clear();
     }
 
     public void updateCounterState(int counterState){
@@ -129,14 +130,14 @@ public class TacticMaker extends LoopThread {
     }
 
     public void setDecisionNode(SearchNode node){
-        this.decicionNode = node;
+        this.decisionNode = node;
     }
 
     public Position getDecisionMade(){
         if(this.roboMaster.name.equals("Blue1")){
-            System.out.println(this.decicionNode.position.x + "  " + this.decicionNode.position.y);
+            System.out.println(this.decisionNode.position.x + "  " + this.decisionNode.position.y);
         }
-        return this.decicionNode.position;
+        return this.decisionNode.position;
     }
 
     public CopyOnWriteArrayList<SearchNode> getPathNodes(){
@@ -163,21 +164,6 @@ public class TacticMaker extends LoopThread {
         return this.roboMaster.pointStatus;
     }
 
-    public boolean isOutOfDangerousZone(int x, int y){
-        if(!PointSimulator.isPoiontInsideMap(x, y)) return false;
-        return enemiesObservationGrid[x][y] == 0;
-    }
-
-    public boolean isInFirstEnemyView(int x, int y){
-        if(!PointSimulator.isPoiontInsideMap(x, y)) return false;
-        return enemiesObservationGrid[x][y] == 1;
-    }
-
-    public boolean isInSecondEnemyView(int x, int y){
-        if(!PointSimulator.isPoiontInsideMap(x, y)) return false;
-        return enemiesObservationGrid[x][y] == 2;
-    }
-
     public boolean isOnTargetedEnemyView(int x, int y){
         if(!PointSimulator.isPoiontInsideMap(x, y)) return false;
         int targetedVal = 0;
@@ -185,34 +171,15 @@ public class TacticMaker extends LoopThread {
             targetedVal = 1;
         if(lockedEnemy.name.equals("Red2"))
             targetedVal = 2;
-        return enemiesObservationGrid[x][y] == targetedVal;
+        return EnemiesObservationSimulator.getEnemiesObservationStatus(x, y) == targetedVal;
     }
 
-    public boolean isOnUnTargetedEnemyView(int x, int y){
-        if(!PointSimulator.isPoiontInsideMap(x, y)) return false;
-        int unTargetedVal = 0;
-        if(unlockedEnemy.name.equals("Red1"))
-            unTargetedVal = 1;
-        if(unlockedEnemy.name.equals("Red2"))
-            unTargetedVal = 2;
-        return enemiesObservationGrid[x][y] == unTargetedVal;
-    }
-
-    public boolean isInBothEnemiesView(int x, int y){
-//        if(!PointSimulator.isPoiontInsideMap(x, y)) return false;
-        return enemiesObservationGrid[x][y] == 3;
-    }
-
-    public void clearNodeGrid(){
-        nodeGrid = new boolean[849][489];
-    }
-
-    public boolean[][] getNodeGrid(){
-        return nodeGrid;
+    public boolean[][] getVisitedGrid(){
+        return visitedGrid;
     }
 
     public boolean isVisited(int x, int y){
-        return nodeGrid[x][y];
+        return visitedGrid[x][y];
     }
 
     public RoboMaster getFriendRoboMaster() {
@@ -232,9 +199,9 @@ public class TacticMaker extends LoopThread {
         return result;
     }
 
-    public SearchNode getDecicionNode() {
+    public SearchNode getDecisionNode() {
         for(RoboMaster roboMaster : RoboMasters.teamBlue){
-            if(this.roboMaster != roboMaster) return roboMaster.tacticMaker.decicionNode;
+            if(this.roboMaster != roboMaster) return roboMaster.tacticMaker.decisionNode;
         }
         return null;
     }

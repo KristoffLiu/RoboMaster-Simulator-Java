@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.tactics.SearchNode;
 import com.kristoff.robomaster_simulator.robomasters.teams.enemyobservations.EnemiesObservationPoint;
-import com.kristoff.robomaster_simulator.robomasters.teams.friendobservations.FriendsObservation;
 import com.kristoff.robomaster_simulator.robomasters.teams.friendobservations.FriendsObservationPoint;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.StatusPoint;
 import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
@@ -12,7 +11,6 @@ import com.kristoff.robomaster_simulator.utils.Position;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
 import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
 
-import java.awt.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LidarPointCloudLayer extends VisualLayer {
@@ -57,7 +55,7 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer5.begin(ShapeRenderer.ShapeType.Filled);
         for(int i = 20; i < 829; i+=20){
             for(int j = 20; j < 469; j+=20){
-                if(RoboMasters.teamBlue.get(0).tacticMaker.getNodeGrid()[i][j]){
+                if(RoboMasters.teamBlue.get(0).tacticMaker.getVisitedGrid()[i][j]){
                     int x = i * 10;
                     int y = j * 10;
                     shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
@@ -66,7 +64,7 @@ public class LidarPointCloudLayer extends VisualLayer {
                             y / 1000f,
                             0.15f,10);
                 }
-                if(RoboMasters.teamBlue.get(1).tacticMaker.getNodeGrid()[i][j]){
+                if(RoboMasters.teamBlue.get(1).tacticMaker.getVisitedGrid()[i][j]){
                     int x = i * 10;
                     int y = j * 10;
                     shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
@@ -105,6 +103,34 @@ public class LidarPointCloudLayer extends VisualLayer {
         shapeRenderer3.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer3.setAutoShapeType(true);
         shapeRenderer3.begin(ShapeRenderer.ShapeType.Filled);
+//        for(int i = 0; i < 849; i += 1){
+//            for(int j = 0; j < 489; j += 1){
+//                switch (Team.getEnemiesObservationGrid()[i][j]){
+//                    case 1 ->{
+//                        shapeRenderer3.setColor(0.45f,0.45f,0.45f,1.0f);
+//                        shapeRenderer3.circle(
+//                                i / 100f,
+//                                j / 100f,
+//                                0.025f,10);
+//                    }
+//                    case 2 ->{
+//                        shapeRenderer3.setColor(0.6f,0.6f,0.6f,1.0f);
+//                        shapeRenderer3.circle(
+//                                i / 100f,
+//                                j / 100f,
+//                                0.025f,10);
+//                    }
+//                    case 3 ->{
+//                        shapeRenderer3.setColor(0.6f,0f,0f,1.0f);
+//                        shapeRenderer3.circle(
+//                                i / 100f,
+//                                j / 100f,
+//                                0.025f,10);
+//                    }
+//                }
+//
+//            }
+//        }
         for(EnemiesObservationPoint position : RoboMasters.teamBlue.enemiesObservationSimulator.getDangerousZone()){
             int x = position.x;
             int y = position.y;

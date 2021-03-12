@@ -9,6 +9,7 @@ import com.kristoff.robomaster_simulator.utils.LoopThread;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class FriendsObservationSimulator extends LoopThread {
+
     Team thisTeam;
     Mode mode;
 
@@ -26,8 +27,8 @@ public class FriendsObservationSimulator extends LoopThread {
     // 2 = enemy2observed,
     // 3 = both
 
-    FriendsObservation friendsObservationOne;
-    FriendsObservation friendsObservationTwo;
+    FriendObservation friendObservationOne;
+    FriendObservation friendObservationTwo;
 
     Runnable runnable;
     Runnable runnable2;
@@ -42,13 +43,6 @@ public class FriendsObservationSimulator extends LoopThread {
                 emptyMatrix[i][j] = 0;
             }
         }
-
-        runnable = () -> {
-            friendsObservationOne.simulate(matrix,eoArrayList);
-        };
-        runnable2 = () -> {
-            friendsObservationTwo.simulate(matrix,eoArrayList);
-        };
     }
 
     public enum Mode{
@@ -58,47 +52,23 @@ public class FriendsObservationSimulator extends LoopThread {
 
     @Override
     public void step(){
-        switch (mode){
-            case self_observation -> {
-                synchronized(matrix){
-                    CopyOnWriteArrayList<FriendsObservationPoint> arrayList = new CopyOnWriteArrayList<>();
+        synchronized(matrix){
+            CopyOnWriteArrayList<FriendsObservationPoint> arrayList = new CopyOnWriteArrayList<>();
 
-                    for(int i=0; i<849; i++){
-                        for(int j=0; j<489; j++){
-                            eoMatrix2[i][j] = eoMatrix[i][j];
-                            eoMatrix[i][j] = 0;
-                        }
+            int[][] temp = new int[849][489];
+
+            friendObservationOne.simulate(temp);
+            friendObservationTwo.simulate(temp);
+
+            for(int i=0; i<849; i+=10){
+                for(int j=0; j<489; j+=10){
+                    if(temp[i][j] != 0) {
+                        arrayList.add(new FriendsObservationPoint(i,j,temp[i][j]));
                     }
-
-                    for(int i=0; i<849; i++){
-                        for(int j=0; j<489; j++){
-                            matrix[i][j] = 0;
-                        }
-                    }
-
-                    friendsObservationOne.simulate(matrix,eoArrayList);
-                    friendsObservationTwo.simulate(matrix,eoArrayList);
-
-                    for(int i=0; i<849; i+=10){
-                        for(int j=0; j<489; j+=10){
-                            if(this.matrix[i][j] != 0) {
-                                arrayList.add(new FriendsObservationPoint(i,j,matrix[i][j]));
-                            }
-                        }
-                    }
-                    dangerousZone = arrayList;
                 }
             }
-            case global_observation -> {
-                if(thisTeam == RoboMasters.teamBlue)
-                {
-
-                }
-                else{
-
-                }
-            }
-
+            matrix = temp;
+            dangerousZone = arrayList;
         }
     }
 
@@ -108,24 +78,8 @@ public class FriendsObservationSimulator extends LoopThread {
 
     @Override
     public void start(){
-        switch (mode){
-            case self_observation -> {
-                if(thisTeam == RoboMasters.teamBlue)
-                {
-                    friendsObservationOne = new FriendsObservation(RoboMasters.teamRed.get(0), RoboMasters.teamRed.get(1), this.thisTeam.get(0),1);
-                    friendsObservationTwo = new FriendsObservation(RoboMasters.teamRed.get(0), RoboMasters.teamRed.get(1), this.thisTeam.get(1),2);
-                }
-            }
-            case global_observation -> {
-                if(thisTeam == RoboMasters.teamBlue)
-                {
-
-                }
-                else{
-
-                }
-            }
-        }
+        friendObservationOne = new FriendObservation(RoboMasters.teamRed.get(0), RoboMasters.teamRed.get(1), this.thisTeam.get(0),1);
+        friendObservationTwo = new FriendObservation(RoboMasters.teamRed.get(0), RoboMasters.teamRed.get(1), this.thisTeam.get(1),2);
         super.start();
     }
 

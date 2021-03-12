@@ -50,5 +50,4 @@ public class Team extends CopyOnWriteArrayList<RoboMaster> {
         return me().enemiesObservationSimulator.matrix;
     }
 
-
 }

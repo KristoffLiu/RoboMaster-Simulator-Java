@@ -33,4 +33,8 @@ public class Position {
     public boolean isInsideTheMap(){
         return (x > 205 && x < 8285 && y > 205 && y < 4685);
     }
+
+    public boolean isInsideTheMap(boolean isCentiMeter){
+        return (x > 20 && x < 829 && y > 20 && y < 469);
+    }
 }
