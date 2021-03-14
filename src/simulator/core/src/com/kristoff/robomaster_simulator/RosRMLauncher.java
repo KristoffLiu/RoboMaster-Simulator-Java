@@ -3,10 +3,10 @@ package com.kristoff.robomaster_simulator;
 import com.kristoff.robomaster_simulator.core.Simulator;
 import com.kristoff.robomaster_simulator.core.SimulatorConfiguration;
 import com.kristoff.robomaster_simulator.core.SimulatorMode;
-import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
-import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.systems.pointsimulator.PointState;
+import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import py4j.GatewayServer;
 
 public class RosRMLauncher {
@@ -32,7 +32,7 @@ public class RosRMLauncher {
         return simulator;
     }
 
-    public PointSimulator.PointStatus[][] getMap(){
+    public PointState[][] getMap(){
         return Systems.pointSimulator.getMatrix();
     }
 

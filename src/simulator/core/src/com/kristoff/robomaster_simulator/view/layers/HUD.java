@@ -1,18 +1,10 @@
 package com.kristoff.robomaster_simulator.view.layers;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
-import com.kristoff.robomaster_simulator.robomasters.robomaster.types.Enemy;
-import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
-import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.types.Enemy;
+import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
 import com.kristoff.robomaster_simulator.view.ui.controls.Image;
-import com.kristoff.robomaster_simulator.view.ui.controls.TextBlock;
-import com.kristoff.robomaster_simulator.view.ui.controls.UIElement;
 import com.kristoff.robomaster_simulator.view.ui.pages.UIPage;
 
 import java.util.ArrayList;

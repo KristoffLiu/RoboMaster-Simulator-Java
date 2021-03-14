@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
+import com.kristoff.robomaster_simulator.teams.RoboMasters;
 
 public class PhysicalSimulator extends Simulator{
     public static PhysicalSimulator current;

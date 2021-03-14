@@ -1,10 +1,10 @@
 package com.kristoff.robomaster_simulator.systems.refree;
 
 import com.kristoff.robomaster_simulator.utils.LoopThread;
-import com.kristoff.robomaster_simulator.robomasters.robomaster.RoboMaster;
-import com.kristoff.robomaster_simulator.robomasters.teams.Team;
-import com.kristoff.robomaster_simulator.robomasters.robomaster.judgement.BuffZone.BuffZone;
-import com.kristoff.robomaster_simulator.robomasters.robomaster.judgement.BuffZoneList;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.teams.Team;
+import com.kristoff.robomaster_simulator.robomasters.judgement.BuffZone.BuffZone;
+import com.kristoff.robomaster_simulator.robomasters.judgement.BuffZoneList;
 
 import java.util.ArrayList;
 import java.util.List;

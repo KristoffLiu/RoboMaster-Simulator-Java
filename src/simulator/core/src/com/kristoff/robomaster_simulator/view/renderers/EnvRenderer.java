@@ -9,7 +9,7 @@ import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.view.View;
 import com.kristoff.robomaster_simulator.view.io.GlobalInputEventHandler;
 import com.kristoff.robomaster_simulator.systems.maps.Map;
-import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
+import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.view.layers.*;
 import com.kristoff.robomaster_simulator.view.Assets;
 

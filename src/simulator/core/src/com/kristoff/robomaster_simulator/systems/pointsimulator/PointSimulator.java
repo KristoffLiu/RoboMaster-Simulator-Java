@@ -10,9 +10,9 @@ import java.util.List;
 public class PointSimulator extends Simulator {
     PhysicalSimulator physicalSimulator;
 
-    public PointStatus[][] pointMatrix;
-    public PointStatus[][] staticObjectPointMatrix;
-    public List<PointStatus> staticObjectPointsList;
+    public PointState[][] pointMatrix;
+    public PointState[][] staticObjectPointMatrix;
+    public List<PointState> staticObjectPointsList;
 
     public PointSimulator() {
         delta = 1/60f;
@@ -20,8 +20,8 @@ public class PointSimulator extends Simulator {
 
         this.physicalSimulator = Systems.physicalSimulator;
 
-        pointMatrix = new PointStatus[849][489];
-        staticObjectPointMatrix = new PointStatus[849][489];
+        pointMatrix = new PointState[849][489];
+        staticObjectPointMatrix = new PointState[849][489];
     }
 
     @Override
@@ -36,18 +36,8 @@ public class PointSimulator extends Simulator {
 
     }
 
-
-    public enum PointStatus {
-        Empty,
-        StaticObject,
-        Blue1,
-        Blue2,
-        Red1,
-        Red2
-    }
-
     public static boolean isPointNotEmpty(int x, int y){
-        if(Systems.pointSimulator.pointMatrix[x][y] == PointStatus.Empty || Systems.pointSimulator.pointMatrix[x][y] == null){
+        if(Systems.pointSimulator.pointMatrix[x][y] == PointState.Empty || Systems.pointSimulator.pointMatrix[x][y] == null){
             return false;
         }
         else {
@@ -59,11 +49,17 @@ public class PointSimulator extends Simulator {
         return !(x < 20 || x > 829 || y < 20 || y > 469);
     }
 
-    public boolean isPointNotEmpty(int x, int y, PointStatus pointStatus){
-//        if(!isPoiontInsideMap(x, y)) return false;
-        if(this.pointMatrix[x][y] == PointStatus.Empty
+    public boolean isPointEmpty(int x, int y, PointState pointState){
+        return     this.pointMatrix[x][y] == PointState.Empty
                 || this.pointMatrix[x][y] == null
-                || this.pointMatrix[x][y] == pointStatus){
+                || this.pointMatrix[x][y] == pointState;
+    }
+
+    public boolean isPointNotEmpty(int x, int y, PointState pointState){
+//        if(!isPoiontInsideMap(x, y)) return false;
+        if(this.pointMatrix[x][y] == PointState.Empty
+                || this.pointMatrix[x][y] == null
+                || this.pointMatrix[x][y] == pointState){
             return false;
         }
         else {
@@ -71,13 +67,13 @@ public class PointSimulator extends Simulator {
         }
     }
 
-    public void clearPointStatus(PointStatus pointStatus){
+    public void clearPointStatus(PointState pointState){
         int m = 0;
         int n = 0;
         int count = 0;
         for(int i = 0; i < 849; i++){
             for(int j = 0; j < 489; j++){
-                if(this.pointMatrix[i][j] == pointStatus){
+                if(this.pointMatrix[i][j] == pointState){
                     count ++;
                 }
                 if(count >= 25){
@@ -92,19 +88,19 @@ public class PointSimulator extends Simulator {
         }
         for(int i = -50; i < 50; i++){
             for(int j = -50; j < 40; j++){
-                if(this.pointMatrix[i][j] == pointStatus){
-                    this.pointMatrix[i][j] = PointStatus.Empty;
+                if(this.pointMatrix[i][j] == pointState){
+                    this.pointMatrix[i][j] = PointState.Empty;
                 }
             }
         }
     }
 
-    public boolean isPointNotEmpty(int x, int y, PointStatus pointStatus, PointStatus pointStatus2){
+    public boolean isPointNotEmpty(int x, int y, PointState pointState, PointState pointState2){
         if(!isPoiontInsideMap(x, y)) return false;
-        if(this.pointMatrix[x][y] == PointStatus.Empty
+        if(this.pointMatrix[x][y] == PointState.Empty
                 || this.pointMatrix[x][y] == null
-                || this.pointMatrix[x][y] == pointStatus
-                || this.pointMatrix[x][y] == pointStatus2){
+                || this.pointMatrix[x][y] == pointState
+                || this.pointMatrix[x][y] == pointState2){
             return false;
         }
         else {
@@ -112,9 +108,9 @@ public class PointSimulator extends Simulator {
         }
     }
 
-    public boolean isPointNotEmpty(int x, int y, PointStatus self1, PointStatus self2, PointStatus enemyPoint) {
+    public boolean isPointNotEmpty(int x, int y, PointState self1, PointState self2, PointState enemyPoint) {
         if(!isPoiontInsideMap(x, y)) return false;
-        if(this.pointMatrix[x][y] == PointStatus.Empty
+        if(this.pointMatrix[x][y] == PointState.Empty
                 || this.pointMatrix[x][y] == null
                 || this.pointMatrix[x][y] == self1
                 || this.pointMatrix[x][y] == self2
@@ -127,26 +123,26 @@ public class PointSimulator extends Simulator {
     }
 
     public boolean isPointOnEnemies(int x, int y){
-        return this.pointMatrix[x][y] == PointStatus.Red1 || this.pointMatrix[x][y] == PointStatus.Red2;
+        return this.pointMatrix[x][y] == PointState.Red1 || this.pointMatrix[x][y] == PointState.Red2;
     }
 
 
-    public static StatusPoint getRoboMasterPoint(int x, int y){
-        return new StatusPoint(x,y,Systems.pointSimulator.pointMatrix[x][y]);
+    public static StatePoint getRoboMasterPoint(int x, int y){
+        return new StatePoint(x,y,Systems.pointSimulator.pointMatrix[x][y]);
     }
 
-    public PointStatus getPoint(int x, int y){
+    public PointState getPoint(int x, int y){
         return Systems.pointSimulator.pointMatrix[x][y];
     }
 
-    public PointStatus[][] getMatrix() {
+    public PointState[][] getMatrix() {
         return pointMatrix;
     }
 
-    public void updatePoint(int x, int y, PointStatus status) {
+    public void updatePoint(int x, int y, PointState status) {
         try{
             if(!isPoiontInsideMap(x, y)) return;
-            if(getMatrix()[x][y] != PointStatus.StaticObject){
+            if(getMatrix()[x][y] != PointState.StaticObject){
                 getMatrix()[x][y] = status;
             }
         }
@@ -181,13 +177,13 @@ public class PointSimulator extends Simulator {
         for(int i=x;i<x+width;i++){
             for(int j=y;j<y+height;j++){
                 if((i == x || i == x+width-1) && ( j >= y && j <= y+height-1)){
-                    staticObjectPointMatrix[i][j] = PointStatus.StaticObject;
+                    staticObjectPointMatrix[i][j] = PointState.StaticObject;
                 }
                 else if((i > x && i < x+width-1) && ( j == y || j == y+height-1)){
-                    staticObjectPointMatrix[i][j] = PointStatus.StaticObject;
+                    staticObjectPointMatrix[i][j] = PointState.StaticObject;
                 }
                 else {
-                    staticObjectPointMatrix[i][j] = PointStatus.Empty;
+                    staticObjectPointMatrix[i][j] = PointState.Empty;
                 }
             }
         }
@@ -195,9 +191,9 @@ public class PointSimulator extends Simulator {
 
     private void addBlock(int x, int y, int width, int height, float radian){
         if(radian == 0){
-            for(int i=(int)x;i<x+width-1;i++){
-                for(int j=y;j<y+height-1;j++){
-                    staticObjectPointMatrix[i][j] = PointStatus.StaticObject;
+            for(int i=(int)x;i<x+width;i++){
+                for(int j=y;j<y+height;j++){
+                    staticObjectPointMatrix[i][j] = PointState.StaticObject;
                 }
             }
         }
@@ -205,14 +201,14 @@ public class PointSimulator extends Simulator {
             for(int i = 0; i <= (25 * Math.sqrt(2)); i++){
                 if(i <= (25 / Math.sqrt(2))){
                     for(int j = 0; j <= i ; j++){
-                        staticObjectPointMatrix[i + 407][245 + j] = PointStatus.StaticObject;
-                        staticObjectPointMatrix[i + 407][245 - j] = PointStatus.StaticObject;
+                        staticObjectPointMatrix[i + 407][245 + j] = PointState.StaticObject;
+                        staticObjectPointMatrix[i + 407][245 - j] = PointState.StaticObject;
                     }
                 }
                 else{
                     for(int j = 0; j <= 25 * Math.sqrt(2) - i; j++){
-                        staticObjectPointMatrix[i + 407][245 + j] = PointStatus.StaticObject;
-                        staticObjectPointMatrix[i + 407][245 - j] = PointStatus.StaticObject;
+                        staticObjectPointMatrix[i + 407][245 + j] = PointState.StaticObject;
+                        staticObjectPointMatrix[i + 407][245 - j] = PointState.StaticObject;
                     }
                 }
             }

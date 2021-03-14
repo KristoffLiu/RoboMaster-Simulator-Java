@@ -2,7 +2,7 @@ package com.kristoff.robomaster_simulator.core;
 
 import com.badlogic.gdx.*;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.robomasters.teams.RoboMasters;
+import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
 import com.kristoff.robomaster_simulator.view.renderers.Renderer;
 import com.kristoff.robomaster_simulator.view.renderers.RendererConfiguration;
