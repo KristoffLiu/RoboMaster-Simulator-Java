@@ -11,7 +11,7 @@ public class FriendObservation {
     RoboMaster self2;
     RoboMaster friend;
     Position position = new Position();
-    int radius = 400;
+    int radius = 600;
     int weight = 0;
 
     public FriendObservation(RoboMaster self1, RoboMaster self2, RoboMaster friend, int value){

@@ -24,7 +24,7 @@ public class Team extends CopyOnWriteArrayList<RoboMaster> {
     }
 
     public void start(){
-        friendsObservationSimulator.start();
+        //friendsObservationSimulator.start();
         enemiesObservationSimulator.start();
         infoAnalyzer.start();
     }

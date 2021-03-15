@@ -1,14 +1,19 @@
 package com.kristoff.robomaster_simulator.teams.friendobservations;
 
 import com.badlogic.gdx.utils.Array;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.types.Enemy;
 import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.teams.Team;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.StatePoint;
+import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
+import com.kristoff.robomaster_simulator.utils.Position;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class FriendsObservationSimulator extends LoopThread {
+    public static FriendsObservationSimulator current;
 
     Team thisTeam;
     Mode mode;
@@ -34,9 +39,10 @@ public class FriendsObservationSimulator extends LoopThread {
     Runnable runnable2;
 
     public FriendsObservationSimulator(Team team){
+        current = this;
         thisTeam = team;
         mode = Mode.self_observation;
-        isStep = false;
+        isStep = true;
         delta = 1/60f;
         for(int i=0; i<849; i++){
             for(int j=0; j<489; j++){
@@ -97,5 +103,33 @@ public class FriendsObservationSimulator extends LoopThread {
 
     public boolean isInBothEnemiesView(int x, int y){
         return matrix[x][y] == 3;
+    }
+
+    public static boolean canSeeLockedEnemy(int x, int y, RoboMaster currentRoboMaster){
+        for(int i=0;i<60;i++){
+            for(int j=0;j<45;j++){
+                int val = currentRoboMaster.teamIndex + 1;
+                Position position = Enemy.getLockedEnemy().actor.getPoint(i, j);
+                if(current.matrix[position.x][position.y] == val || current.matrix[position.x][position.y] == 3)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean canSeeUnlockedEnemy(int x, int y, RoboMaster currentRoboMaster){
+        for(int i=0;i<60;i++){
+            for(int j=0;j<45;j++){
+                int val = currentRoboMaster.teamIndex + 1;
+                Position position = Enemy.getUnlockedEnemy().actor.getPoint(i, j);
+                if(current.matrix[x][y] == val)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isInUnlockedEnemyViewOnly(int x, int y){
+        return current.matrix[x][y] == Enemy.getUnlockedEnemy().teamIndex + 1;
     }
 }

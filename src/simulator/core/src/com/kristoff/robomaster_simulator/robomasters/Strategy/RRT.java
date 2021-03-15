@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class RRT implements Strategy {
+public class RRT implements StrategyAnalyzer {
     public StrategyMaker strategyMaker;
 
     public Random random;

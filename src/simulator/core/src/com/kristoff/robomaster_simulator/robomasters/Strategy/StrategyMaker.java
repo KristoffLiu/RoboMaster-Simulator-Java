@@ -18,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class StrategyMaker extends LoopThread {
     ShanghaiTechMasterIII roboMaster;
-    Strategy strategy;
+    StrategyAnalyzer strategyAnalyzer;
 
     /***
      * -1: Not Working
@@ -29,7 +29,7 @@ public class StrategyMaker extends LoopThread {
      */
     //int counterState = -1;
     Position decisionMade;
-    StrategyAnalyzer strategyAnalyzer;
+    StrategyAnalyzer_2V2Master strategyAnalyzer_2V2Master;
     SearchNode friendDecision;
 
     public boolean[][] visitedGrid;
@@ -43,7 +43,7 @@ public class StrategyMaker extends LoopThread {
     public CopyOnWriteArrayList<SearchNode>                 pathNodes;
 
     public CounterState counterState = CounterState.TwoVSTwo;
-    public TacticState tacticState = TacticState.COUNTERING;
+    public TacticState tacticState = TacticState.MOVING;
 
     public StrategyMaker(RoboMaster roboMaster){
         this.roboMaster = (ShanghaiTechMasterIII)roboMaster;
@@ -58,22 +58,21 @@ public class StrategyMaker extends LoopThread {
         resultNodes            = new CopyOnWriteArrayList<SearchNode>();
         pathNodes              = new CopyOnWriteArrayList<SearchNode>();
 
-        strategyAnalyzer = new StrategyAnalyzer(this);
+        strategyAnalyzer_2V2Master = new StrategyAnalyzer_2V2Master(this);
 
-        this.strategy = strategyAnalyzer;
+        this.strategyAnalyzer = strategyAnalyzer_2V2Master;
         this.delta = 1/2f;
         this.isStep = true;
     }
 
     @Override
     public void step(){
-        analyze();
-
+        makeDecision();
     }
 
-    public void analyze(){
+    public void makeDecision(){
         queue.clear();
-        strategy.analyze(tacticState);
+        strategyAnalyzer.analyze(tacticState);
     }
 
     public void update(SearchNode resultNode,
@@ -84,29 +83,33 @@ public class StrategyMaker extends LoopThread {
         this.visitedGrid = visitedGrid;
         this.resultNodes = resultNodes;
         this.pathNodes = pathNodes;
+        changeTacticState();
         decide();
     }
 
-    public void decide(){
-        if(EnemiesObservationSimulator.isInBothEnemiesView(this.decisionNode.getX(), this.decisionNode.getY())){
+    private void changeTacticState(){
+        if(EnemiesObservationSimulator.isInBothEnemiesView(this.resultNode.getX(), this.resultNode.getY())){
             tacticState = TacticState.STATIC;
         }
         else{
-            tacticState = TacticState.COUNTERING;
+            tacticState = TacticState.MOVING;
         }
+        if(this.roboMaster.name == "Blue2") System.out.println(this.tacticState);
+    }
+
+    private void decide(){
         switch (tacticState){
             case STATIC -> {
                 pathNodes.clear();
                 decisionNode = new SearchNode(this.getCurrentPosition().x, this.getCurrentPosition().y);
             }
-            case ROAMING -> {}
-            case WANDERING -> {}
-            case COUNTERING -> {
+            case MOVING -> {
                 decisionNode = resultNode;
             }
         }
-        System.out.println(this.tacticState);
     }
+
+
 
     public void updateDecisionForFriend(SearchNode node){
         this.getFriendRoboMaster().strategyMaker.setFriendDecision(new SearchNode(node.position.x, node.position.y));
@@ -134,7 +137,7 @@ public class StrategyMaker extends LoopThread {
 
     public Position getDecisionMade(){
         if(this.roboMaster.name.equals("Blue1")){
-            System.out.println(this.decisionNode.position.x + "  " + this.decisionNode.position.y);
+            //System.out.println(this.decisionNode.position.x + "  " + this.decisionNode.position.y);
         }
         return this.decisionNode.position;
     }
@@ -180,7 +183,7 @@ public class StrategyMaker extends LoopThread {
         Vector2 friendSide = new Vector2(friendPosition.x - enemyPosition.x, friendPosition.y - enemyPosition.y);
         Vector2 myside = new Vector2(x - enemyPosition.x, y - enemyPosition.y);
         float result = friendSide.angleDeg(myside);
-        System.out.println(result);
+
         return result;
     }
 
@@ -190,13 +193,6 @@ public class StrategyMaker extends LoopThread {
         }
         return null;
     }
-
-
-
-
-
-
-
 
 
     public boolean isPointInsideMap(Position position){

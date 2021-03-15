@@ -28,7 +28,7 @@ public class Enemy extends RoboMaster {
 
     @Override
     public void setPosition(int x, int y) {
-        System.out.println(this.getPosition().distanceTo(x, y));
+        //System.out.println(this.getPosition().distanceTo(x, y));
         if(isInTheView && this.getPosition().distanceTo(x, y) > 50 && count < 5){
             count ++;
             return;
