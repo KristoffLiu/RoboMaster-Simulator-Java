@@ -4,12 +4,14 @@ import com.kristoff.robomaster_simulator.robomasters.types.Enemy;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
+import com.kristoff.robomaster_simulator.teams.friendobservations.FriendObservation;
+import com.kristoff.robomaster_simulator.teams.friendobservations.FriendsObservationSimulator;
 import com.kristoff.robomaster_simulator.utils.Position;
 
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class StrategyAnalyzer_2V2Roamer implements StrategyAnalyzer {
+public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
     public StrategyMaker strategyMaker;
 
     public SearchNode rootNode;
@@ -20,7 +22,7 @@ public class StrategyAnalyzer_2V2Roamer implements StrategyAnalyzer {
 
     Position destination = new Position();
 
-    public StrategyAnalyzer_2V2Roamer(StrategyMaker strategyMaker){
+    public StrategyAnalyzer_2V2Master(StrategyMaker strategyMaker){
         this.strategyMaker = strategyMaker;
 
         this.queue                      = this.strategyMaker.queue;
@@ -41,7 +43,8 @@ public class StrategyAnalyzer_2V2Roamer implements StrategyAnalyzer {
     }
 
     public boolean shouldIMove(int x, int y){
-        return !strategyMaker.isSafeNow(x, y);
+        //return !strategyMaker.isSafeNow(x, y);
+        return true;
     }
 
     public void scanMap(Position currentPosition){
@@ -59,7 +62,7 @@ public class StrategyAnalyzer_2V2Roamer implements StrategyAnalyzer {
 
         while (!this.queue.isEmpty()){
             resultNode = this.queue.poll();
-            if(isAvailable()) {
+            if(isAvailable(resultNode.position)) {
                 break;
             }
             generateChildrenNodes(resultNode, tempVisitedGrid);
@@ -75,21 +78,22 @@ public class StrategyAnalyzer_2V2Roamer implements StrategyAnalyzer {
         this.strategyMaker.update(resultNode, tempVisitedGrid, resultNodes, pathNodes);
     }
 
-    public boolean isAvailable(){
+    public boolean isAvailable(Position centrePosition){
+        return isTheSurroundingAreaAvailable(centrePosition) &&
+                !(Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) < 45 ||
+                Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) > 600 ||
+                this.strategyMaker.getFriendDecision().position.distanceTo(centrePosition) < 150);
+    }
+
+    public boolean isTheSurroundingAreaAvailable(Position centrePosition){
         for(int i=0;i<45;i++){
             for(int j=0;j<45;j++){
-                int x = resultNode.position.x + i - 23;
-                int y = resultNode.position.y + j - 23;
+                int x = centrePosition.x + i - 23;
+                int y = centrePosition.y + j - 23;
                 if(   !(x>=0 && x<849)
                         || !(y>=0 && y<489)
-                        || EnemiesObservationSimulator.isInBothEnemiesView(x,y)
-                        || !this.strategyMaker.isInLockedEnemyViewOnly(x,y)
+                        || !EnemiesObservationSimulator.isInLockedEnemyViewOnly(x, y)
                         || Systems.pointSimulator.isPointNotEmpty(x,y, strategyMaker.getPointStatus())
-                        || Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y) < 30
-                        || Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y) > 600
-                        || this.strategyMaker.getFriendDecision().position.distanceTo(x,y) < 150
-//                        || this.tacticMaker.getAngularSeparation(x, y) < 30
-//                        || this.tacticMaker.getAngularSeparation(x, y) > 330
                 ){
                     return false;
                 }
@@ -109,27 +113,27 @@ public class StrategyAnalyzer_2V2Roamer implements StrategyAnalyzer {
             if(Systems.pointSimulator.isPointNotEmpty(x,y, strategyMaker.getPointStatus())){
                 continue;
             }
-            if(Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y) < 50){
-                if(node.position.distanceTo(Enemy.getLockedEnemy().getPointPosition()) > Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y)){
-                    continue;
-                }
-            }
-            if(Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y) > 7500){
-                if(node.position.distanceTo(Enemy.getLockedEnemy().getPointPosition()) < Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y)){
-                    continue;
-                }
-            }
-            if(Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y) < 100){
-                if(node.position.distanceTo(Enemy.getLockedEnemy().getPointPosition()) > Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y)){
-                    continue;
-                }
-            }
-            if(this.strategyMaker.getFriendRoboMaster().getPointPosition().distanceTo(x,y) < 100){
-                if(node.position.distanceTo(this.strategyMaker.getFriendRoboMaster().getPointPosition()) > this.strategyMaker.getFriendRoboMaster().getPointPosition().distanceTo(x,y)){
-                    continue;
-                }
-            }
-//            if(!isFitIntoThePosition(x, y)) continue;
+//            if(Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y) < 50){
+//                if(node.position.distanceTo(Enemy.getLockedEnemy().getPointPosition()) > Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y)){
+//                    continue;
+//                }
+//            }
+//            if(Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y) > 7500){
+//                if(node.position.distanceTo(Enemy.getLockedEnemy().getPointPosition()) < Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y)){
+//                    continue;
+//                }
+//            }
+//            if(Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y) < 100){
+//                if(node.position.distanceTo(Enemy.getLockedEnemy().getPointPosition()) > Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y)){
+//                    continue;
+//                }
+//            }
+//            if(this.strategyMaker.getFriendRoboMaster().getPointPosition().distanceTo(x,y) < 100){
+//                if(node.position.distanceTo(this.strategyMaker.getFriendRoboMaster().getPointPosition()) > this.strategyMaker.getFriendRoboMaster().getPointPosition().distanceTo(x,y)){
+//                    continue;
+//                }
+//            }
+            if(!isFitIntoThePosition(x, y)) continue;
             if(hasThisNodeNotBeenVisited(x, y, visitedGrid)){
                 SearchNode childNode = new SearchNode(x,y,node.index + 1, cost,node);
                 node.childrenNodes.add(childNode);
@@ -155,10 +159,10 @@ public class StrategyAnalyzer_2V2Roamer implements StrategyAnalyzer {
     }
 
     public boolean isFitIntoThePosition(int x, int y){
-        for(int i=0;i<45;i++){
-            for(int j=0;j<45;j++){
-                int m = x + i - 23;
-                int n = y + j - 23;
+        for(int i=0;i<50;i+=10){
+            for(int j=0;j<50;j+=10){
+                int m = x + i - 25;
+                int n = y + j - 25;
                 if(Systems.pointSimulator.isPointNotEmpty(m, n, strategyMaker.getPointStatus())){
                     return false;
                 }
