@@ -11,6 +11,7 @@ import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservat
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.utils.Position;
+import org.lwjgl.Sys;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -29,7 +30,10 @@ public class StrategyMaker extends LoopThread {
      */
     //int counterState = -1;
     Position decisionMade;
+
     StrategyAnalyzer_2V2Master strategyAnalyzer_2V2Master;
+    StrategyAnalyzer_2V2Ranger strategyAnalyzer_2V2Ranger;
+
     SearchNode friendDecision;
 
     public boolean[][] visitedGrid;
@@ -59,6 +63,7 @@ public class StrategyMaker extends LoopThread {
         pathNodes              = new CopyOnWriteArrayList<SearchNode>();
 
         strategyAnalyzer_2V2Master = new StrategyAnalyzer_2V2Master(this);
+        strategyAnalyzer_2V2Ranger = new StrategyAnalyzer_2V2Ranger(this);
 
         this.strategyAnalyzer = strategyAnalyzer_2V2Master;
         this.delta = 1/2f;
@@ -72,7 +77,17 @@ public class StrategyMaker extends LoopThread {
 
     public void makeDecision(){
         queue.clear();
+        switchAnalyzer();
         strategyAnalyzer.analyze(tacticState);
+    }
+
+    public void switchAnalyzer(){
+        switch (counterState){
+            case OneVSOne -> strategyAnalyzer = strategyAnalyzer_2V2Master;
+            case OneVSTwo -> strategyAnalyzer = strategyAnalyzer_2V2Master;
+            case TwoVSOne -> strategyAnalyzer = strategyAnalyzer_2V2Master;
+            case TwoVSTwo -> strategyAnalyzer = this.roboMaster.isRoamer() ? strategyAnalyzer_2V2Ranger : strategyAnalyzer_2V2Master;
+        }
     }
 
     public void update(SearchNode resultNode,
@@ -107,12 +122,9 @@ public class StrategyMaker extends LoopThread {
                 decisionNode = resultNode;
             }
         }
-    }
-
-
-
-    public void updateDecisionForFriend(SearchNode node){
-        this.getFriendRoboMaster().strategyMaker.setFriendDecision(new SearchNode(node.position.x, node.position.y));
+        if(!this.roboMaster.isRoamer()){
+            this.getFriendRoboMaster().strategyMaker.setFriendDecision(new SearchNode(decisionNode.position.x, decisionNode.position.y));
+        }
     }
 
     public void setFriendDecision(SearchNode node){

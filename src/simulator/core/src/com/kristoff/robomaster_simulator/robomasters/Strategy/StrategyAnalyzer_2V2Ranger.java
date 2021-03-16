@@ -4,14 +4,12 @@ import com.kristoff.robomaster_simulator.robomasters.types.Enemy;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
-import com.kristoff.robomaster_simulator.teams.friendobservations.FriendObservation;
-import com.kristoff.robomaster_simulator.teams.friendobservations.FriendsObservationSimulator;
 import com.kristoff.robomaster_simulator.utils.Position;
 
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
+public class StrategyAnalyzer_2V2Ranger implements StrategyAnalyzer {
     public StrategyMaker strategyMaker;
 
     public SearchNode rootNode;
@@ -22,7 +20,7 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
 
     Position destination = new Position();
 
-    public StrategyAnalyzer_2V2Master(StrategyMaker strategyMaker){
+    public StrategyAnalyzer_2V2Ranger(StrategyMaker strategyMaker){
         this.strategyMaker = strategyMaker;
 
         this.queue                      = this.strategyMaker.queue;
@@ -67,22 +65,20 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
             }
             generateChildrenNodes(resultNode, tempVisitedGrid);
         }
-
         SearchNode node = resultNode;
         pathNodes.clear();
         while (true && node.parentNode != null){
             pathNodes.add(node);
             node = node.parentNode;
         }
-
         this.strategyMaker.update(resultNode, tempVisitedGrid, resultNodes, pathNodes);
     }
 
     public boolean isAvailable(Position centrePosition){
         return isTheSurroundingAreaAvailable(centrePosition) &&
-                !(Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) < 45 ||
-                Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) > 600 ||
-                this.strategyMaker.getFriendDecision().position.distanceTo(centrePosition) < 150);
+                Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) > 45 &&
+                Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) < 600 &&
+                this.strategyMaker.getFriendDecision().position.distanceTo(centrePosition) > 150;
     }
 
     public boolean isTheSurroundingAreaAvailable(Position centrePosition){

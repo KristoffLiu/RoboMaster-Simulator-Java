@@ -11,7 +11,6 @@ import com.kristoff.robomaster_simulator.systems.Systems;
 
 public class RoboMasters{
     static SimulatorConfiguration config;
-    public static LidarObservation.LidarMode lidarMode = LidarObservation.LidarMode.list;
 
     public static Team all       = new Team();
     public static Team teamBlue   = new Team("Blue");

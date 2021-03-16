@@ -74,17 +74,13 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
             pathNodes.add(node);
             node = node.parentNode;
         }
-
         this.strategyMaker.update(resultNode, tempVisitedGrid, resultNodes, pathNodes);
     }
 
     public boolean isAvailable(Position centrePosition){
         return isTheSurroundingAreaAvailable(centrePosition) &&
-                FriendsObservationSimulator.canSeeLockedEnemy(centrePosition.x, centrePosition.y, this.strategyMaker.roboMaster) &&
-                !FriendsObservationSimulator.canSeeUnlockedEnemy(centrePosition.x, centrePosition.y, this.strategyMaker.roboMaster) &&
-                !(Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) < 30 ||
-                Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) > 600 ||
-                this.strategyMaker.getFriendDecision().position.distanceTo(centrePosition) < 150);
+                !(Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) < 45 ||
+                Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) > 600);
     }
 
     public boolean isTheSurroundingAreaAvailable(Position centrePosition){
@@ -94,8 +90,7 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
                 int y = centrePosition.y + j - 23;
                 if(   !(x>=0 && x<849)
                         || !(y>=0 && y<489)
-                        || EnemiesObservationSimulator.isInBothEnemiesView(x,y)
-                        || !this.strategyMaker.isInLockedEnemyViewOnly(x,y)
+                        || !EnemiesObservationSimulator.isInLockedEnemyViewOnly(x, y)
                         || Systems.pointSimulator.isPointNotEmpty(x,y, strategyMaker.getPointStatus())
                 ){
                     return false;

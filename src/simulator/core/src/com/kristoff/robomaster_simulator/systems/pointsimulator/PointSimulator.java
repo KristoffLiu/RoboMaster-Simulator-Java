@@ -56,7 +56,7 @@ public class PointSimulator extends Simulator {
     }
 
     public boolean isPointNotEmpty(int x, int y, PointState pointState){
-//        if(!isPoiontInsideMap(x, y)) return false;
+        if(!isPoiontInsideMap(x, y)) return false;
         if(this.pointMatrix[x][y] == PointState.Empty
                 || this.pointMatrix[x][y] == null
                 || this.pointMatrix[x][y] == pointState){
