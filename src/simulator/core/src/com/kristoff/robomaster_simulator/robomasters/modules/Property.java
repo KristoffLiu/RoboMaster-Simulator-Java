@@ -13,7 +13,7 @@ public class Property {
 
     //Competition properties;
     //RoboMasterSate roboMasterState;
-    public float health;
+    public int health = 2000;
     public int numOfBulletsOwned;
     public int numOfBulletsLeft;
     int numOfBulletsShot;
@@ -23,5 +23,5 @@ public class Property {
 
     public boolean movable = true;
     public boolean shootable = true;
-    public boolean isAlive = false;
+    public boolean isAlive = true;
 }

@@ -8,7 +8,7 @@ public class SimulatorConfiguration {
     LwjglApplicationConfiguration rendererConfig = new LwjglApplicationConfiguration();
     public boolean isRendering                  = true;
     public float physicalWorldStep              = 1 / 60f;
-    public int renderedFrameRate                = 120;
+    public int renderedFrameRate                = 60;
 
     public int width                            = 1920;
     public int height                           = 1080;

@@ -40,6 +40,7 @@ public abstract class RoboMaster {
     public String name;
     public int No;
     public int teamIndex;
+    public int health;
     public PointState pointState;
 
     /***
@@ -81,6 +82,7 @@ public abstract class RoboMaster {
             }
             case realMachine -> {}
         }
+        this.health = property.health;
     }
 
     public void start(){
@@ -163,4 +165,18 @@ public abstract class RoboMaster {
     public void die(){
         this.isAlive = false;
     }
+
+    public void loseHealth(int healthLost){
+        this.health = this.health > 0 ? health - healthLost : 0;
+        if(this.health <= 0) this.isAlive = false;
+    }
+
+    public int getHealth(){
+        return this.health;
+    }
+
+    public float getHealthPercent(){
+        return (float)this.getHealth() / (float)this.property.health;
+    }
 }
+

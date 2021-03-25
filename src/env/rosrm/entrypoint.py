@@ -1,6 +1,7 @@
 from typing import Sequence
 from py4j.java_gateway import JavaGateway
 from py4j.java_gateway import java_import
+import time
 
 gateway = JavaGateway() #启动py4j服务器
 entrypoint = gateway.entry_point #获取服务器桥的入口
@@ -13,7 +14,7 @@ robomaster = entrypoint.getRoboMaster("Blue1") #直接获取RoboMaster对象
 # 一共有四辆Robomaster，分别叫 Blue1, Blue2, Red1, Red2。
 # robomaster.setPosition(5000,1000) #设置x, y坐标
 
-robomaster.setPosition(700,1600,float(102.14)) #设置x, y, yaw数值。 yaw用radian数值表示, 且必须是float类型
+robomaster.setPosition(700,1600,float(0.6)) #设置x, y, yaw数值。 yaw用radian数值表示, 且必须是float类型
 
 a = robomaster.getPosition() #获得roboMaster的坐标，类型为java的Position类
 b = robomaster.getX() #获得roboMaster的x坐标，类型为int整型
@@ -43,12 +44,14 @@ red2.setPosition(7600,2600,float(1)) #设置x, y, yaw数值。 yaw用radian数�
 
 #robomaster.getPointAvoidingFacingEnemies()
 
-decisionPoint = robomaster.getDecisionMade();
-print(decisionPoint.getX());
-print(decisionPoint.getY());
+decisionPoint = robomaster.getDecisionMade()
+print(decisionPoint.getX())
+print(decisionPoint.getY())
 
-decisionPoint2 = blue2.getDecisionMade();
-print(decisionPoint2.getX());
-print(decisionPoint2.getY());
+decisionPoint2 = blue2.getDecisionMade()
+print(decisionPoint2.getX())
+print(decisionPoint2.getY())
 
-
+for i in range(500):
+    robomaster.loseHealth(10)
+    time.sleep(0.01)

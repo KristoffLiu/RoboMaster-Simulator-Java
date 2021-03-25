@@ -11,9 +11,13 @@ import java.util.ArrayList;
 
 public class HUD extends UIPage {
     EnvRenderer envRenderer;
+    ArrayList<Image> hpBarIndicatorBackgroundList = new ArrayList<>();
+    ArrayList<Image> hpBarIndicatorForegroundList = new ArrayList<>();
     ArrayList<Image> roboMastersIDList = new ArrayList<>();
     ArrayList<Image> enemyInViewIndicators = new ArrayList<>();
-    Image lockedIndicator = new Image();
+    ArrayList<Image> isDeadIndicatorList = new ArrayList<>();
+
+    Image lockedIndicator;
 
     public HUD(EnvRenderer envRenderer) {
         super(envRenderer.view.getViewport());
@@ -24,7 +28,29 @@ public class HUD extends UIPage {
             roboImage.setTag(roboMaster);
             roboImage.setScale(0.02f);
             roboMastersIDList.add(roboImage);
+
+            Image hpBarIndicatorBackground = new Image();
+            hpBarIndicatorBackground.setTextureRegion("RoboMasters/Indicators/HPBarBackground.png");
+            hpBarIndicatorBackground.setTag(roboMaster);
+            hpBarIndicatorBackground.setScale(0.02f);
+            hpBarIndicatorBackgroundList.add(hpBarIndicatorBackground);
+
+            Image hpBarIndicatorForeground = new Image();
+            hpBarIndicatorForeground.setTextureRegion("RoboMasters/Indicators/HPBarForeground.png");
+            hpBarIndicatorForeground.setTag(roboMaster);
+            hpBarIndicatorForeground.setScale(0.02f);
+            hpBarIndicatorForegroundList.add(hpBarIndicatorForeground);
+
+            Image isDeadIndicator = new Image();
+            isDeadIndicator.setTextureRegion("RoboMasters/Indicators/dead.png");
+            isDeadIndicator.setTag(roboMaster);
+            isDeadIndicator.setScale(0.00f);
+            isDeadIndicatorList.add(isDeadIndicator);
+
             this.addUIElement(roboImage);
+            this.addUIElement(hpBarIndicatorBackground);
+            this.addUIElement(hpBarIndicatorForeground);
+            this.addUIElement(isDeadIndicator);
 
             if(RoboMasters.teamRed.contains(roboMaster)){
                 Image enemyInViewIndicatorImage = new Image();
@@ -50,8 +76,25 @@ public class HUD extends UIPage {
             RoboMaster roboMaster = (RoboMaster) roboImage.getTag();
             roboImage.setPosition((roboMaster.getX() - 310f) / 1000f , (roboMaster.getY() + 210f) / 1000f );
         }
+        for(int i = 0; i < this.hpBarIndicatorBackgroundList.size(); i++){
+            Image hpBarIndicatorBackground = hpBarIndicatorBackgroundList.get(i);
+            Image hpBarIndicatorForeground = hpBarIndicatorForegroundList.get(i);
+
+            RoboMaster roboMaster = (RoboMaster) hpBarIndicatorBackground.getTag();
+            hpBarIndicatorBackground.setPosition((roboMaster.getX() - 280f) / 1000f , (roboMaster.getY() - 330f) / 1000f );
+            hpBarIndicatorForeground.setPosition((roboMaster.getX() - 280f) / 1000f , (roboMaster.getY() - 330f) / 1000f );
+            float percent = roboMaster.getHealthPercent() > 0 ? roboMaster.getHealthPercent() : 0;
+            hpBarIndicatorForeground.setWidth(hpBarIndicatorBackground.getWidth() * percent);
+        }
         for(Image inViewImage : this.enemyInViewIndicators){
             setInViewImage(inViewImage);
+        }
+        for(Image isDeadImage : this.isDeadIndicatorList){
+            RoboMaster roboMaster = (RoboMaster) isDeadImage.getTag();
+            if(!roboMaster.isAlive){
+                isDeadImage.setScale(0.007f);
+                isDeadImage.setPosition((roboMaster.getX() - 220f) / 1000f , (roboMaster.getY() - 200f) / 1000f );
+            }
         }
     }
 
@@ -65,40 +108,3 @@ public class HUD extends UIPage {
         }
     }
 }
-
-
-//    EnvRenderer envRenderer;
-//    ArrayList<BitmapFont> roboMastersIDList = new ArrayList<>();
-//
-//    //绘图，封装openGL
-//    SpriteBatch spriteBatch;
-//    // BitmapFont是libgdx提供的文字显示用类，内部将图片转化为可供opengl调用的
-//    // 文字贴图(默认不支持中文)。
-//
-//
-//    public HUD(EnvRenderer envRenderer) {
-//        super(envRenderer.view.getViewport());
-//        this.envRenderer = envRenderer;
-//        spriteBatch = new SpriteBatch();
-//        for(RoboMaster roboMaster : RoboMasters.all){
-//            BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal("font/ImpactFont.fnt"),
-//                    Gdx.files.internal("font/ImpactFont.png"), false);
-//            roboMastersIDList.add(bitmapFont);
-//        }
-//    }
-//
-//    public void addID(){
-//
-//    }
-//
-//    @Override
-//    public void act(float delta){
-//        super.act(delta);
-//        spriteBatch.begin();
-//        for(int i = 0; i < RoboMasters.all.size(); i ++){
-//            RoboMaster roboMaster = RoboMasters.all.get(i);
-//            BitmapFont bitmapFont = roboMastersIDList.get(i);
-//            bitmapFont.draw(spriteBatch, roboMaster.name, 100, 200);
-//        }
-//        spriteBatch.end();
-//    }

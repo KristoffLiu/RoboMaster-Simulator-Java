@@ -12,11 +12,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class StrategyAnalyzer_2V2Ranger implements StrategyAnalyzer {
     public StrategyMaker strategyMaker;
 
-    public SearchNode rootNode;
-    public Queue<SearchNode>                      queue;
-    public SearchNode resultNode;
-    public CopyOnWriteArrayList<SearchNode>                   resultNodes;
-    public CopyOnWriteArrayList<SearchNode>                   pathNodes;
+    public SearchNode                               rootNode;
+    public Queue<SearchNode>                        queue;
+    public SearchNode                               resultNode;
+    public CopyOnWriteArrayList<SearchNode>         resultNodes;
+    public CopyOnWriteArrayList<SearchNode>         pathNodes;
 
     Position destination = new Position();
 
