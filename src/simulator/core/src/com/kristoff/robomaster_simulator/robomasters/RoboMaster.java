@@ -167,7 +167,7 @@ public abstract class RoboMaster {
     }
 
     public void setHealth(int value){
-        this.health = this.health > 0 ? health - health : 0;
+        this.health = this.health > 0 ? value : 0;
         if(this.health <= 0) this.isAlive = false;
     }
 

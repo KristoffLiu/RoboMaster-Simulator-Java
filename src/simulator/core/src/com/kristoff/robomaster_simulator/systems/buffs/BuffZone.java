@@ -1,5 +1,6 @@
 package com.kristoff.robomaster_simulator.systems.buffs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.view.actors.CustomActor;
@@ -46,7 +47,15 @@ public class BuffZone {
             case DisableMovement -> pathHeader += "MovementForbidden.png";
             case RedBulletSupply -> pathHeader += "BulletSupplyRed.png";
         }
-        this.buffImage.setTextureRegion(pathHeader);
+        String finalPathHeader = pathHeader;
+        Gdx.app.postRunnable(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                buffImage.setTextureRegion(finalPathHeader);
+            }
+        });
     }
 
     public String getName(){

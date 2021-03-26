@@ -86,11 +86,14 @@ class Brain:
             self.Red2.setPosition(int(enemy[1].center.x*1000), int(enemy[1].center.y*1000),float(1.57))
 
     def robotHP(self, data):
-        print("----")
-        print(data.red1)
-        print(data.red2)
         print(data.blue1)
         print(data.blue2)
+        print(data.red1)
+        print(data.red2)
+        self.Blue1.setHealth(data.blue1)
+        self.Blue2.setHealth(data.blue2)
+        self.Red1.setHealth(data.red1)
+        self.Red2.setHealth(data.red2)
     
     def gameZone(self, data):
         print("****")
