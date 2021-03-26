@@ -4,6 +4,7 @@ import com.kristoff.robomaster_simulator.core.Simulator;
 import com.kristoff.robomaster_simulator.core.SimulatorConfiguration;
 import com.kristoff.robomaster_simulator.core.SimulatorMode;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.systems.buffs.BuffZone;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointState;
 import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.Systems;
@@ -43,5 +44,9 @@ public class RosRMLauncher {
     public RoboMaster getRoboMaster(String name){
         roboMaster = RoboMasters.getRoboMaster(name);
         return roboMaster;
+    }
+
+    public void updateBuffZone(int buffZoneNo, int buffType){
+        BuffZone.updateBuffZone(buffZoneNo, buffType);
     }
 }

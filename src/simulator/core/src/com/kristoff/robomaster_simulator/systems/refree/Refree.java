@@ -30,6 +30,15 @@ public class Refree extends LoopThread {
         super.start();
     }
 
+    public void test(){
+        BuffZone.updateBuffZone(0,1);
+        BuffZone.updateBuffZone(1,2);
+        BuffZone.updateBuffZone(2,3);
+        BuffZone.updateBuffZone(3,4);
+        BuffZone.updateBuffZone(4,5);
+        BuffZone.updateBuffZone(5,6);
+    }
+
     public List<BuffZone> getBuffZones(){
         return this.buffZones;
     }

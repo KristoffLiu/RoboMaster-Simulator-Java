@@ -1,7 +1,6 @@
 package com.kristoff.robomaster_simulator.systems.buffs;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.view.actors.CustomActor;
 import com.kristoff.robomaster_simulator.view.ui.controls.Image;
@@ -9,11 +8,13 @@ import com.kristoff.robomaster_simulator.view.ui.controls.UIElement;
 
 public class BuffZone {
     Buff buff;
+    String name;
     CustomActor actor;
     Image buffImage;
     TextureMapObject textureMapObject;
 
     public BuffZone(TextureMapObject textureMapObject){
+        this.name = textureMapObject.getName();
         buffImage = new Image();
         updateBuff(Buff.NotActivated);
         this.textureMapObject = textureMapObject;
@@ -36,14 +37,18 @@ public class BuffZone {
         String pathHeader = "Systems/BuffZones/";
         switch (buff){
             case NotActivated      -> pathHeader += "NotActivated.png";
-            case HealingForRed     -> pathHeader += "HealingRed.png";
-            case ShootingForbidden -> pathHeader += "ShootingForbidden.png";
-            case BulletSupplyBlue  -> pathHeader += "BulletSupplyBlue.png";
-            case HealingForBlue    -> pathHeader += "HealingBlue.png";
-            case MovementForbidden -> pathHeader += "MovementForbidden.png";
-            case BulletSupplyRed   -> pathHeader += "BulletSupplyRed.png";
+            case RedHPRecovery -> pathHeader += "HealingRed.png";
+            case DisableShooting -> pathHeader += "ShootingForbidden.png";
+            case BlueBulletSupply -> pathHeader += "BulletSupplyBlue.png";
+            case BlueHPRecovery -> pathHeader += "HealingBlue.png";
+            case DisableMovement -> pathHeader += "MovementForbidden.png";
+            case RedBulletSupply -> pathHeader += "BulletSupplyRed.png";
         }
         this.buffImage.setTextureRegion(pathHeader);
+    }
+
+    public String getName(){
+        return this.name;
     }
 
     public Buff getBuff(){
@@ -61,8 +66,8 @@ public class BuffZone {
     public static boolean isInDebuffZone(int x, int y){
         for(BuffZone buffZone : Systems.refree.getBuffZones()){
             if(buffZone.getBuff() != Buff.NotActivated &&
-                    buffZone.getBuff() != Buff.BulletSupplyBlue &&
-                buffZone.getBuff() != Buff.HealingForBlue ){
+                    buffZone.getBuff() != Buff.BlueBulletSupply &&
+                buffZone.getBuff() != Buff.BlueHPRecovery){
                 if(isInBuffZone(x, y, buffZone)){
                     return true;
                 }
@@ -73,5 +78,22 @@ public class BuffZone {
 
     public static boolean isInBuffZone(int x, int y, BuffZone buffZone){
         return buffZone.getBuffZoneActor().getBounds().contains(x*10, y*10);
+    }
+
+    public static void updateBuffZone(int buffZoneNo, int buffType){
+        for(BuffZone buffZone : Systems.refree.getBuffZones()){
+            if(buffZone.getName().equals("F" + (buffZoneNo + 1))){
+                switch (buffType){
+                    case 0 -> buffZone.updateBuff(Buff.NotActivated        );
+                    case 1 -> buffZone.updateBuff(Buff.RedHPRecovery       );
+                    case 2 -> buffZone.updateBuff(Buff.RedBulletSupply     );
+                    case 3 -> buffZone.updateBuff(Buff.BlueHPRecovery      );
+                    case 4 -> buffZone.updateBuff(Buff.BlueBulletSupply    );
+                    case 5 -> buffZone.updateBuff(Buff.DisableShooting     );
+                    case 6 -> buffZone.updateBuff(Buff.DisableMovement      );
+                }
+                break;
+            }
+        }
     }
 }

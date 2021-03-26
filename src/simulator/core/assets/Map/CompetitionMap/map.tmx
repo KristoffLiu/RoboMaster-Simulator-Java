@@ -1042,11 +1042,11 @@
   <object id="33" name="B5" gid="13" x="4068.22" y="2445" width="250" height="250" rotation="45"/>
  </objectgroup>
  <objectgroup id="8" name="Buff_Zone">
-  <object id="9" gid="40" x="3970" y="4480" width="540" height="480"/>
-  <object id="12" gid="40" x="3968" y="891" width="540" height="480"/>
-  <object id="14" gid="40" x="6115.33" y="2094.67" width="540" height="480"/>
-  <object id="15" gid="40" x="7515.33" y="3234.67" width="540" height="480"/>
-  <object id="16" gid="40" x="1835.33" y="3280.67" width="540" height="480"/>
-  <object id="17" gid="40" x="435.5" y="2135" width="540" height="480"/>
+  <object id="9" name="F6" gid="40" x="3970" y="4480" width="540" height="480"/>
+  <object id="12" name="F3" gid="40" x="3968" y="891" width="540" height="480"/>
+  <object id="14" name="F5" gid="40" x="6115.33" y="2094.67" width="540" height="480"/>
+  <object id="15" name="F4" gid="40" x="7515.33" y="3234.67" width="540" height="480"/>
+  <object id="16" name="F2" gid="40" x="1835.33" y="3280.67" width="540" height="480"/>
+  <object id="17" name="F1" gid="40" x="435.5" y="2135" width="540" height="480"/>
  </objectgroup>
 </map>
