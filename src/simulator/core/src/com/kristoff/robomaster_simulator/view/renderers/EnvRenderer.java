@@ -32,6 +32,7 @@ public class EnvRenderer implements Screen {
     public RoboMasterLayer roboMasterLayer;
     public BlocksLayer blocksLayer;
     public LidarPointCloudLayer lidarPointCloudLayer;
+    public BuffLayer buffLayer;
     public HUD HUD;
 
     public FrameRate frameRate;
@@ -50,6 +51,7 @@ public class EnvRenderer implements Screen {
         lidarPointCloudLayer = new LidarPointCloudLayer(this);
 
         blocksLayer = new BlocksLayer(this);
+        buffLayer = new BuffLayer(this);
         HUD = new HUD(this);
         frameRate = new FrameRate();
 
@@ -95,6 +97,9 @@ public class EnvRenderer implements Screen {
 
         lidarPointCloudLayer.act(delta);
         lidarPointCloudLayer.draw();
+
+        buffLayer.act();
+        buffLayer.draw();
 
         roboMasterLayer.act();
         roboMasterLayer.draw();

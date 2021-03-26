@@ -66,7 +66,7 @@ public class StrategyMaker extends LoopThread {
         strategyAnalyzer_2V2Ranger = new StrategyAnalyzer_2V2Ranger(this);
 
         this.strategyAnalyzer = strategyAnalyzer_2V2Master;
-        this.delta = 1/2f;
+        this.delta = 2f;
         this.isStep = true;
     }
 

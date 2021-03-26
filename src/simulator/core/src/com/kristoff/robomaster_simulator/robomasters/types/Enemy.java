@@ -29,18 +29,18 @@ public class Enemy extends RoboMaster {
     @Override
     public void setPosition(int x, int y) {
         //System.out.println(this.getPosition().distanceTo(x, y));
-        if(isInTheView && this.getPosition().distanceTo(x, y) > 50 && count < 5){
+        if(isInTheView && this.getPosition().distanceTo(x, y) > 500 && count < 5){
             count ++;
             return;
         }
-        count ++;
+        count = 0;
         setInTheView();
         super.setPosition(x, y);
     }
 
     @Override
     public void setPosition(int x, int y, float rotation) {
-        if(isInTheView && this.getPosition().distanceTo(x, y) > 50 && count < 5){
+        if(isInTheView && this.getPosition().distanceTo(x, y) > 500 && count < 5){
             count ++;
             return;
         }

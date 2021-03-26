@@ -8,6 +8,7 @@ public class AlexanderMasterII extends RoboMaster {
         super("RoboMasters/AlexanderMaster.png",
                 team, name);
     }
+
 //    private double weight = 17.1;           //Kg
 //    private int max_forward_speed = 3;      //m/s
 //    private int max_cross_range_speed = 2;  //m/s

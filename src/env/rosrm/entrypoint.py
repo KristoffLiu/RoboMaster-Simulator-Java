@@ -3,7 +3,7 @@ from py4j.java_gateway import JavaGateway
 from py4j.java_gateway import java_import
 import time
 
-gateway = JavaGateway() #启动py4j服务器
+gateway = JavaGateway()          #启动py4j服务器
 entrypoint = gateway.entry_point #获取服务器桥的入口
 
 map = entrypoint.getMap() #直接获取matrixsimulator点阵模拟器实时生成的整张地图，类型为RoboMasterPoint[][]的java二维数组
@@ -55,3 +55,4 @@ print(decisionPoint2.getY())
 for i in range(500):
     robomaster.loseHealth(10)
     time.sleep(0.01)
+    

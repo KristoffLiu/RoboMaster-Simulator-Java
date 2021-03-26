@@ -15,6 +15,7 @@ java_import(gateway.jvm,'java.util.*') #导入java中的类的方法
 import rospy
 from geometry_msgs.msg import PoseStamped
 from obstacle_detector.msg import Obstacles
+# from roborts_msgs.msg import GameRobotHP
 from scipy.spatial.transform import Rotation as R
 import threading
 import math
@@ -50,14 +51,10 @@ class Brain:
                               rospy.Publisher("/CAR2/move_base_simple/goal", PoseStamped, queue_size=10)]
         self._robots_subscriber = [rospy.Subscriber("/CAR1/amcl_pose", PoseStamped, self.ownPositionCB0),
                                    rospy.Subscriber("/CAR2/amcl_pose", PoseStamped, self.ownPositionCB1)]
-        self._enemies_subscriber = [rospy.Subscriber("/obstacle_preprocessed", Obstacles, self.ownObservationCB0)]
-        # self._decision_pub = [rospy.Publisher("/jackal0/move_base_simple/goal", PoseStamped, queue_size=10),
-        #                       rospy.Publisher("/jackal1/move_base_simple/goal", PoseStamped, queue_size=10)]
-        # self._debuff_subscriber = rospy.Subscriber("/debuff", String, self.receiveDebuffSignal)
-        # self._robots_subscriber = [rospy.Subscriber("/jackal0/amcl_pose", PoseStamped, self.ownPositionCB0),
-        #                            rospy.Subscriber("/jackal1/amcl_pose", PoseStamped, self.ownPositionCB1)]
-        # self._enemies_subscriber = [rospy.Subscriber("/jackal0/obstacle_filtered", Obstacles, self.ownObservationCB0),
-        #                             rospy.Subscriber("/jackal1/obstacle_filtered", Obstacles, self.ownObservationCB1)]
+        self._enemies_subscriber = rospy.Subscriber("/obstacle_preprocessed", Obstacles, self.enemyInfo)
+
+        # self._hp_subscriber = rospy.Subscriber("/CAR1/game_robot_hp", GameRobotHP, self.robotHP)
+        # self._buff_zone_subscriber = rospy.Subscriber("/CAR1/game_zone_array_status", GameRobotHP, self.gameZone)
 
     def ownPositionCB0(self, msg):
         self.robots[0].x = msg.pose.position.x
@@ -79,7 +76,7 @@ class Brain:
         self.robots[1].yaw = y
         self.Blue2.setPosition(int(msg.pose.position.x*1000), int(msg.pose.position.y*1000),float(y))
 
-    def ownObservationCB0(self, data):
+    def enemyInfo(self, data):
         enemy = data.circles
         if len(enemy) == 1:
             self.Red1.setPosition(int(enemy[0].center.x*1000), int(enemy[0].center.y*1000),float(1.57))
@@ -87,14 +84,22 @@ class Brain:
             self.Red1.setPosition(int(enemy[0].center.x*1000), int(enemy[0].center.y*1000),float(1.57))
             self.Red2.setPosition(int(enemy[1].center.x*1000), int(enemy[1].center.y*1000),float(1.57))
 
-    def ownObservationCB1(self, data):
-        enemy = data.circles
-        if len(enemy) == 1:
-            self.Red1.setPosition(int(enemy[0].center.x*1000), int(enemy[0].center.y*1000),float(1.57))
-        elif len(enemy) == 2:
-            self.Red1.setPosition(int(enemy[0].center.x*1000), int(enemy[0].center.y*1000),float(1.57))
-            self.Red2.setPosition(int(enemy[1].center.x*1000), int(enemy[1].center.y*1000),float(1.57))
-        
+    # def robotHP(self, data):
+    #     print("----")
+    #     print(data.red1)
+    #     print(data.red2)
+    #     print(data.blue1)
+    #     print(data.blue2)
+    
+    # def game_zone_array_status(self, data):
+    #     print("****")
+    #     print(data.zone[0])
+    #     print(data.zone[1])
+    #     print(data.zone[2])
+    #     print(data.zone[3])
+    #     print(data.zone[4])
+    #     print(data.zone[5])
+
     def get_next_position1(self):
         # pos = self.Blue2.getPointAvoidingFacingEnemies()
         pos = self.Blue1.getDecisionMade()

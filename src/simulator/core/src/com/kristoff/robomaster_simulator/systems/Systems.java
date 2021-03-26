@@ -3,6 +3,7 @@ package com.kristoff.robomaster_simulator.systems;
 import com.kristoff.robomaster_simulator.core.SimulatorConfiguration;
 import com.kristoff.robomaster_simulator.systems.maps.Map;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
+import com.kristoff.robomaster_simulator.systems.refree.Refree;
 import com.kristoff.robomaster_simulator.systems.simulators.PhysicalSimulator;
 
 public class Systems {
@@ -10,6 +11,7 @@ public class Systems {
     public static Map map;
     public static PointSimulator pointSimulator;
     public static PhysicalSimulator physicalSimulator;
+    public static Refree refree;
 
     public Systems(SimulatorConfiguration simulatorConfiguration){
         config = simulatorConfiguration;
@@ -22,10 +24,12 @@ public class Systems {
                 map = new Map("CompetitionMap");
                 physicalSimulator = new PhysicalSimulator();
                 pointSimulator = new PointSimulator();
+                refree = new Refree();
             }
             case realMachine -> {
                 map = new Map("CompetitionMap");
                 pointSimulator = new PointSimulator();
+                refree = new Refree();
             }
         }
     }
@@ -36,10 +40,12 @@ public class Systems {
                 map.start();
                 physicalSimulator.start();
                 pointSimulator.start();
+                refree.start();
             }
             case realMachine -> {
                 map.start();
                 pointSimulator.start();
+                refree.start();
             }
         }
     }

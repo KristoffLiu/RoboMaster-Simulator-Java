@@ -1,23 +1,37 @@
 package com.kristoff.robomaster_simulator.systems.refree;
 
+import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.kristoff.robomaster_simulator.robomasters.judgement.BuffZones;
+import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.systems.buffs.BuffZone;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.teams.Team;
-import com.kristoff.robomaster_simulator.robomasters.judgement.BuffZone.BuffZone;
 import com.kristoff.robomaster_simulator.robomasters.judgement.BuffZoneList;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 public class Refree extends LoopThread {
+    List<BuffZone> buffZones = new LinkedList<>();
 
-    Team thisTeam;
+    public Refree(){
+        isStep = true;
+        delta = 1/30f;
+        buffZones = new LinkedList<>();
+    }
 
-    public Refree(Team thisTeam){
-        this.thisTeam = thisTeam;
-         isStep = true;
-         delta = 1/30f;
+    @Override
+    public void start(){
+        for(TextureMapObject textureMapObject : Systems.map.getBuffZones()){
+            buffZones.add(new BuffZone(textureMapObject));
+        }
+        super.start();
+    }
+
+    public List<BuffZone> getBuffZones(){
+        return this.buffZones;
     }
 
     @Override
@@ -32,7 +46,7 @@ public class Refree extends LoopThread {
         list.add(3);
         Random random = new Random();
         int n1 = random.nextInt(list.size());
-        for (BuffZone zone : oldZones){
+        for (com.kristoff.robomaster_simulator.robomasters.judgement.BuffZone.BuffZone zone : oldZones){
             if (zone.getZoneID() == n1){
                 zone.setBuffCase("BleuAddBullet");
             }else if (zone.getZoneID() == n1 + 3){
@@ -62,7 +76,6 @@ public class Refree extends LoopThread {
         return Robomaster.property.isAlive;
     }
 
-
     public boolean isRoboMasterMoveable(RoboMaster Robomaster){
         return Robomaster.property.movable;
     }
@@ -78,6 +91,5 @@ public class Refree extends LoopThread {
     public float RoboMasterHealth(RoboMaster Robomaster){
         return Robomaster.property.health;
     }
-
 
 }

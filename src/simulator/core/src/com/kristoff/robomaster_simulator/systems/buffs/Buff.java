@@ -1,6 +1,6 @@
 package com.kristoff.robomaster_simulator.systems.buffs;
 
-public enum BuffType {
+public enum Buff {
     NotActivated,
     HealingForRed,
     ShootingForbidden,
