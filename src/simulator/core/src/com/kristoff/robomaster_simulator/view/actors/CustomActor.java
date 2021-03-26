@@ -31,8 +31,6 @@ public class CustomActor extends Actor {
         setSize(this.textureRegion.getRegionWidth(), this.textureRegion.getRegionHeight());
     }
 
-
-
     public TextureRegion getTextureRegion() {
         return textureRegion;
     }

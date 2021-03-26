@@ -2,6 +2,7 @@ package com.kristoff.robomaster_simulator.robomasters.Strategy;
 
 import com.kristoff.robomaster_simulator.robomasters.types.Enemy;
 import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.systems.buffs.BuffZone;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
 import com.kristoff.robomaster_simulator.teams.friendobservations.FriendObservation;
@@ -80,7 +81,7 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
     public boolean isAvailable(Position centrePosition){
         return isTheSurroundingAreaAvailable(centrePosition) &&
                 !(Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) < 45 ||
-                Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) > 600);
+                Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) > 600) ;
     }
 
     public boolean isTheSurroundingAreaAvailable(Position centrePosition){
@@ -92,6 +93,7 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
                         || !(y>=0 && y<489)
                         || !EnemiesObservationSimulator.isInLockedEnemyViewOnly(x, y)
                         || Systems.pointSimulator.isPointNotEmpty(x,y, strategyMaker.getPointStatus())
+                        || BuffZone.isInDebuffZone(centrePosition.x, centrePosition.y)
                 ){
                     return false;
                 }
