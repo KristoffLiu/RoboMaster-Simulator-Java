@@ -46,7 +46,7 @@ public class RosRMLauncher {
         return roboMaster;
     }
 
-    public void updateBuffZone(int buffZoneNo, int buffType){
-        BuffZone.updateBuffZone(buffZoneNo, buffType);
+    public void updateBuffZone(int buffZoneNo, int buffType, boolean isActive){
+        BuffZone.updateBuffZone(buffZoneNo, buffType, isActive);
     }
 }

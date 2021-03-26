@@ -8,6 +8,7 @@ import com.kristoff.robomaster_simulator.view.ui.controls.UIElement;
 
 public class BuffZone {
     Buff buff;
+    boolean isActive;
     String name;
     CustomActor actor;
     Image buffImage;
@@ -15,6 +16,7 @@ public class BuffZone {
 
     public BuffZone(TextureMapObject textureMapObject){
         this.name = textureMapObject.getName();
+        this.isActive = false;
         buffImage = new Image();
         updateBuff(Buff.NotActivated);
         this.textureMapObject = textureMapObject;
@@ -80,7 +82,7 @@ public class BuffZone {
         return buffZone.getBuffZoneActor().getBounds().contains(x*10, y*10);
     }
 
-    public static void updateBuffZone(int buffZoneNo, int buffType){
+    public static void updateBuffZone(int buffZoneNo, int buffType, boolean isActive){
         for(BuffZone buffZone : Systems.refree.getBuffZones()){
             if(buffZone.getName().equals("F" + (buffZoneNo + 1))){
                 switch (buffType){
@@ -92,6 +94,7 @@ public class BuffZone {
                     case 5 -> buffZone.updateBuff(Buff.DisableShooting     );
                     case 6 -> buffZone.updateBuff(Buff.DisableMovement      );
                 }
+                buffZone.isActive = isActive;
                 break;
             }
         }

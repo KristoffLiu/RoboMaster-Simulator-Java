@@ -31,12 +31,12 @@ public class Refree extends LoopThread {
     }
 
     public void test(){
-        BuffZone.updateBuffZone(0,1);
-        BuffZone.updateBuffZone(1,2);
-        BuffZone.updateBuffZone(2,3);
-        BuffZone.updateBuffZone(3,4);
-        BuffZone.updateBuffZone(4,5);
-        BuffZone.updateBuffZone(5,6);
+        BuffZone.updateBuffZone(0,1, false);
+        BuffZone.updateBuffZone(1,2, false);
+        BuffZone.updateBuffZone(2,3, false);
+        BuffZone.updateBuffZone(3,4, false);
+        BuffZone.updateBuffZone(4,5, false);
+        BuffZone.updateBuffZone(5,6, false);
     }
 
     public List<BuffZone> getBuffZones(){

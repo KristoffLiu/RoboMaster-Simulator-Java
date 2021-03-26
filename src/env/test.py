@@ -15,7 +15,8 @@ java_import(gateway.jvm,'java.util.*') #导入java中的类的方法
 import rospy
 from geometry_msgs.msg import PoseStamped
 from obstacle_detector.msg import Obstacles
-# from roborts_msgs.msg import GameRobotHP
+from roborts_msgs.msg import GameRobotHP
+from roborts_msgs.msg import GameZoneArray
 from scipy.spatial.transform import Rotation as R
 import threading
 import math
@@ -53,8 +54,8 @@ class Brain:
                                    rospy.Subscriber("/CAR2/amcl_pose", PoseStamped, self.ownPositionCB1)]
         self._enemies_subscriber = rospy.Subscriber("/obstacle_preprocessed", Obstacles, self.enemyInfo)
 
-        # self._hp_subscriber = rospy.Subscriber("/CAR1/game_robot_hp", GameRobotHP, self.robotHP)
-        # self._buff_zone_subscriber = rospy.Subscriber("/CAR1/game_zone_array_status", GameRobotHP, self.gameZone)
+        self._hp_subscriber = rospy.Subscriber("/CAR1/game_robot_hp", GameRobotHP, self.robotHP)
+        self._buff_zone_subscriber = rospy.Subscriber("/CAR1/game_zone_array_status", GameZoneArray, self.gameZone)
 
     def ownPositionCB0(self, msg):
         self.robots[0].x = msg.pose.position.x
@@ -84,21 +85,28 @@ class Brain:
             self.Red1.setPosition(int(enemy[0].center.x*1000), int(enemy[0].center.y*1000),float(1.57))
             self.Red2.setPosition(int(enemy[1].center.x*1000), int(enemy[1].center.y*1000),float(1.57))
 
-    # def robotHP(self, data):
-    #     print("----")
-    #     print(data.red1)
-    #     print(data.red2)
-    #     print(data.blue1)
-    #     print(data.blue2)
+    def robotHP(self, data):
+        print("----")
+        print(data.red1)
+        print(data.red2)
+        print(data.blue1)
+        print(data.blue2)
     
-    # def game_zone_array_status(self, data):
-    #     print("****")
-    #     print(data.zone[0])
-    #     print(data.zone[1])
-    #     print(data.zone[2])
-    #     print(data.zone[3])
-    #     print(data.zone[4])
-    #     print(data.zone[5])
+    def gameZone(self, data):
+        print("****")
+        # print("0, " + str(data.zone[0]))
+        # print("1, " + str(data.zone[1]))
+        # print("2, " + str(data.zone[2]))
+        # print("3, " + str(data.zone[3]))
+        # print("4, " + str(data.zone[4]))
+        # print("5, " + str(data.zone[5]))
+
+
+
+        for i, d in enumerate(data.zone):
+            print(str(i) + " " + str(d.type) + " " + str(d.active))
+            entrypoint.updateBuffZone(i, d.type, d.active)
+            
 
     def get_next_position1(self):
         # pos = self.Blue2.getPointAvoidingFacingEnemies()
