@@ -1,18 +1,22 @@
-package com.kristoff.robomaster_simulator.robomasters.Strategy;
+package com.kristoff.robomaster_simulator.systems;
 
+import com.kristoff.robomaster_simulator.robomasters.Strategy.SearchNode;
+import com.kristoff.robomaster_simulator.robomasters.Strategy.StrategyAnalyzer;
+import com.kristoff.robomaster_simulator.robomasters.Strategy.StrategyMaker;
+import com.kristoff.robomaster_simulator.robomasters.Strategy.TacticState;
 import com.kristoff.robomaster_simulator.robomasters.types.Enemy;
 import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.systems.buffs.Buff;
 import com.kristoff.robomaster_simulator.systems.buffs.BuffZone;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
-import com.kristoff.robomaster_simulator.teams.friendobservations.FriendObservation;
-import com.kristoff.robomaster_simulator.teams.friendobservations.FriendsObservationSimulator;
+import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.utils.Position;
 
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
+public class CostMapGenerator extends LoopThread {
     public StrategyMaker strategyMaker;
 
     public SearchNode rootNode;
@@ -20,27 +24,70 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
     public SearchNode resultNode;
     public CopyOnWriteArrayList<SearchNode>                   resultNodes;
     public CopyOnWriteArrayList<SearchNode>                   pathNodes;
+    public int[][] costmap;
 
     Position destination = new Position();
 
-    public StrategyAnalyzer_2V2Master(StrategyMaker strategyMaker){
+    public CostMapGenerator(StrategyMaker strategyMaker){
         this.strategyMaker = strategyMaker;
 
         this.queue                      = this.strategyMaker.queue;
         this.resultNodes                = new CopyOnWriteArrayList<>();
         this.pathNodes                  = new CopyOnWriteArrayList<>();
+        this.costmap                    = new int[849][489];
     }
 
     @Override
-    public void analyze(TacticState tacticState) {
-        Position currentPosition = strategyMaker.getCurrentPosition();
-        if(shouldIMove(currentPosition.x, currentPosition.y)){
-            scanMap(currentPosition);
+    public void step(){
+        generateCostMap();
+    }
+
+    @Override
+    public void start(){
+        super.start();
+    }
+
+    public void generateCostMap(){
+        for(int i = 20; i < 829; i ++){
+            for(int j = 20; j < 469; j ++){
+                int cost = 0;
+                if(Systems.pointSimulator.isPointTheObstacle(i, j)){
+                    costmap[i][j] = Integer.MAX_VALUE;
+                    continue;
+                }
+                cost += costOfEnemyObservation(i, j);
+                cost += costOfEnemiesDistance(i, j);
+                cost += costOfBuff(i, j);
+                costmap[i][j] = cost;
+            }
         }
-        else {
-            pathNodes.clear();
-            return;
-        }
+    }
+
+    public int costOfEnemyObservation(int x, int y){
+        if(EnemiesObservationSimulator.isInLockedEnemyViewOnly(x, y))
+            return 0;
+        else if(EnemiesObservationSimulator.isInUnlockedEnemyViewOnly(x, y))
+            return 10;
+        else if(EnemiesObservationSimulator.isInBothEnemiesView(x, y))
+            return 30;
+        else
+            return 20;
+    }
+
+    public int costOfEnemiesDistance(int x, int y){
+        int safeDistance = 30;
+        float deweight = 0.02f;
+        float distanceToLockedEnemy = Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y);
+        float distanceToUnlockedEnemy = Enemy.getUnlockedEnemy().getPointPosition().distanceTo(x,y);
+        return (int)((Math.abs(distanceToLockedEnemy - safeDistance) + Math.abs(distanceToUnlockedEnemy - safeDistance)) * deweight);
+    }
+
+    public int costOfBuff(int x, int y){
+        return BuffZone.costOfBuff(x, y);
+    }
+
+    public int costOfObstacle(int x, int y){
+        return Systems.pointSimulator.isPointTheObstacle(x, y) ? 500 : 0;
     }
 
     public boolean shouldIMove(int x, int y){
