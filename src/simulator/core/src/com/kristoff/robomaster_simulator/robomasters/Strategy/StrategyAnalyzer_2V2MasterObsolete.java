@@ -13,7 +13,7 @@ import com.kristoff.robomaster_simulator.utils.Position;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
+public class StrategyAnalyzer_2V2MasterObsolete implements StrategyAnalyzer {
     public StrategyMaker strategyMaker;
 
     public SearchNode rootNode;
@@ -24,7 +24,7 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
 
     Position destination = new Position();
 
-    public StrategyAnalyzer_2V2Master(StrategyMaker strategyMaker){
+    public StrategyAnalyzer_2V2MasterObsolete(StrategyMaker strategyMaker){
         this.strategyMaker = strategyMaker;
 
         this.queue                      = this.strategyMaker.queue;

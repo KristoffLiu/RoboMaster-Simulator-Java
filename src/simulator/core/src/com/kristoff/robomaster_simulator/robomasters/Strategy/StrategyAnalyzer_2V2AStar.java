@@ -4,16 +4,15 @@ import com.kristoff.robomaster_simulator.robomasters.modules.Property;
 import com.kristoff.robomaster_simulator.robomasters.types.Enemy;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.buffs.BuffZone;
+import com.kristoff.robomaster_simulator.systems.costmap.CostMapGenerator;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
-import com.kristoff.robomaster_simulator.teams.friendobservations.FriendObservation;
-import com.kristoff.robomaster_simulator.teams.friendobservations.FriendsObservationSimulator;
 import com.kristoff.robomaster_simulator.utils.Position;
 
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
+public class StrategyAnalyzer_2V2AStar implements StrategyAnalyzer {
     public StrategyMaker strategyMaker;
 
     public SearchNode rootNode;
@@ -24,7 +23,7 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
 
     Position destination = new Position();
 
-    public StrategyAnalyzer_2V2Master(StrategyMaker strategyMaker){
+    public StrategyAnalyzer_2V2AStar(StrategyMaker strategyMaker){
         this.strategyMaker = strategyMaker;
 
         this.queue                      = this.strategyMaker.queue;
@@ -56,7 +55,7 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
                 currentPosition.x,
                 currentPosition.y,
                 -1,
-                0,
+                CostMapGenerator.getCost(currentPosition.x, currentPosition.y),
                 null);
         this.resultNode = rootNode;
         queue.offer(rootNode);
@@ -64,9 +63,7 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
 
         while (!this.queue.isEmpty()){
             resultNode = this.queue.poll();
-            if(isAvailable(resultNode.position)) {
-                break;
-            }
+            if(isAvailable(resultNode.position)) break;;
             generateChildrenNodes(resultNode, tempVisitedGrid);
         }
 
@@ -79,10 +76,28 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
         this.strategyMaker.update(resultNode, tempVisitedGrid, resultNodes, pathNodes);
     }
 
+    //查找并生成子节点，并返回队列对象
+    public void generateChildrenNodes(SearchNode node, boolean[][] visitedGrid){
+        if(!PointSimulator.isPoiontInsideMap(node.position.x, node.position.y)) return;
+        visitedGrid[node.position.x][node.position.y] = true;
+        for(int i=0; i < SearchNode.childrenNodesFindingCost.length; i++){
+            int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;
+            int y = node.position.y + SearchNode.childrenNodesFindingCost[i][1] ;
+            double cost = CostMapGenerator.getCost(x, y);
+            double stepCost = Math.sqrt(SearchNode.childrenNodesFindingCost[i][2]);
+            if(!isFitIntoThePosition(x, y)) continue;
+            if(hasThisNodeNotBeenVisited(x, y, visitedGrid) ){
+                SearchNode childNode = new SearchNode(x,y,node.index + 1, cost,node);
+                if(cost <= node.cost + 25){
+                    node.childrenNodes.add(childNode);
+                    queue.offer(childNode);
+                }
+            }
+        }
+    }
+
     public boolean isAvailable(Position centrePosition){
-        return isTheSurroundingAreaAvailable(centrePosition) &&
-                !(Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) < 45 ||
-                Enemy.getLockedEnemy().getPointPosition().distanceTo(centrePosition) > 600) ;
+        return isTheSurroundingAreaAvailable(centrePosition);
     }
 
     public boolean isTheSurroundingAreaAvailable(Position centrePosition){
@@ -92,55 +107,13 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
                 int y = centrePosition.y + j - Property.heightUnit / 2;
                 if(   !(x>=0 && x<849)
                         || !(y>=0 && y<489)
-                        || !EnemiesObservationSimulator.isInLockedEnemyViewOnly(x, y)
-                        || Systems.pointSimulator.isPointNotEmpty(x,y, strategyMaker.getPointStatus())
-                        || BuffZone.isInDebuffZone(centrePosition.x, centrePosition.y)
+                        || CostMapGenerator.getCost(x, y) > 100
                 ){
                     return false;
                 }
             }
         }
         return true;
-    }
-
-    //查找并生成子节点，并返回队列对象
-    public void generateChildrenNodes(SearchNode node, boolean[][] visitedGrid){
-        if(!PointSimulator.isPoiontInsideMap(node.position.x, node.position.y)) return;
-        visitedGrid[node.position.x][node.position.y] = true;
-        for(int i=0; i < SearchNode.childrenNodesFindingCost.length; i++){
-            int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;
-            int y = node.position.y + SearchNode.childrenNodesFindingCost[i][1] ;
-            double cost = Math.sqrt(SearchNode.childrenNodesFindingCost[i][2]);
-            if(Systems.pointSimulator.isPointNotEmpty(x,y, strategyMaker.getPointStatus())){
-                continue;
-            }
-//            if(Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y) < 50){
-//                if(node.position.distanceTo(Enemy.getLockedEnemy().getPointPosition()) > Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y)){
-//                    continue;
-//                }
-//            }
-//            if(Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y) > 7500){
-//                if(node.position.distanceTo(Enemy.getLockedEnemy().getPointPosition()) < Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y)){
-//                    continue;
-//                }
-//            }
-//            if(Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y) < 100){
-//                if(node.position.distanceTo(Enemy.getLockedEnemy().getPointPosition()) > Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y)){
-//                    continue;
-//                }
-//            }
-//            if(this.strategyMaker.getFriendRoboMaster().getPointPosition().distanceTo(x,y) < 100){
-//                if(node.position.distanceTo(this.strategyMaker.getFriendRoboMaster().getPointPosition()) > this.strategyMaker.getFriendRoboMaster().getPointPosition().distanceTo(x,y)){
-//                    continue;
-//                }
-//            }
-            if(!isFitIntoThePosition(x, y)) continue;
-            if(hasThisNodeNotBeenVisited(x, y, visitedGrid)){
-                SearchNode childNode = new SearchNode(x,y,node.index + 1, cost,node);
-                node.childrenNodes.add(childNode);
-                queue.offer(childNode);
-            }
-        }
     }
 
     //检查节点可访问性
@@ -160,8 +133,8 @@ public class StrategyAnalyzer_2V2Master implements StrategyAnalyzer {
     }
 
     public boolean isFitIntoThePosition(int x, int y){
-        for(int i=0;i<Property.widthUnit;i+=10){
-            for(int j=0;j<Property.heightUnit;j+=10){
+        for(int i = 0; i< Property.widthUnit; i+=10){
+            for(int j=0;j< Property.heightUnit;j+=10){
                 int m = x + i - Property.widthUnit / 2;
                 int n = y + j - Property.heightUnit / 2;
                 if(Systems.pointSimulator.isPointNotEmpty(m, n, strategyMaker.getPointStatus())){

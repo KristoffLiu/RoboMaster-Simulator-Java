@@ -19,7 +19,7 @@ public class Renderer extends MovingObject implements ModuleInterface {
     public void start(){
         this.setTextureRegion(new TextureRegion(new Texture(textureRegionPath)));
         this.setWidth(0.6f);
-        this.setHeight(0.4f);
+        this.setHeight(0.5f);
     }
 
     @Override

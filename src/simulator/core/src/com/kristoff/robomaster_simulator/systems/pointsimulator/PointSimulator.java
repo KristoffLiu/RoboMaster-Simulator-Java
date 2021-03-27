@@ -67,6 +67,11 @@ public class PointSimulator extends Simulator {
         }
     }
 
+    public boolean isPointTheObstacle(int x, int y){
+        if(!isPoiontInsideMap(x, y)) return false;
+        return this.pointMatrix[x][y] == PointState.StaticObject;
+    }
+
     public void clearPointStatus(PointState pointState){
         int m = 0;
         int n = 0;
@@ -139,6 +144,11 @@ public class PointSimulator extends Simulator {
         return pointMatrix;
     }
 
+    public void setStaticObjectPoint(int x, int y) {
+        if(isPoiontInsideMap(x, y))
+            staticObjectPointMatrix[x][y] = PointState.StaticObject;
+    }
+
     public void updatePoint(int x, int y, PointState status) {
         try{
             if(!isPoiontInsideMap(x, y)) return;
@@ -191,24 +201,24 @@ public class PointSimulator extends Simulator {
 
     private void addBlock(int x, int y, int width, int height, float radian){
         if(radian == 0){
-            for(int i=(int)x;i<x+width;i++){
-                for(int j=y;j<y+height;j++){
-                    staticObjectPointMatrix[i][j] = PointState.StaticObject;
+            for(int i = x - 20; i < x + width + 20 ; i ++){
+                for(int j = y - 20;j < y + height + 20; j ++){
+                    setStaticObjectPoint(i, j);
                 }
             }
         }
         else{
-            for(int i = 0; i <= (25 * Math.sqrt(2)); i++){
-                if(i <= (25 / Math.sqrt(2))){
+            for(int i = 0; i <= (50 * Math.sqrt(2)); i++){
+                if(i <= (50 / Math.sqrt(2))){
                     for(int j = 0; j <= i ; j++){
-                        staticObjectPointMatrix[i + 407][245 + j] = PointState.StaticObject;
-                        staticObjectPointMatrix[i + 407][245 - j] = PointState.StaticObject;
+                        setStaticObjectPoint(i + 389, 245 + j);
+                        setStaticObjectPoint(i + 389, 245 - j);
                     }
                 }
                 else{
-                    for(int j = 0; j <= 25 * Math.sqrt(2) - i; j++){
-                        staticObjectPointMatrix[i + 407][245 + j] = PointState.StaticObject;
-                        staticObjectPointMatrix[i + 407][245 - j] = PointState.StaticObject;
+                    for(int j = 0; j <= 50 * Math.sqrt(2) - i; j++){
+                        setStaticObjectPoint(i + 389, 245 + j);
+                        setStaticObjectPoint(i + 389, 245 - j);
                     }
                 }
             }

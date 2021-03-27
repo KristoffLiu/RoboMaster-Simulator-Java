@@ -39,9 +39,9 @@ public class Actor extends LoopThread {
             }
         }
 
-        matrix = new Position[60][45];
-        for(int i = 0; i < 60 ; i++){
-            for(int j = 0; j < 45 ; j++){
+        matrix = new Position[Property.widthUnit][Property.heightUnit];
+        for(int i = 0; i < Property.widthUnit ; i++){
+            for(int j = 0; j < Property.heightUnit ; j++){
                 matrix[i][j] = new Position();
             }
         }
@@ -85,8 +85,8 @@ public class Actor extends LoopThread {
         return (float) (- this.rotation);
     }
 
-    int centre_x = 30;
-    int centre_y = 22;
+    int centre_x = Property.widthUnit / 2;
+    int centre_y = Property.heightUnit / 2;
     float previousRotation = 0;
 
     @Override
@@ -95,12 +95,12 @@ public class Actor extends LoopThread {
         float centreX = x / 10;
         float centreY = y / 10;
         float delta_rotation = rotation;
-        for(int i = 0; i < 60 ; i++){
-            for(int j = 0; j < 45 ; j++){
+        for(int i = 0; i < Property.widthUnit ; i++){
+            for(int j = 0; j < Property.heightUnit ; j++){
                 Position transformedPoint = matrix[i][j];
                 Systems.pointSimulator.updatePoint(transformedPoint.x, transformedPoint.y, PointState.Empty);
-                float tempX = centreX - 30 + i;
-                float tempY = centreY - 22.5f + j;
+                float tempX = centreX - Property.widthUnit / 2 + i;
+                float tempY = centreY - Property.heightUnit / 2 + j;
                 transformedPoint.x = (int) (cos(delta_rotation) * (tempX-centreX) - sin(delta_rotation) * (tempY-centreY) + centreX);
                 transformedPoint.y = (int) (sin(delta_rotation) * (tempX-centreX) + cos(delta_rotation) * (tempY-centreY) + centreY);
                 Systems.pointSimulator.updatePoint(transformedPoint.x, transformedPoint.y, this.pointState);

@@ -2,10 +2,12 @@ package com.kristoff.robomaster_simulator.robomasters.modules;
 
 public class Property {
     //physical properties
-    public float mass = 17.1f; //unit: kg
-    public float width = 0.60f; //unit: m
-    public float height = 0.45f; //unit: m
-    public float area = width * height; //unit: metre square
+    public static float mass = 17.1f; //unit: kg
+    public static float width = 0.60f; //unit: m
+    public static float height = 0.50f; //unit: m
+    public static int widthUnit = 60; //unit: m
+    public static int heightUnit = 50; //unit: m
+    public static float area = width * height; //unit: metre square
 
     //mechanical properties;
     float acceleration      ;

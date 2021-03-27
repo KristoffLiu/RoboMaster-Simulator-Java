@@ -13,7 +13,7 @@ public class EnemyObservation{
     RoboMaster self2;
     RoboMaster enemy;
     Position position = new Position();
-    int radius = 300;
+    int radius = EnemiesObservationSimulator.getRadius();
     int weight = 0;
 
     public EnemyObservation(RoboMaster self1, RoboMaster self2, RoboMaster enemy, int value){
@@ -32,8 +32,6 @@ public class EnemyObservation{
     }
 
     public void simulate(int[][] EnemyObservationMapPoints){
-        if(((Enemy)enemy).isLocked()) radius = 600;
-        else radius = 600;
         int[][] pointsArray = EnemyObservationMapPoints;
         Array<StatePoint> pointsArrayList = new Array<>();
         this.setPosition(enemy.getLidarPosition());

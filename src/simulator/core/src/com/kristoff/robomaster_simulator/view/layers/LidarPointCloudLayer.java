@@ -3,6 +3,7 @@ package com.kristoff.robomaster_simulator.view.layers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.kristoff.robomaster_simulator.robomasters.Strategy.SearchNode;
+import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationPoint;
 import com.kristoff.robomaster_simulator.teams.friendobservations.FriendsObservationPoint;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.StatePoint;
@@ -51,32 +52,32 @@ public class LidarPointCloudLayer extends VisualLayer {
     public void draw(){
         super.draw();
 
-        shapeRenderer5.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
-        shapeRenderer5.setAutoShapeType(true);
-        shapeRenderer5.begin(ShapeRenderer.ShapeType.Filled);
-        for(int i = 20; i < 829; i+=20){
-            for(int j = 20; j < 469; j+=20){
-                if(RoboMasters.teamBlue.get(0).strategyMaker.getVisitedGrid()[i][j]){
-                    int x = i * 10;
-                    int y = j * 10;
-                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
-                    shapeRenderer5.circle(
-                            x / 1000f,
-                            y / 1000f,
-                            0.15f,10);
-                }
-                if(RoboMasters.teamBlue.get(1).strategyMaker.getVisitedGrid()[i][j]){
-                    int x = i * 10;
-                    int y = j * 10;
-                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
-                    shapeRenderer5.circle(
-                            x / 1000f,
-                            y / 1000f,
-                            0.15f,10);
-                }
-            }
-        }
-        shapeRenderer5.end();
+//        shapeRenderer5.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
+//        shapeRenderer5.setAutoShapeType(true);
+//        shapeRenderer5.begin(ShapeRenderer.ShapeType.Filled);
+//        for(int i = 20; i < 829; i+=20){
+//            for(int j = 20; j < 469; j+=20){
+//                if(RoboMasters.teamBlue.get(0).strategyMaker.getVisitedGrid()[i][j]){
+//                    int x = i * 10;
+//                    int y = j * 10;
+//                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
+//                    shapeRenderer5.circle(
+//                            x / 1000f,
+//                            y / 1000f,
+//                            0.15f,10);
+//                }
+//                if(RoboMasters.teamBlue.get(1).strategyMaker.getVisitedGrid()[i][j]){
+//                    int x = i * 10;
+//                    int y = j * 10;
+//                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
+//                    shapeRenderer5.circle(
+//                            x / 1000f,
+//                            y / 1000f,
+//                            0.15f,10);
+//                }
+//            }
+//        }
+//        shapeRenderer5.end();
 
         shapeRenderer2.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer2.setAutoShapeType(true);
@@ -172,56 +173,6 @@ public class LidarPointCloudLayer extends VisualLayer {
         }
         shapeRenderer3.end();
 
-        shapeRenderer4.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
-        shapeRenderer4.setAutoShapeType(true);
-        shapeRenderer4.begin(ShapeRenderer.ShapeType.Filled);
-//        Position position1 = RoboMasters.teamBlue.get(0).strategyMaker.getDecisionNode().position;
-//        if(position1!=null){
-//            int x = position1.x * 10;
-//            int y = position1.y * 10;
-//            shapeRenderer4.setColor(0.0f,1.0f,0f,1.0f);
-//            shapeRenderer4.circle(
-//                    x / 1000f,
-//                    y / 1000f,
-//                    0.05f,10);
-//        }
-//        Position position2 = RoboMasters.teamBlue.get(1).strategyMaker.getDecisionNode().position;
-//        if(position2!=null){
-//            int x = position2.x * 10;
-//            int y = position2.y * 10;
-//            shapeRenderer4.setColor(0.0f,0f,1f,1.0f);
-//            shapeRenderer4.circle(
-//                    x / 1000f,
-//                    y / 1000f,
-//                    0.05f,10);
-//        }
-
-        for(SearchNode node : RoboMasters.teamBlue.get(0).strategyMaker.getPathNodes()){
-            Position position = node.position;
-            if(position!=null){
-                int x = position.x * 10;
-                int y = position.y * 10;
-                shapeRenderer4.setColor(0.0f,1.0f,0f,1.0f);
-                shapeRenderer4.circle(
-                        x / 1000f,
-                        y / 1000f,
-                        0.05f,10);
-            }
-        }
-        for(SearchNode node : RoboMasters.teamBlue.get(1).strategyMaker.getPathNodes()){
-            Position position = node.position;
-            if(position!=null){
-                int x = position.x * 10;
-                int y = position.y * 10;
-                shapeRenderer4.setColor(0.0f,0f,1f,1.0f);
-                shapeRenderer4.circle(
-                        x / 1000f,
-                        y / 1000f,
-                        0.05f,10);
-            }
-        }
-        shapeRenderer4.end();
-
         shapeRenderer.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer.setAutoShapeType(true);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -296,6 +247,8 @@ public class LidarPointCloudLayer extends VisualLayer {
                     0.05f,10);
         }
         shapeRenderer.end();
+
+        //drawCostMap();
     }
 
     float timestate = 0;
@@ -308,5 +261,29 @@ public class LidarPointCloudLayer extends VisualLayer {
     }
     public CopyOnWriteArrayList<StatePoint> getLidarPointCloudPointsArray2(){
         return RoboMasters.teamBlue.get(1).lidarObservation.others;
+    }
+
+    public void drawCostMap(){
+        shapeRenderer5.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
+        shapeRenderer5.setAutoShapeType(true);
+        shapeRenderer5.begin(ShapeRenderer.ShapeType.Filled);
+        for(int i = 20; i < 829; i+=10){
+            for(int j = 20; j < 469; j+=10){
+                int x = i * 10;
+                int y = j * 10;
+                int cost = Systems.costMapGenerator.getCostMap()[i][j];
+                float colorFloat = 0;
+                if(cost <= 50){
+                    colorFloat = (50f - cost) * 0.02f;
+                }
+
+                shapeRenderer5.setColor(colorFloat,colorFloat,colorFloat,1.0f);
+                shapeRenderer5.circle(
+                        x / 1000f,
+                        y / 1000f,
+                        0.05f,10);
+            }
+        }
+        shapeRenderer5.end();
     }
 }

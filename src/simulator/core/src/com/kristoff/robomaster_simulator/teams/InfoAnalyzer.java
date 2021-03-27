@@ -85,7 +85,7 @@ public class InfoAnalyzer extends LoopThread {
             case TwoVSTwo ->{
                 List<Float> distances = new LinkedList<>();
                 for(RoboMaster enemy : this.enemyTeam){
-                    float coefficient = 1f;
+                    float coefficient = 2f;
                     if(!((Enemy)enemy).isLocked()) coefficient = lockingWeight;
                     distances.add(
                             (enemy.getPosition().distanceTo(this.thisTeam.get(0).getPosition()) +

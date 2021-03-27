@@ -4,6 +4,7 @@ import com.kristoff.robomaster_simulator.robomasters.modules.Property;
 import com.kristoff.robomaster_simulator.robomasters.types.Enemy;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.buffs.BuffZone;
+import com.kristoff.robomaster_simulator.systems.costmap.CostMapGenerator;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
 import com.kristoff.robomaster_simulator.utils.Position;
@@ -11,7 +12,7 @@ import com.kristoff.robomaster_simulator.utils.Position;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class StrategyAnalyzer_2V2AStar implements StrategyAnalyzer {
+public class StrategyAnalyzer_2V2Ranger implements StrategyAnalyzer {
     public StrategyMaker strategyMaker;
 
     public SearchNode rootNode;
@@ -19,10 +20,11 @@ public class StrategyAnalyzer_2V2AStar implements StrategyAnalyzer {
     public SearchNode resultNode;
     public CopyOnWriteArrayList<SearchNode>                   resultNodes;
     public CopyOnWriteArrayList<SearchNode>                   pathNodes;
+    public Position friendDecisionPosition;
 
     Position destination = new Position();
 
-    public StrategyAnalyzer_2V2AStar(StrategyMaker strategyMaker){
+    public StrategyAnalyzer_2V2Ranger(StrategyMaker strategyMaker){
         this.strategyMaker = strategyMaker;
 
         this.queue                      = this.strategyMaker.queue;
@@ -49,11 +51,12 @@ public class StrategyAnalyzer_2V2AStar implements StrategyAnalyzer {
 
     public void scanMap(Position currentPosition){
         boolean[][] tempVisitedGrid = new boolean[849][489];
-
+        friendDecisionPosition = strategyMaker.getFriendDecision().position;
         this.rootNode = new SearchNode(
                 currentPosition.x,
                 currentPosition.y,
                 -1,
+                CostMapGenerator.getCostConsideringFriendPosition(currentPosition, friendDecisionPosition),
                 null);
         this.resultNode = rootNode;
         queue.offer(rootNode);
@@ -61,6 +64,7 @@ public class StrategyAnalyzer_2V2AStar implements StrategyAnalyzer {
 
         while (!this.queue.isEmpty()){
             resultNode = this.queue.poll();
+            if(isAvailable(resultNode.position)) break;
             generateChildrenNodes(resultNode, tempVisitedGrid);
         }
 
@@ -81,14 +85,40 @@ public class StrategyAnalyzer_2V2AStar implements StrategyAnalyzer {
             int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;
             int y = node.position.y + SearchNode.childrenNodesFindingCost[i][1] ;
             double cost = Math.sqrt(SearchNode.childrenNodesFindingCost[i][2]);
+            if(!isFitIntoThePosition(x, y)) continue;
             if(hasThisNodeNotBeenVisited(x, y, visitedGrid) ){
-                SearchNode childNode = new SearchNode(x,y,node.index + 1,node);
-                if(childNode.cost <= node.cost){
+                SearchNode childNode = new SearchNode(
+                        x,
+                        y,
+                        node.index + 1,
+                        CostMapGenerator.getCostConsideringFriendPosition(node.position, friendDecisionPosition),
+                        node);
+                if(childNode.cost <= node.cost + 25){
                     node.childrenNodes.add(childNode);
                     queue.offer(childNode);
                 }
             }
         }
+    }
+
+    public boolean isAvailable(Position centrePosition){
+        return isTheSurroundingAreaAvailable(centrePosition);
+    }
+
+    public boolean isTheSurroundingAreaAvailable(Position centrePosition){
+        for(int i = 0; i < Property.widthUnit ; i++){
+            for(int j = 0; j < Property.heightUnit ; j++){
+                int x = centrePosition.x + i - Property.widthUnit / 2;
+                int y = centrePosition.y + j - Property.heightUnit / 2;
+                if(   !(x>=0 && x<849)
+                        || !(y>=0 && y<489)
+                        || CostMapGenerator.getCostConsideringFriendPosition(new Position(x, y), friendDecisionPosition) > 100
+                ){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     //检查节点可访问性
@@ -106,4 +136,19 @@ public class StrategyAnalyzer_2V2AStar implements StrategyAnalyzer {
             return true;
         }
     }
+
+
+    public boolean isFitIntoThePosition(int x, int y){
+        for(int i = 0; i< Property.widthUnit; i+=10){
+            for(int j=0;j< Property.heightUnit;j+=10){
+                int m = x + i - Property.widthUnit / 2;
+                int n = y + j - Property.heightUnit / 2;
+                if(Systems.pointSimulator.isPointNotEmpty(m, n, strategyMaker.getPointStatus())){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }

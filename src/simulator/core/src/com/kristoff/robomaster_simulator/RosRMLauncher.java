@@ -10,10 +10,14 @@ import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import py4j.GatewayServer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RosRMLauncher {
     public Simulator simulator;
     public SimulatorConfiguration config;
     public RoboMaster roboMaster;
+    public List<Integer> demo;
 
     public RosRMLauncher(){
         this.config = new SimulatorConfiguration();
@@ -21,6 +25,10 @@ public class RosRMLauncher {
         this.simulator = new Simulator(config);
         this.simulator.launch();
         this.simulator.init();
+        demo = new ArrayList<>();
+        for(int i = 0; i < 500; i ++){
+            demo.add(i);
+        }
     }
 
     public static void main(String[] args) {
@@ -49,4 +57,9 @@ public class RosRMLauncher {
     public void updateBuffZone(int buffZoneNo, int buffType, boolean isActive){
         BuffZone.updateBuffZone(buffZoneNo, buffType, isActive);
     }
+
+    public List<Integer> getDemoList(){
+        return this.demo;
+    }
+
 }

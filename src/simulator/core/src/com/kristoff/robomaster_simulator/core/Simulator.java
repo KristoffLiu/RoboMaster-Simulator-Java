@@ -40,7 +40,7 @@ public class Simulator extends Game {
 	}
 
 	public void configurateRenderer(){
-		rendererConfig.title = "RoboMaster Simulator Platform - Java [Realtime Remoting Mode]";
+		rendererConfig.title = "RoboMaster Simulator Platform - [Real-time Remoting Mode]";
 		rendererConfig.width = (int) (this.config.width * this.config.scaleFactor);
 		rendererConfig.height = (int) (this.config.height * this.config.scaleFactor);
 		rendererConfig.foregroundFPS = this.config.renderedFrameRate;

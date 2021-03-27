@@ -1,7 +1,7 @@
 from typing import Sequence
 from py4j.java_gateway import JavaGateway
 from py4j.java_gateway import java_import
-import time
+import time, datetime
 
 gateway = JavaGateway()          #启动py4j服务器
 entrypoint = gateway.entry_point #获取服务器桥的入口
@@ -52,7 +52,21 @@ decisionPoint2 = blue2.getDecisionMade()
 print(decisionPoint2.getX())
 print(decisionPoint2.getY())
 
+# for i in range(500):
+#     robomaster.loseHealth(10)
+#     time.sleep(0.01)
+
+starttime = datetime.datetime.now()
+#long running
+for i in entrypoint.getDemoList():
+    print(i)
+endtime = datetime.datetime.now()
+timetaken = (endtime - starttime)
+print(timetaken)
+
+starttime = datetime.datetime.now()
 for i in range(500):
-    robomaster.loseHealth(10)
-    time.sleep(0.01)
-    
+    print(i)
+endtime = datetime.datetime.now()
+print(timetaken)
+

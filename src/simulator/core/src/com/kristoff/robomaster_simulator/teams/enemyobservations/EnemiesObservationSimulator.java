@@ -14,6 +14,9 @@ public class EnemiesObservationSimulator extends LoopThread {
     Team thisTeam;
     Mode mode;
 
+    public static int getRadius(){
+        return 600;
+    }
     public Array<StatePoint> eoArrayList;
 
     public int[][] matrix = new int[849][489];

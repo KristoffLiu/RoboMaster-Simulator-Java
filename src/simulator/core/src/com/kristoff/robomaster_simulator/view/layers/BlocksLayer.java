@@ -1,14 +1,17 @@
 package com.kristoff.robomaster_simulator.view.layers;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.view.actors.CustomActor;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
 
 public class BlocksLayer extends VisualLayer {
-
+    ShapeRenderer shapeRenderer5;
     public BlocksLayer(EnvRenderer envRenderer) {
         super(envRenderer);
         addBlocks();
+        shapeRenderer5 = new ShapeRenderer();
     }
 
     public void addBlocks(){
@@ -41,5 +44,4 @@ public class BlocksLayer extends VisualLayer {
     public void draw(){
         super.draw();
     }
-
 }
