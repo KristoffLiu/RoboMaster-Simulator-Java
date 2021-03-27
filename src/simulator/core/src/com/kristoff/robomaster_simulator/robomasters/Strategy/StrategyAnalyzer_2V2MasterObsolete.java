@@ -6,8 +6,6 @@ import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.buffs.BuffZone;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
-import com.kristoff.robomaster_simulator.teams.friendobservations.FriendObservation;
-import com.kristoff.robomaster_simulator.teams.friendobservations.FriendsObservationSimulator;
 import com.kristoff.robomaster_simulator.utils.Position;
 
 import java.util.Queue;
@@ -105,7 +103,7 @@ public class StrategyAnalyzer_2V2MasterObsolete implements StrategyAnalyzer {
 
     //查找并生成子节点，并返回队列对象
     public void generateChildrenNodes(SearchNode node, boolean[][] visitedGrid){
-        if(!PointSimulator.isPoiontInsideMap(node.position.x, node.position.y)) return;
+        if(!PointSimulator.isPointInsideMap(node.position.x, node.position.y)) return;
         visitedGrid[node.position.x][node.position.y] = true;
         for(int i=0; i < SearchNode.childrenNodesFindingCost.length; i++){
             int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;

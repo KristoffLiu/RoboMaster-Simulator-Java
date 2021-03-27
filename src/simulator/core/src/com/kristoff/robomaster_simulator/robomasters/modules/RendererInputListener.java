@@ -1,19 +1,26 @@
 package com.kristoff.robomaster_simulator.robomasters.modules;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.ControllerListener;
+import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.utils.Position;
 
 /**
  * 输入事件监听器（包括触屏, 鼠标点击, 键盘按键 的输入）
  */
-public class RendererInputListener extends InputListener {
+public class RendererInputListener extends InputListener implements ControllerListener {
     RoboMaster roboMaster;
     public RendererInputListener(RoboMaster roboMaster){
         super();
         this.roboMaster = roboMaster;
+        Controllers.addListener(this);
     }
 
     private static final String TAG = "";
@@ -78,5 +85,86 @@ public class RendererInputListener extends InputListener {
      */
     @Override
     public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+    }
+
+    @Override
+    public void connected(Controller controller) {
+
+    }
+
+    @Override
+    public void disconnected(Controller controller) {
+
+    }
+
+    @Override
+    public boolean buttonDown(Controller controller, int buttonCode) {
+//        if(buttonCode == XBox360Pad.BUTTON_Y)
+//            sprite.setY(sprite.getY() + 1);
+//        if(buttonCode == XBox360Pad.BUTTON_A)
+//            sprite.setY(sprite.getY()-1);
+//        if(buttonCode == XBox360Pad.BUTTON_X)
+//            sprite.setX(sprite.getX() - 1);
+//        if(buttonCode == XBox360Pad.BUTTON_B)
+//            sprite.setX(sprite.getX() + 1);
+//        if(buttonCode == XBox360Pad.BUTTON_LB)
+//            sprite.scale(-0.1f);
+//        if(buttonCode == XBox360Pad.BUTTON_RB)
+//            sprite.scale(0.1f);
+        return false;
+    }
+    @Override
+    public boolean buttonUp(Controller controller, int buttonCode) {
+        return false;
+    }
+    @Override
+    public boolean axisMoved(Controller controller, int axisCode, float value) {
+        // This is your analog stick
+        // Value will be from -1 to 1 depending how far left/right, up/down the stick is
+        // For the Y translation, I use a negative because I like inverted analog stick
+        // Like all normal people do! 😉
+        // Left Stick
+        Position current = this.roboMaster.getPosition();
+        Position position = new Position(current.x, current.y);
+        int xOffset = 0;
+        int yOffset = 0;
+        if(axisCode == XBox360Pad.AXIS_RIGHT_X) {
+            xOffset += value * 10;
+            System.out.println("x" + xOffset);
+        }
+        if(axisCode == XBox360Pad.AXIS_LEFT_Y)
+            yOffset += value * 10;
+        System.out.println("y" + yOffset);
+        this.roboMaster.setPosition(position.x + xOffset, position.y + yOffset);
+        return false;
+    }
+
+    @Override
+    public boolean povMoved(Controller controller, int povCode, PovDirection value) {
+        // This is the dpad
+//        if(value == XBox360Pad.BUTTON_DPAD_LEFT)
+//            sprite.translateX(-10f);
+//        if(value == XBox360Pad.BUTTON_DPAD_RIGHT)
+//            sprite.translateX(10f);
+//        if(value == XBox360Pad.BUTTON_DPAD_UP)
+//            sprite.translateY(10f);
+//        if(value == XBox360Pad.BUTTON_DPAD_DOWN)
+//            sprite.translateY(-10f);
+        return false;
+    }
+
+    @Override
+    public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) {
+        return false;
+    }
+
+    @Override
+    public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) {
+        return false;
+    }
+
+    @Override
+    public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) {
+        return false;
     }
 }

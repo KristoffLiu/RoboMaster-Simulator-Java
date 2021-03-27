@@ -11,6 +11,7 @@ public class PointSimulator extends Simulator {
     PhysicalSimulator physicalSimulator;
 
     public PointState[][] pointMatrix;
+    public boolean[][] obstacleMatrix;
     public PointState[][] staticObjectPointMatrix;
     public List<PointState> staticObjectPointsList;
 
@@ -22,6 +23,7 @@ public class PointSimulator extends Simulator {
 
         pointMatrix = new PointState[849][489];
         staticObjectPointMatrix = new PointState[849][489];
+        obstacleMatrix = new boolean[849][489];
     }
 
     @Override
@@ -45,8 +47,12 @@ public class PointSimulator extends Simulator {
         }
     }
 
-    public static boolean isPoiontInsideMap(int x, int y){
+    public static boolean isPointInsideMap(int x, int y){
         return !(x < 20 || x > 829 || y < 20 || y > 469);
+    }
+
+    public static boolean isPointOverTheMap(int x, int y){
+        return !(x < 0 || x >= 849 || y < 0 || y >= 489);
     }
 
     public boolean isPointEmpty(int x, int y, PointState pointState){
@@ -56,7 +62,7 @@ public class PointSimulator extends Simulator {
     }
 
     public boolean isPointNotEmpty(int x, int y, PointState pointState){
-        if(!isPoiontInsideMap(x, y)) return false;
+        if(!isPointInsideMap(x, y)) return false;
         if(this.pointMatrix[x][y] == PointState.Empty
                 || this.pointMatrix[x][y] == null
                 || this.pointMatrix[x][y] == pointState){
@@ -68,40 +74,12 @@ public class PointSimulator extends Simulator {
     }
 
     public boolean isPointTheObstacle(int x, int y){
-        if(!isPoiontInsideMap(x, y)) return false;
-        return this.pointMatrix[x][y] == PointState.StaticObject;
-    }
-
-    public void clearPointStatus(PointState pointState){
-        int m = 0;
-        int n = 0;
-        int count = 0;
-        for(int i = 0; i < 849; i++){
-            for(int j = 0; j < 489; j++){
-                if(this.pointMatrix[i][j] == pointState){
-                    count ++;
-                }
-                if(count >= 25){
-                    m = i;
-                    n = j;
-                    break;
-                }
-            }
-            if(count >= 25){
-                break;
-            }
-        }
-        for(int i = -50; i < 50; i++){
-            for(int j = -50; j < 40; j++){
-                if(this.pointMatrix[i][j] == pointState){
-                    this.pointMatrix[i][j] = PointState.Empty;
-                }
-            }
-        }
+        if(!isPointInsideMap(x, y)) return false;
+        return this.obstacleMatrix[x][y];
     }
 
     public boolean isPointNotEmpty(int x, int y, PointState pointState, PointState pointState2){
-        if(!isPoiontInsideMap(x, y)) return false;
+        if(!isPointInsideMap(x, y)) return false;
         if(this.pointMatrix[x][y] == PointState.Empty
                 || this.pointMatrix[x][y] == null
                 || this.pointMatrix[x][y] == pointState
@@ -114,7 +92,7 @@ public class PointSimulator extends Simulator {
     }
 
     public boolean isPointNotEmpty(int x, int y, PointState self1, PointState self2, PointState enemyPoint) {
-        if(!isPoiontInsideMap(x, y)) return false;
+        if(!isPointInsideMap(x, y)) return false;
         if(this.pointMatrix[x][y] == PointState.Empty
                 || this.pointMatrix[x][y] == null
                 || this.pointMatrix[x][y] == self1
@@ -145,13 +123,18 @@ public class PointSimulator extends Simulator {
     }
 
     public void setStaticObjectPoint(int x, int y) {
-        if(isPoiontInsideMap(x, y))
+        if(isPointOverTheMap(x, y))
             staticObjectPointMatrix[x][y] = PointState.StaticObject;
+    }
+
+    public void setObstaclePoint(int x, int y) {
+        if(isPointOverTheMap(x, y))
+            obstacleMatrix[x][y] = true;
     }
 
     public void updatePoint(int x, int y, PointState status) {
         try{
-            if(!isPoiontInsideMap(x, y)) return;
+            if(!isPointInsideMap(x, y)) return;
             if(getMatrix()[x][y] != PointState.StaticObject){
                 getMatrix()[x][y] = status;
             }
@@ -201,9 +184,33 @@ public class PointSimulator extends Simulator {
 
     private void addBlock(int x, int y, int width, int height, float radian){
         if(radian == 0){
-            for(int i = x - 20; i < x + width + 20 ; i ++){
-                for(int j = y - 20;j < y + height + 20; j ++){
+            for(int i = x; i < x + width ; i ++){
+                for(int j = y ;j < y + height; j ++){
                     setStaticObjectPoint(i, j);
+                }
+            }
+        }
+        else{
+            for(int i = 0; i <= (25 * Math.sqrt(2)); i++){
+                if(i <= (25 / Math.sqrt(2))){
+                    for(int j = 0; j <= i ; j++){
+                        setStaticObjectPoint(i + 407, 245 + j);
+                        setStaticObjectPoint(i + 407, 245 - j);
+                    }
+                }
+                else{
+                    for(int j = 0; j <= 25 * Math.sqrt(2) - i; j++){
+                        setStaticObjectPoint(i + 407, 245 + j);
+                        setStaticObjectPoint(i + 407, 245 - j);
+                    }
+                }
+            }
+        }
+
+        if(radian == 0){
+            for(int i = x - 25; i < x + width + 25 ; i ++){
+                for(int j = y - 25;j < y + height + 25; j ++){
+                    setObstaclePoint(i, j);
                 }
             }
         }
@@ -211,14 +218,14 @@ public class PointSimulator extends Simulator {
             for(int i = 0; i <= (50 * Math.sqrt(2)); i++){
                 if(i <= (50 / Math.sqrt(2))){
                     for(int j = 0; j <= i ; j++){
-                        setStaticObjectPoint(i + 389, 245 + j);
-                        setStaticObjectPoint(i + 389, 245 - j);
+                        setObstaclePoint(i + 389, 245 + j);
+                        setObstaclePoint(i + 389, 245 - j);
                     }
                 }
                 else{
                     for(int j = 0; j <= 50 * Math.sqrt(2) - i; j++){
-                        setStaticObjectPoint(i + 389, 245 + j);
-                        setStaticObjectPoint(i + 389, 245 - j);
+                        setObstaclePoint(i + 389, 245 + j);
+                        setObstaclePoint(i + 389, 245 - j);
                     }
                 }
             }

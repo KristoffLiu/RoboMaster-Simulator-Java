@@ -5,6 +5,7 @@ import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.types.Enemy;
 import com.kristoff.robomaster_simulator.robomasters.types.ShanghaiTechMasterIII;
 import com.kristoff.robomaster_simulator.systems.Systems;
+import com.kristoff.robomaster_simulator.systems.costmap.CostMapGenerator;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointState;
 import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
@@ -79,6 +80,7 @@ public class StrategyMaker extends LoopThread {
     }
 
     public void makeDecision(){
+        visitedGrid = new boolean[849][489];
         queue.clear();
         switchAnalyzer();
         strategyAnalyzer.analyze(tacticState);
@@ -128,6 +130,7 @@ public class StrategyMaker extends LoopThread {
         if(!this.roboMaster.isRoamer()){
             this.getFriendRoboMaster().strategyMaker.setFriendDecision(new SearchNode(decisionNode.position.x, decisionNode.position.y));
         }
+        System.out.println(decisionNode.position.x + " "  + decisionNode.position.y + " " +CostMapGenerator.getCost(decisionNode.position.x,decisionNode.position.y));
     }
 
     public void setFriendDecision(SearchNode node){
@@ -211,7 +214,7 @@ public class StrategyMaker extends LoopThread {
 
 
     public boolean isPointInsideMap(Position position){
-        return  PointSimulator.isPoiontInsideMap(position.x, position.y);
+        return  PointSimulator.isPointInsideMap(position.x, position.y);
     }
 
     public boolean isSafeNow(int x, int y){

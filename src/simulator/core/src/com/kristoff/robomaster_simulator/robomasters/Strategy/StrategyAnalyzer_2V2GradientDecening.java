@@ -1,6 +1,5 @@
 package com.kristoff.robomaster_simulator.robomasters.Strategy;
 
-import com.kristoff.robomaster_simulator.robomasters.modules.Property;
 import com.kristoff.robomaster_simulator.systems.costmap.CostMapGenerator;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.utils.Position;
@@ -8,7 +7,7 @@ import com.kristoff.robomaster_simulator.utils.Position;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class StrategyAnalyzer_2V2AStar extends UniversalAnalyzer {
+public class StrategyAnalyzer_2V2GradientDecening extends UniversalAnalyzer {
     public StrategyMaker strategyMaker;
 
     public SearchNode rootNode;
@@ -16,15 +15,17 @@ public class StrategyAnalyzer_2V2AStar extends UniversalAnalyzer {
     public SearchNode resultNode;
     public CopyOnWriteArrayList<SearchNode>                   resultNodes;
     public CopyOnWriteArrayList<SearchNode>                   pathNodes;
+    public int maxIteration;
 
     Position destination = new Position();
 
-    public StrategyAnalyzer_2V2AStar(StrategyMaker strategyMaker){
+    public StrategyAnalyzer_2V2GradientDecening(StrategyMaker strategyMaker){
         this.strategyMaker = strategyMaker;
 
-        this.queue                      = this.strategyMaker.queue;
-        this.resultNodes                = new CopyOnWriteArrayList<>();
-        this.pathNodes                  = new CopyOnWriteArrayList<>();
+        this.queue        = this.strategyMaker.queue;
+        this.resultNodes  = new CopyOnWriteArrayList<>();
+        this.pathNodes    = new CopyOnWriteArrayList<>();
+        this.maxIteration = 500;
     }
 
     @Override

@@ -110,8 +110,8 @@ public class BuffZone {
                     case NotActivated     -> cost = 0;
                     case RedHPRecovery    -> cost = 50;
                     case RedBulletSupply  -> cost = 50;
-                    case BlueHPRecovery   -> cost = -80;
-                    case BlueBulletSupply -> cost = -40;
+                    case BlueHPRecovery   -> cost = -100;
+                    case BlueBulletSupply -> cost = -100;
                     case DisableShooting  -> cost = 80;
                     case DisableMovement  -> cost = 80;
                 }
@@ -125,8 +125,8 @@ public class BuffZone {
                         case NotActivated     -> cost += 0;
                         case RedHPRecovery    -> cost += 0;
                         case RedBulletSupply  -> cost += 0;
-                        case BlueHPRecovery   -> cost += (maxDis - distance) / maxDis * -80;
-                        case BlueBulletSupply -> cost += (maxDis - distance) / maxDis * -40;
+                        case BlueHPRecovery   -> cost += (maxDis - distance) / maxDis * -100;
+                        case BlueBulletSupply -> cost += (maxDis - distance) / maxDis * -100;
                         case DisableShooting  -> cost += 0;
                         case DisableMovement  -> cost += 0;
                     }

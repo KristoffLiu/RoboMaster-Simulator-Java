@@ -52,32 +52,32 @@ public class LidarPointCloudLayer extends VisualLayer {
     public void draw(){
         super.draw();
 
-//        shapeRenderer5.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
-//        shapeRenderer5.setAutoShapeType(true);
-//        shapeRenderer5.begin(ShapeRenderer.ShapeType.Filled);
-//        for(int i = 20; i < 829; i+=20){
-//            for(int j = 20; j < 469; j+=20){
-//                if(RoboMasters.teamBlue.get(0).strategyMaker.getVisitedGrid()[i][j]){
-//                    int x = i * 10;
-//                    int y = j * 10;
-//                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
-//                    shapeRenderer5.circle(
-//                            x / 1000f,
-//                            y / 1000f,
-//                            0.15f,10);
-//                }
-//                if(RoboMasters.teamBlue.get(1).strategyMaker.getVisitedGrid()[i][j]){
-//                    int x = i * 10;
-//                    int y = j * 10;
-//                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
-//                    shapeRenderer5.circle(
-//                            x / 1000f,
-//                            y / 1000f,
-//                            0.15f,10);
-//                }
-//            }
-//        }
-//        shapeRenderer5.end();
+        shapeRenderer5.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
+        shapeRenderer5.setAutoShapeType(true);
+        shapeRenderer5.begin(ShapeRenderer.ShapeType.Filled);
+        for(int i = 20; i < 829; i+=20){
+            for(int j = 20; j < 469; j+=20){
+                if(RoboMasters.teamBlue.get(0).strategyMaker.getVisitedGrid()[i][j]){
+                    int x = i * 10;
+                    int y = j * 10;
+                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
+                    shapeRenderer5.circle(
+                            x / 1000f,
+                            y / 1000f,
+                            0.15f,10);
+                }
+                if(RoboMasters.teamBlue.get(1).strategyMaker.getVisitedGrid()[i][j]){
+                    int x = i * 10;
+                    int y = j * 10;
+                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
+                    shapeRenderer5.circle(
+                            x / 1000f,
+                            y / 1000f,
+                            0.15f,10);
+                }
+            }
+        }
+        shapeRenderer5.end();
 
         shapeRenderer2.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer2.setAutoShapeType(true);

@@ -64,6 +64,7 @@ public class InfoAnalyzer extends LoopThread {
             }
         }
         Enemy lockedEnemy = Enemy.getLockedEnemy();
+        Enemy unlockedEnemy = Enemy.getUnlockedEnemy();
         switch (counterState){
             case OneVSOne, TwoVSOne -> {
                 for(RoboMaster roboMaster : this.enemyTeam){
@@ -83,20 +84,14 @@ public class InfoAnalyzer extends LoopThread {
                 }
             }
             case TwoVSTwo ->{
-                List<Float> distances = new LinkedList<>();
-                for(RoboMaster enemy : this.enemyTeam){
-                    float coefficient = 2f;
-                    if(!((Enemy)enemy).isLocked()) coefficient = lockingWeight;
-                    distances.add(
-                            (enemy.getPosition().distanceTo(this.thisTeam.get(0).getPosition()) +
-                            enemy.getPosition().distanceTo(this.thisTeam.get(1).getPosition())) * coefficient
-                            );
-                }
-                if(distances.get(0) < distances.get(1)) {
-                    ((Enemy)this.enemyTeam.get(0)).lock();
-                }
-                else {
-                    ((Enemy)this.enemyTeam.get(1)).lock();
+                float lockedEnemyDistance =
+                        (lockedEnemy.getPosition().distanceTo(this.thisTeam.get(0).getPosition()) +
+                        lockedEnemy.getPosition().distanceTo(this.thisTeam.get(1).getPosition())) ;
+                float unlockedEnemyDistance =
+                        (unlockedEnemy.getPosition().distanceTo(this.thisTeam.get(0).getPosition()) +
+                        unlockedEnemy.getPosition().distanceTo(this.thisTeam.get(1).getPosition())) * 1.5f;
+                if(lockedEnemyDistance > unlockedEnemyDistance) {
+                    unlockedEnemy.lock();
                 }
             }
         }

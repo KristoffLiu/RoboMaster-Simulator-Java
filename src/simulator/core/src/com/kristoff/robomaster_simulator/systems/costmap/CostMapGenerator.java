@@ -50,7 +50,7 @@ public class CostMapGenerator extends LoopThread {
                 cost += costOfEnemyObservation(i, j);
                 cost += costOfBuff(i, j);
                 cost += costToTheCentre(i, j);
-                costmap[i][j] = cost < 255 ? cost : 254;
+                costmap[i][j] = cost;
             }
         }
         long endTime = System.currentTimeMillis();    //获取结束时间
@@ -58,36 +58,31 @@ public class CostMapGenerator extends LoopThread {
     }
 
     public int costOfEnemyObservation(int x, int y){
-        int observationCost = 0;
-        int costOfLockedEnemyDistance = 0;
-        int costOfUnlockedEnemyDistance = 0;
+        int cost = 0;
 
         if(EnemiesObservationSimulator.isInLockedEnemyViewOnly(x, y)) {
-            observationCost = 0;
-            costOfLockedEnemyDistance = costOfLockedEnemyDistance(x, y);
+            cost = costOfLockedEnemyDistance(x, y);
         }
         else if(EnemiesObservationSimulator.isInUnlockedEnemyViewOnly(x, y)) {
-            observationCost = 10;
-            costOfUnlockedEnemyDistance = costOfUnlockedEnemyDistance(x, y);
+            cost = costOfUnlockedEnemyDistance(x, y);
         }
         else if(EnemiesObservationSimulator.isOutOfBothEnemiesView(x, y))
-            observationCost = 10;
+            cost = 0;
         else if(EnemiesObservationSimulator.isInBothEnemiesView(x, y)) {
-            observationCost = 30;
-            costOfUnlockedEnemyDistance = costOfUnlockedEnemyDistance(x, y) * 2;
+            cost = costOfBothEnemyDistance(x, y);
         }
-        return observationCost + costOfLockedEnemyDistance + costOfUnlockedEnemyDistance;
+        return cost;
     }
 
     public int costOfLockedEnemyDistance(int x, int y){
         int maxRange = EnemiesObservationSimulator.getRadius();
-        int minShootingRange = 75;
-        int maxShootingRange = 275;
+        int minShootingRange = 80;
+        int maxShootingRange = 160;
         int peekVal = 64;
-        int troughVal = - 100;
+        int troughVal = - 128;
         float distanceToEnemy = Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y);
         float cost = 0;
-        if(distanceToEnemy <= 50){
+        if(distanceToEnemy <= 65){
             cost = 999;
         }
         else if(distanceToEnemy <= minShootingRange){
@@ -107,6 +102,20 @@ public class CostMapGenerator extends LoopThread {
         int peekVal = 64;
         float distanceToEnemy = Enemy.getUnlockedEnemy().getPointPosition().distanceTo(x,y);
         float cost = 0;
+        if(distanceToEnemy <= 65){
+            cost = 999;
+        }
+        else{
+            cost = (maxRange - distanceToEnemy) / maxRange * peekVal;
+        }
+        return (int) cost;
+    }
+
+    public int costOfBothEnemyDistance(int x, int y){
+        int maxRange = EnemiesObservationSimulator.getRadius();
+        int peekVal = 128;
+        float distanceToEnemy = Enemy.getUnlockedEnemy().getPointPosition().distanceTo(x,y);
+        float cost = 0;
         cost = (maxRange - distanceToEnemy) / maxRange * peekVal;
         return (int) cost;
     }
@@ -114,11 +123,10 @@ public class CostMapGenerator extends LoopThread {
     public int costToTheCentre(int x, int y){
         Position centre = new Position(849 / 2 , 489 / 2);
         int peekVal = 127;
-        float coefficient = 0.7f;
         float distanceToTheCentre = centre.distanceTo(x,y);
         int costOfDistanceToEnemy = 0;
-        if(distanceToTheCentre > 325 && distanceToTheCentre <= 400){
-            costOfDistanceToEnemy = (int) ((distanceToTheCentre - 325) / (400 - 325) * peekVal);
+        if(distanceToTheCentre > 350 && distanceToTheCentre <= 470){
+            costOfDistanceToEnemy = (int) ((distanceToTheCentre - 350) / (470 - 350) * peekVal);
         }
         else if(distanceToTheCentre > 400){
             costOfDistanceToEnemy = 254;
@@ -140,7 +148,7 @@ public class CostMapGenerator extends LoopThread {
 
     public static int getCostConsideringFriendPosition(Position position, Position friendPosition){
         float distance = position.distanceTo(friendPosition);
-        float safeDis = 120;
+        float safeDis = 80;
         float coefficient = 0.75f;
         int cost = 0;
         if(distance < safeDis){

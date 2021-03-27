@@ -98,14 +98,16 @@ public class EnvRenderer implements Screen {
         lidarPointCloudLayer.act(delta);
         lidarPointCloudLayer.draw();
 
-        buffLayer.act();
-        buffLayer.draw();
+
 
         roboMasterLayer.act();
         roboMasterLayer.draw();
 
         blocksLayer.act();
         blocksLayer.draw();
+
+        buffLayer.act();
+        buffLayer.draw();
 
         HUD.act(delta);
         HUD.draw();

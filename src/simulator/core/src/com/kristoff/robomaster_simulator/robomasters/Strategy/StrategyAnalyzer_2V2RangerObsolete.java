@@ -103,7 +103,7 @@ public class StrategyAnalyzer_2V2RangerObsolete implements StrategyAnalyzer {
 
     //查找并生成子节点，并返回队列对象
     public void generateChildrenNodes(SearchNode node, boolean[][] visitedGrid){
-        if(!PointSimulator.isPoiontInsideMap(node.position.x, node.position.y)) return;
+        if(!PointSimulator.isPointInsideMap(node.position.x, node.position.y)) return;
         visitedGrid[node.position.x][node.position.y] = true;
         for(int i=0; i < SearchNode.childrenNodesFindingCost.length; i++){
             int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;

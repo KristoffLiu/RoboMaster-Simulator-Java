@@ -106,9 +106,9 @@ class Brain:
 
 
 
-        for i, d in enumerate(data.zone):
-            print(str(i) + " " + str(d.type) + " " + str(d.active))
-            entrypoint.updateBuffZone(i, d.type, d.active)
+        # for i, d in enumerate(data.zone):
+        #     print(str(i) + " " + str(d.type) + " " + str(d.active))
+        #     entrypoint.updateBuffZone(i, d.type, d.active)
             
 
     def get_next_position1(self):
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     try: 
         print(__file__ + " start!!")
         rospy.init_node('decision_node', anonymous=True)
-        rate = rospy.Rate(1)
+        rate = rospy.Rate(0.5)
         brain = Brain()
         print(brain)
         spin_thread = threading.Thread(target=call_rosspin).start()
