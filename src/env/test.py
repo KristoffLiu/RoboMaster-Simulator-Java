@@ -110,6 +110,11 @@ class Brain:
         #     print(str(i) + " " + str(d.type) + " " + str(d.active))
         #     entrypoint.updateBuffZone(i, d.type, d.active)
             
+    def _createQuaternionFromYaw(self, yaw):
+        # input: r p y
+        r = R.from_euler('zyx', [0, 0, yaw], degrees=False).as_quat()
+        # output: w x y z
+        return [r[3], r[2], r[1], r[0]]
 
     def get_next_position1(self):
         # pos = self.Blue2.getPointAvoidingFacingEnemies()
@@ -120,10 +125,17 @@ class Brain:
         self.cnt = self.cnt+1
         print("x: ", rx)
         print("y: ", ry)
+
+        yaw_angle = math.atan2(ry - self.robots[0].y, rx - self.robots[0].x)
+
         goal = PoseStamped()
         goal.header.frame_id = "/map"
         goal.pose.position.x, goal.pose.position.y = rx, ry
-        goal.pose.orientation.w = 1
+
+        [goal.pose.orientation.w,
+        goal.pose.orientation.x,
+        goal.pose.orientation.y,
+        goal.pose.orientation.z] = self._createQuaternionFromYaw(yaw_angle)
 
         self._decision_pub[0].publish(goal)
         print("blue 1  -> send")
@@ -137,11 +149,18 @@ class Brain:
         self.cnt = self.cnt+1
         print("x: ", rx)
         print("y: ", ry)
+
+        yaw_angle = math.atan2(ry - self.robots[1].y, rx - self.robots[1].x)
+
         goal = PoseStamped()
         goal.header.frame_id = "/map"
         goal.pose.position.x, goal.pose.position.y = rx, ry
-        goal.pose.orientation.w = 1
 
+        [goal.pose.orientation.w,
+        goal.pose.orientation.x,
+        goal.pose.orientation.y,
+        goal.pose.orientation.z] = self._createQuaternionFromYaw(yaw_angle)
+        
         self._decision_pub[1].publish(goal)
 
 
