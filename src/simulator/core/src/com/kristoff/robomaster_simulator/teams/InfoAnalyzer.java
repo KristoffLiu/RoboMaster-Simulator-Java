@@ -91,7 +91,7 @@ public class InfoAnalyzer extends LoopThread {
                         (unlockedEnemy.getPosition().distanceTo(this.thisTeam.get(0).getPosition()) +
                         unlockedEnemy.getPosition().distanceTo(this.thisTeam.get(1).getPosition())) * 1.5f;
                 if(lockedEnemyDistance > unlockedEnemyDistance) {
-                    unlockedEnemy.lock();
+                    //unlockedEnemy.lock();
                 }
             }
         }

@@ -46,7 +46,7 @@ public class RoboMasterLayer extends VisualLayer {
 
     @Override
     public void draw(){
-        //drawCostMap();
+        drawCostMap();
         drawPaths();
         super.draw();
     }

@@ -89,11 +89,14 @@ public class StrategyAnalyzer_2V2AStar extends UniversalAnalyzer {
         for(int i=0; i < SearchNode.childrenNodesFindingCost.length; i++){
             int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;
             int y = node.position.y + SearchNode.childrenNodesFindingCost[i][1] ;
-            double cost = CostMapGenerator.getCost(x, y);
+            double currentCost = CostMapGenerator.getCost(node.position.x, node.position.y);
+            double nextCost = CostMapGenerator.getCost(x, y);
+            double delta = nextCost - currentCost;
             double stepCost = Math.sqrt(SearchNode.childrenNodesFindingCost[i][2]);
+            double totalCost = node.cost + delta + stepCost;
             if(hasThisNodeNotBeenVisited(x, y, visitedGrid) ){
-                SearchNode childNode = new SearchNode(x,y,node.index + 1, cost,node);
-                if(childNode.cost <= node.cost && childNode.cost < 400){
+                SearchNode childNode = new SearchNode(x,y,node.index + 1, totalCost,node);
+                if(nextCost <= currentCost && nextCost < 400){
                     node.childrenNodes.add(childNode);
                     queue.offer(childNode);
                 }

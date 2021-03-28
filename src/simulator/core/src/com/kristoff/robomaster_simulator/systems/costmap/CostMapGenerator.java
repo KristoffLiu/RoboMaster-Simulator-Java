@@ -148,7 +148,7 @@ public class CostMapGenerator extends LoopThread {
 
     public static int getCostConsideringFriendPosition(Position position, Position friendPosition){
         float distance = position.distanceTo(friendPosition);
-        float safeDis = 80;
+        float safeDis = 100;
         float coefficient = 0.75f;
         int cost = 0;
         if(distance < safeDis){

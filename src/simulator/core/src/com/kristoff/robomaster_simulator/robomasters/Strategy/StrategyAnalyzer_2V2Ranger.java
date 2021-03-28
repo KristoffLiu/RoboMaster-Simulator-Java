@@ -62,7 +62,7 @@ public class StrategyAnalyzer_2V2Ranger extends UniversalAnalyzer {
 
         while (!this.queue.isEmpty()){
             resultNode = this.queue.poll();
-            //if(isAvailable(resultNode.position)) break;
+            if(isAvailable(resultNode.position)) break;
             generateChildrenNodes(resultNode, tempVisitedGrid);
         }
 
@@ -82,16 +82,19 @@ public class StrategyAnalyzer_2V2Ranger extends UniversalAnalyzer {
         for(int i=0; i < SearchNode.childrenNodesFindingCost.length; i++){
             int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;
             int y = node.position.y + SearchNode.childrenNodesFindingCost[i][1] ;
-            double cost = CostMapGenerator.getCostConsideringFriendPosition(node.position, friendDecisionPosition);
+            double currentCost = CostMapGenerator.getCostConsideringFriendPosition(node.position, friendDecisionPosition);
+            double nextCost = CostMapGenerator.getCostConsideringFriendPosition(new Position(x, y), friendDecisionPosition);
+            double delta = nextCost - currentCost;
             double stepCost = Math.sqrt(SearchNode.childrenNodesFindingCost[i][2]);
+            double totalCost = node.cost + delta + stepCost;
             if(hasThisNodeNotBeenVisited(x, y, visitedGrid) ){
                 SearchNode childNode = new SearchNode(
                         x,
                         y,
                         node.index + 1,
-                        cost,
+                        totalCost,
                         node);
-                if(childNode.cost <= node.cost && childNode.cost < 400){
+                if(nextCost <= currentCost + 25 && nextCost < 400){
                     node.childrenNodes.add(childNode);
                     queue.offer(childNode);
                 }
