@@ -7,7 +7,6 @@ import com.kristoff.robomaster_simulator.robomasters.types.ShanghaiTechMasterIII
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.buffs.BuffZone;
 import com.kristoff.robomaster_simulator.systems.costmap.PositionCost;
-import com.kristoff.robomaster_simulator.systems.costmap.UniversalCostMap;
 import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
@@ -52,7 +51,7 @@ public class CostMap extends LoopThread {
                     cost += costOfEnemyObservation(i, j);
                     //cost += costOfBuff(i, j);
                     cost += costToTheCentre(i, j);
-                    cost += costToTheMaster(i, j);
+                    cost += costToMyself(i, j);
                     cost += costOfFriendEntity(i, j);
                     cost += costOfFriendDecision(i, j);
                     costmap[i][j] = cost;
@@ -185,8 +184,8 @@ public class CostMap extends LoopThread {
         return costOfDistanceToEnemy;
     }
 
-    public int costToTheMaster(int x, int y){
-        Position master = RoboMasters.teamBlue.get(0).getPointPosition();
+    public int costToMyself(int x, int y){
+        Position master = this.roboMaster.getPointPosition();
         int peekVal = 64;
         float distance = master.distanceTo(x,y);
         float maxRange = 952f;

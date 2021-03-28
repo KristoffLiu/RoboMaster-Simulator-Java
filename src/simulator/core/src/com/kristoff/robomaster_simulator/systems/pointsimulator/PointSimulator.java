@@ -215,17 +215,31 @@ public class PointSimulator extends Simulator {
             }
         }
         else{
-            for(int i = 0; i <= (50 * Math.sqrt(2)); i++){
-                if(i <= (50 / Math.sqrt(2))){
+//            for(int i = 0; i <= (50 * Math.sqrt(2)); i++){
+//                if(i <= (50 / Math.sqrt(2))){
+//                    for(int j = 0; j <= i ; j++){
+//                        setObstaclePoint(i + 389, 245 + j);
+//                        setObstaclePoint(i + 389, 245 - j);
+//                    }
+//                }
+//                else{
+//                    for(int j = 0; j <= 50 * Math.sqrt(2) - i; j++){
+//                        setObstaclePoint(i + 389, 245 + j);
+//                        setObstaclePoint(i + 389, 245 - j);
+//                    }
+//                }
+//            }
+            for(int i = 0; i <= (60 * Math.sqrt(2)); i++){
+                if(i <= (60 / Math.sqrt(2))){
                     for(int j = 0; j <= i ; j++){
-                        setObstaclePoint(i + 389, 245 + j);
-                        setObstaclePoint(i + 389, 245 - j);
+                        setObstaclePoint(i + 382, 245 + j);
+                        setObstaclePoint(i + 382, 245 - j);
                     }
                 }
                 else{
-                    for(int j = 0; j <= 50 * Math.sqrt(2) - i; j++){
-                        setObstaclePoint(i + 389, 245 + j);
-                        setObstaclePoint(i + 389, 245 - j);
+                    for(int j = 0; j <= 60 * Math.sqrt(2) - i; j++){
+                        setObstaclePoint(i + 382, 245 + j);
+                        setObstaclePoint(i + 382, 245 - j);
                     }
                 }
             }

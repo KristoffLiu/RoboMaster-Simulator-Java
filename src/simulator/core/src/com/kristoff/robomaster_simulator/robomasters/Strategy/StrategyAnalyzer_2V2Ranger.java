@@ -2,6 +2,7 @@ package com.kristoff.robomaster_simulator.robomasters.Strategy;
 
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.modules.Property;
+import com.kristoff.robomaster_simulator.systems.costmap.PositionCost;
 import com.kristoff.robomaster_simulator.systems.costmap.UniversalCostMap;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.utils.Position;
@@ -46,7 +47,7 @@ public class StrategyAnalyzer_2V2Ranger extends UniversalAnalyzer {
                 getCostMap().getCost(currentPosition.x, currentPosition.y),
                 null);
         this.resultNode = rootNode;
-        Position target = getCostMap().minPositionCost;
+        PositionCost target = getCostMap().minPositionCost;
 
         queue.offer(rootNode);
         tempVisitedGrid[rootNode.position.x][rootNode.position.y] = true;
@@ -93,10 +94,11 @@ public class StrategyAnalyzer_2V2Ranger extends UniversalAnalyzer {
         }
     }
 
-    public boolean isAvailable(Position centre, Position target){
+    public boolean isAvailable(Position centre, PositionCost target){
 //        return isTheCentreAvailable(centrePosition, friendDecisionPosition)
 //                && isTheSurroundingAreaAvailable(centrePosition, friendDecisionPosition);
-        return centre.x == target.x && centre.y == target.y;
+        return Math.abs(getCostMap().getCost(centre.getX(), centre.getY()) - target.cost) < 30 ||
+                centre.x == target.x && centre.y == target.y;
     }
 
     public boolean isTheSurroundingAreaAvailable(Position centrePosition){
