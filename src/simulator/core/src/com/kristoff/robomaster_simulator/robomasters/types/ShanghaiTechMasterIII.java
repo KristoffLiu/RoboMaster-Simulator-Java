@@ -1,6 +1,7 @@
 package com.kristoff.robomaster_simulator.robomasters.types;
 
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.modules.CostMap;
 import com.kristoff.robomaster_simulator.teams.Team;
 
 public class ShanghaiTechMasterIII extends RoboMaster {
@@ -9,6 +10,7 @@ public class ShanghaiTechMasterIII extends RoboMaster {
     public ShanghaiTechMasterIII(Team team, String name){
         super("RoboMasters/AlexanderMaster.png",
                 team, name);
+
     }
 
     public boolean isRoamer(){
@@ -16,5 +18,10 @@ public class ShanghaiTechMasterIII extends RoboMaster {
     }
     public void setAsRoamer(){
          isRoamer = true;
+    }
+
+    @Override
+    public void start(){
+        super.start();
     }
 }

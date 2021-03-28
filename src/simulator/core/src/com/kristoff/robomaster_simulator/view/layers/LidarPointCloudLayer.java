@@ -2,13 +2,11 @@ package com.kristoff.robomaster_simulator.view.layers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.kristoff.robomaster_simulator.robomasters.Strategy.SearchNode;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationPoint;
 import com.kristoff.robomaster_simulator.teams.friendobservations.FriendsObservationPoint;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.StatePoint;
 import com.kristoff.robomaster_simulator.teams.RoboMasters;
-import com.kristoff.robomaster_simulator.utils.Position;
 import com.kristoff.robomaster_simulator.view.renderers.EnvRenderer;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 
@@ -271,7 +269,7 @@ public class LidarPointCloudLayer extends VisualLayer {
             for(int j = 20; j < 469; j+=10){
                 int x = i * 10;
                 int y = j * 10;
-                int cost = Systems.costMapGenerator.getCostMap()[i][j];
+                int cost = RoboMasters.getRoboMaster("Blue1").costMap.getCostMap()[i][j];
                 float colorFloat = 0;
                 if(cost <= 50){
                     colorFloat = (50f - cost) * 0.02f;

@@ -1,7 +1,8 @@
 package com.kristoff.robomaster_simulator.robomasters.Strategy;
 
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.modules.Property;
-import com.kristoff.robomaster_simulator.systems.costmap.CostMapGenerator;
+import com.kristoff.robomaster_simulator.systems.costmap.UniversalCostMap;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.utils.Position;
 
@@ -9,23 +10,11 @@ import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class StrategyAnalyzer_2V2Ranger extends UniversalAnalyzer {
-    public StrategyMaker strategyMaker;
-
-    public SearchNode rootNode;
-    public Queue<SearchNode>                      queue;
-    public SearchNode resultNode;
-    public CopyOnWriteArrayList<SearchNode>                   resultNodes;
-    public CopyOnWriteArrayList<SearchNode>                   pathNodes;
     public Position friendDecisionPosition;
 
-    Position destination = new Position();
 
     public StrategyAnalyzer_2V2Ranger(StrategyMaker strategyMaker){
-        this.strategyMaker = strategyMaker;
-
-        this.queue                      = this.strategyMaker.queue;
-        this.resultNodes                = new CopyOnWriteArrayList<>();
-        this.pathNodes                  = new CopyOnWriteArrayList<>();
+        super(strategyMaker);
     }
 
     @Override
@@ -54,15 +43,17 @@ public class StrategyAnalyzer_2V2Ranger extends UniversalAnalyzer {
                 currentPosition.x,
                 currentPosition.y,
                 -1,
-                CostMapGenerator.getCostConsideringFriendPosition(currentPosition, friendDecisionPosition),
+                getCostMap().getCost(currentPosition.x, currentPosition.y),
                 null);
         this.resultNode = rootNode;
+        Position target = getCostMap().minPositionCost;
+
         queue.offer(rootNode);
         tempVisitedGrid[rootNode.position.x][rootNode.position.y] = true;
 
         while (!this.queue.isEmpty()){
             resultNode = this.queue.poll();
-            if(isAvailable(resultNode.position)) break;
+            if(isAvailable(resultNode.position, target)) break;
             generateChildrenNodes(resultNode, tempVisitedGrid);
         }
 
@@ -82,8 +73,8 @@ public class StrategyAnalyzer_2V2Ranger extends UniversalAnalyzer {
         for(int i=0; i < SearchNode.childrenNodesFindingCost.length; i++){
             int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;
             int y = node.position.y + SearchNode.childrenNodesFindingCost[i][1] ;
-            double currentCost = CostMapGenerator.getCostConsideringFriendPosition(node.position, friendDecisionPosition);
-            double nextCost = CostMapGenerator.getCostConsideringFriendPosition(new Position(x, y), friendDecisionPosition);
+            double currentCost = getCostMap().getCost(node.position.getX(), node.position.getY());
+            double nextCost = getCostMap().getCost(x, y);
             double delta = nextCost - currentCost;
             double stepCost = Math.sqrt(SearchNode.childrenNodesFindingCost[i][2]);
             double totalCost = node.cost + delta + stepCost;
@@ -94,7 +85,7 @@ public class StrategyAnalyzer_2V2Ranger extends UniversalAnalyzer {
                         node.index + 1,
                         totalCost,
                         node);
-                if(nextCost <= currentCost + 25 && nextCost < 400){
+                if(nextCost < 400){
                     node.childrenNodes.add(childNode);
                     queue.offer(childNode);
                 }
@@ -102,9 +93,10 @@ public class StrategyAnalyzer_2V2Ranger extends UniversalAnalyzer {
         }
     }
 
-    public boolean isAvailable(Position centrePosition){
-        return isTheCentreAvailable(centrePosition, friendDecisionPosition)
-                && isTheSurroundingAreaAvailable(centrePosition, friendDecisionPosition);
+    public boolean isAvailable(Position centre, Position target){
+//        return isTheCentreAvailable(centrePosition, friendDecisionPosition)
+//                && isTheSurroundingAreaAvailable(centrePosition, friendDecisionPosition);
+        return centre.x == target.x && centre.y == target.y;
     }
 
     public boolean isTheSurroundingAreaAvailable(Position centrePosition){
@@ -114,7 +106,7 @@ public class StrategyAnalyzer_2V2Ranger extends UniversalAnalyzer {
                 int y = centrePosition.y + j - Property.heightUnit / 2;
                 if(   !(x>=0 && x<849)
                         || !(y>=0 && y<489)
-                        || CostMapGenerator.getCostConsideringFriendPosition(new Position(x, y), friendDecisionPosition)
+                        || getCostMap().getCost(x, y)
                             > 200
                         //|| strategyMaker.getFriendRoboMaster().getPointPosition().distanceTo(x, y) < 50
                 ){

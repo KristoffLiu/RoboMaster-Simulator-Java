@@ -35,7 +35,8 @@ public abstract class RoboMaster {
     public LidarObservation          lidarObservation;          //激光雷达Lidar发生器 Lidar Sensor Simulator
     public Dynamics                  dynamics;                  //动力系统 Dynamic System
     public JudgeModule               judgeModule;               //裁判系统 Global Judge System
-    public StrategyMaker strategyMaker;               //决策器 Decision System
+    public StrategyMaker             strategyMaker;               //决策器 Decision System
+    public CostMap                   costMap;               //决策器 Decision System
 
     public String name;
     public int No;
@@ -70,6 +71,7 @@ public abstract class RoboMaster {
         lidarObservation = new LidarObservation(this);
 
         if(this.team == RoboMasters.teamBlue){
+            costMap = new CostMap(this);
             strategyMaker = new StrategyMaker(this);
         }
 

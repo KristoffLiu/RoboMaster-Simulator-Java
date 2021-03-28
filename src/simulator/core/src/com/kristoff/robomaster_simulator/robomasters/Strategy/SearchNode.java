@@ -1,6 +1,5 @@
 package com.kristoff.robomaster_simulator.robomasters.Strategy;
 
-import com.kristoff.robomaster_simulator.systems.costmap.CostMapGenerator;
 import com.kristoff.robomaster_simulator.utils.Position;
 
 import java.util.LinkedList;

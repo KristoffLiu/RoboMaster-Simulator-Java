@@ -2,10 +2,11 @@ package com.kristoff.robomaster_simulator.robomasters.Strategy;
 
 import com.badlogic.gdx.math.Vector2;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.modules.CostMap;
 import com.kristoff.robomaster_simulator.robomasters.types.Enemy;
 import com.kristoff.robomaster_simulator.robomasters.types.ShanghaiTechMasterIII;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.costmap.CostMapGenerator;
+import com.kristoff.robomaster_simulator.systems.costmap.UniversalCostMap;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointState;
 import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
@@ -18,7 +19,7 @@ import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class StrategyMaker extends LoopThread {
-    ShanghaiTechMasterIII roboMaster;
+    public ShanghaiTechMasterIII roboMaster;
     StrategyAnalyzer strategyAnalyzer;
 
     /***
@@ -39,6 +40,7 @@ public class StrategyMaker extends LoopThread {
     SearchNode friendDecision;
 
     public boolean[][] visitedGrid;
+    public CostMap costMap;
 
     public SearchNode                                       rootNode;
     public SearchNode                                       decisionNode;
@@ -68,6 +70,8 @@ public class StrategyMaker extends LoopThread {
         strategyAnalyzer_2V2Ranger = new StrategyAnalyzer_2V2Ranger(this);
         strategyAnalyzer_2V2MasterObsolete = new StrategyAnalyzer_2V2MasterObsolete(this);
         strategyAnalyzer_2V2RangerObsolete = new StrategyAnalyzer_2V2RangerObsolete(this);
+
+        costMap = roboMaster.costMap;
 
         this.strategyAnalyzer = strategyAnalyzer_2V2MasterObsolete;
         this.delta = 1/5f;
@@ -130,7 +134,6 @@ public class StrategyMaker extends LoopThread {
         if(!this.roboMaster.isRoamer()){
             this.getFriendRoboMaster().strategyMaker.setFriendDecision(new SearchNode(decisionNode.position.x, decisionNode.position.y));
         }
-        System.out.println(decisionNode.position.x + " "  + decisionNode.position.y + " " +CostMapGenerator.getCost(decisionNode.position.x,decisionNode.position.y));
     }
 
     public void setFriendDecision(SearchNode node){
@@ -244,6 +247,10 @@ public class StrategyMaker extends LoopThread {
 
     public boolean isInLockedEnemyViewOnly(int x, int y){
         return EnemiesObservationSimulator.isInLockedEnemyViewOnly(x, y);
+    }
+
+    public Position getMinCostPosition(){
+        return this.roboMaster.costMap.minPositionCost;
     }
 
 

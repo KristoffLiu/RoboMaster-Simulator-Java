@@ -1,7 +1,8 @@
 package com.kristoff.robomaster_simulator.robomasters.Strategy;
 
-import com.kristoff.robomaster_simulator.robomasters.modules.Property;
-import com.kristoff.robomaster_simulator.systems.costmap.CostMapGenerator;
+import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
+import com.kristoff.robomaster_simulator.robomasters.Strategy.gradientdescent.GradientDescentAnalyzer;
+import com.kristoff.robomaster_simulator.systems.costmap.UniversalCostMap;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
 import com.kristoff.robomaster_simulator.utils.Position;
 
@@ -9,22 +10,8 @@ import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class StrategyAnalyzer_2V2AStar extends UniversalAnalyzer {
-    public StrategyMaker strategyMaker;
-
-    public SearchNode rootNode;
-    public Queue<SearchNode>                      queue;
-    public SearchNode resultNode;
-    public CopyOnWriteArrayList<SearchNode>                   resultNodes;
-    public CopyOnWriteArrayList<SearchNode>                   pathNodes;
-
-    Position destination = new Position();
-
     public StrategyAnalyzer_2V2AStar(StrategyMaker strategyMaker){
-        this.strategyMaker = strategyMaker;
-
-        this.queue                      = this.strategyMaker.queue;
-        this.resultNodes                = new CopyOnWriteArrayList<>();
-        this.pathNodes                  = new CopyOnWriteArrayList<>();
+        super(strategyMaker);
     }
 
     @Override
@@ -52,16 +39,18 @@ public class StrategyAnalyzer_2V2AStar extends UniversalAnalyzer {
                 currentPosition.x,
                 currentPosition.y,
                 -1,
-                CostMapGenerator.getCost(currentPosition.x, currentPosition.y),
+                getCostMap().getCost(currentPosition.x, currentPosition.y),
                 null);
         this.resultNode = rootNode;
+        Position target = getCostMap().minPositionCost;
+
         queue.offer(rootNode);
         tempVisitedGrid[rootNode.position.x][rootNode.position.y] = true;
 
         boolean is_find = false;
         while (!this.queue.isEmpty()){
             resultNode = this.queue.poll();
-            if(isAvailable(resultNode.position)) {
+            if(isAvailable(resultNode.position, target)) {
                 is_find = true;
                 break;
             }
@@ -77,9 +66,10 @@ public class StrategyAnalyzer_2V2AStar extends UniversalAnalyzer {
         this.strategyMaker.update(resultNode, tempVisitedGrid, resultNodes, pathNodes);
     }
 
-    public boolean isAvailable(Position centrePosition){
-        return isTheCentreAvailable(centrePosition)
-                && isTheSurroundingAreaAvailable(centrePosition);
+    public boolean isAvailable(Position centre, Position target){
+//        return isTheCentreAvailable(centrePosition)
+//                && isTheSurroundingAreaAvailable(centrePosition);
+        return centre.x == target.x && centre.y == target.y;
     }
 
     //查找并生成子节点，并返回队列对象
@@ -89,14 +79,14 @@ public class StrategyAnalyzer_2V2AStar extends UniversalAnalyzer {
         for(int i=0; i < SearchNode.childrenNodesFindingCost.length; i++){
             int x = node.position.x + SearchNode.childrenNodesFindingCost[i][0] ;
             int y = node.position.y + SearchNode.childrenNodesFindingCost[i][1] ;
-            double currentCost = CostMapGenerator.getCost(node.position.x, node.position.y);
-            double nextCost = CostMapGenerator.getCost(x, y);
+            double currentCost = getCostMap().getCost(node.position.x, node.position.y);
+            double nextCost = getCostMap().getCost(x, y);
             double delta = nextCost - currentCost;
             double stepCost = Math.sqrt(SearchNode.childrenNodesFindingCost[i][2]);
             double totalCost = node.cost + delta + stepCost;
             if(hasThisNodeNotBeenVisited(x, y, visitedGrid) ){
                 SearchNode childNode = new SearchNode(x,y,node.index + 1, totalCost,node);
-                if(nextCost <= currentCost && nextCost < 400){
+                if(nextCost < 400){
                     node.childrenNodes.add(childNode);
                     queue.offer(childNode);
                 }
