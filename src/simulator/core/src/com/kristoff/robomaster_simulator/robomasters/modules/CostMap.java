@@ -53,15 +53,8 @@ public class CostMap extends LoopThread {
                     //cost += costOfBuff(i, j);
                     cost += costToTheCentre(i, j);
                     cost += costToTheMaster(i, j);
-                    if(this.roboMaster.isRoamer()){
-                        float distance = this.strategyMaker.getFriendDecision().position.distanceTo(i, j);
-                        float safeDis = 100;
-                        float coefficient = 0.75f;
-                        cost += 0;
-                        if(distance < safeDis){
-                            cost += (int)(Math.abs(distance - safeDis) * coefficient);
-                        }
-                    }
+                    cost += costOfFriendEntity(i, j);
+                    cost += costOfFriendDecision(i, j);
                     costmap[i][j] = cost;
                     if(minPositionCost.cost > cost) {
                         minPositionCost.cost = cost;
@@ -73,7 +66,7 @@ public class CostMap extends LoopThread {
             this.minPositionCost = minPositionCost;
             System.out.println(this.minPositionCost.x + " " + this.minPositionCost.y + " " + this.minPositionCost.cost);
             long endTime = System.currentTimeMillis();    //获取结束时间
-            //System.out.println("程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
+            System.out.println("程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
         }
     }
 
@@ -92,6 +85,37 @@ public class CostMap extends LoopThread {
             cost = costOfBothEnemyDistance(x, y);
         }
         return cost;
+    }
+
+    public int costOfFriendEntity(int x, int y){
+        if(this.roboMaster.name == "Blue1"){
+            float distanceToFriend = RoboMasters.getRoboMaster("Blue2").getPointPosition().distanceTo(x,y);
+            float cost = 0;
+            if(distanceToFriend <= 65){
+                cost = 999;
+            }
+            return (int) cost;
+        }
+        else{
+            float distanceToFriend = RoboMasters.getRoboMaster("Blue1").getPointPosition().distanceTo(x,y);
+            float cost = 0;
+            if(distanceToFriend <= 65){
+                cost = 999;
+            }
+            return (int) cost;
+        }
+    }
+
+    public int costOfFriendDecision(int x, int y){
+        if(this.roboMaster.isRoamer()){
+            float distanceToFriendDecision = this.strategyMaker.getFriendDecision().position.distanceTo(x, y);
+            float cost = 0;
+            if(distanceToFriendDecision <= 65){
+                cost = 999;
+            }
+            return (int) cost;
+        }
+        return 0;
     }
 
     public int costOfLockedEnemyDistance(int x, int y){
