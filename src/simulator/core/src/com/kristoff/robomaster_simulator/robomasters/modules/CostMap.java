@@ -50,7 +50,7 @@ public class CostMap extends LoopThread {
                     }
                     cost += costOfEnemyObservation(i, j);
                     //cost += costOfBuff(i, j);
-                    cost += costToTheCentre(i, j);
+                    cost += costOfTheCorners(i, j);
                     cost += costToMyself(i, j);
                     cost += costOfFriendEntity(i, j);
                     cost += costOfFriendDecision(i, j);
@@ -107,10 +107,15 @@ public class CostMap extends LoopThread {
 
     public int costOfFriendDecision(int x, int y){
         if(this.roboMaster.isRoamer()){
+            float outerRange = 100;
+            float outerPeek = 45;
             float distanceToFriendDecision = this.strategyMaker.getFriendDecision().position.distanceTo(x, y);
             float cost = 0;
             if(distanceToFriendDecision <= 65){
                 cost = 999;
+            }
+            else if(distanceToFriendDecision <= 65 + outerRange){
+                cost = (outerRange + 65 - distanceToFriendDecision) / outerRange * outerPeek;
             }
             return (int) cost;
         }
@@ -170,16 +175,13 @@ public class CostMap extends LoopThread {
         return (int) cost;
     }
 
-    public int costToTheCentre(int x, int y){
+    public int costOfTheCorners(int x, int y){
         Position centre = new Position(849 / 2 , 489 / 2);
-        int peekVal = 127;
+        int peekVal = 150;
         float distanceToTheCentre = centre.distanceTo(x,y);
         int costOfDistanceToEnemy = 0;
         if(distanceToTheCentre > 350 && distanceToTheCentre <= 470){
             costOfDistanceToEnemy = (int) ((distanceToTheCentre - 350) / (470 - 350) * peekVal);
-        }
-        else if(distanceToTheCentre > 400){
-            costOfDistanceToEnemy = 254;
         }
         return costOfDistanceToEnemy;
     }
@@ -194,6 +196,10 @@ public class CostMap extends LoopThread {
 
     public int costOfBuff(int x, int y){
         return BuffZone.costOfBuff(x, y);
+    }
+
+    public int costOfBulletOrbit(int x, int y){
+        return 0;
     }
 
     public int[][] getCostMap(){
