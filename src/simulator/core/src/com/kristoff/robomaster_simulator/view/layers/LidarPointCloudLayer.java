@@ -50,32 +50,33 @@ public class LidarPointCloudLayer extends VisualLayer {
     public void draw(){
         super.draw();
 
-        shapeRenderer5.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
-        shapeRenderer5.setAutoShapeType(true);
-        shapeRenderer5.begin(ShapeRenderer.ShapeType.Filled);
-        for(int i = 20; i < 829; i+=20){
-            for(int j = 20; j < 469; j+=20){
-                if(RoboMasters.teamBlue.get(0).strategyMaker.getVisitedGrid()[i][j]){
-                    int x = i * 10;
-                    int y = j * 10;
-                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
-                    shapeRenderer5.circle(
-                            x / 1000f,
-                            y / 1000f,
-                            0.15f,10);
-                }
-                if(RoboMasters.teamBlue.get(1).strategyMaker.getVisitedGrid()[i][j]){
-                    int x = i * 10;
-                    int y = j * 10;
-                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
-                    shapeRenderer5.circle(
-                            x / 1000f,
-                            y / 1000f,
-                            0.15f,10);
-                }
-            }
-        }
-        shapeRenderer5.end();
+//        shapeRenderer5.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
+//        shapeRenderer5.setAutoShapeType(true);
+//        shapeRenderer5.begin(ShapeRenderer.ShapeType.Filled);
+//        for(int i = 20; i < 829; i+=20){
+//            for(int j = 20; j < 469; j+=20){
+//                if(RoboMasters.teamBlue.get(0).strategyMaker.getVisitedGrid()[i][j]){
+//                    int x = i * 10;
+//                    int y = j * 10;
+//                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
+//                    shapeRenderer5.circle(
+//                            x / 1000f,
+//                            y / 1000f,
+//                            0.15f,10);
+//                }
+//                if(RoboMasters.teamBlue.get(1).strategyMaker.getVisitedGrid()[i][j]){
+//                    int x = i * 10;
+//                    int y = j * 10;
+//                    shapeRenderer5.setColor(0.3f,0.3f,0.3f,0.1f);
+//                    shapeRenderer5.circle(
+//                            x / 1000f,
+//                            y / 1000f,
+//                            0.15f,10);
+//                }
+//            }
+//        }
+//        shapeRenderer5.end();
+
 
         shapeRenderer2.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer2.setAutoShapeType(true);
@@ -100,9 +101,9 @@ public class LidarPointCloudLayer extends VisualLayer {
 
 
 
-        shapeRenderer3.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
-        shapeRenderer3.setAutoShapeType(true);
-        shapeRenderer3.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRenderer3.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
+//        shapeRenderer3.setAutoShapeType(true);
+//        shapeRenderer3.begin(ShapeRenderer.ShapeType.Filled);
 //        for(int i = 0; i < 849; i += 1){
 //            for(int j = 0; j < 489; j += 1){
 //                switch (Team.getEnemiesObservationGrid()[i][j]){
@@ -131,45 +132,40 @@ public class LidarPointCloudLayer extends VisualLayer {
 //
 //            }
 //        }
-        for(EnemiesObservationPoint position : RoboMasters.teamBlue.enemiesObservationSimulator.getDangerousZone()){
-            int x = position.x;
-            int y = position.y;
-            switch (position.observationStatus){
-                case 1 ->{
-                    shapeRenderer3.setColor(0.45f,0.45f,0.45f,1.0f);
-                }
-                case 2 ->{
-                    shapeRenderer3.setColor(0.6f,0.6f,0.6f,1.0f);
-                }
-                case 3 ->{
-                    shapeRenderer3.setColor(0.6f,0f,0f,1.0f);
-                }
-            }
-            shapeRenderer3.circle(
-                    x / 100f,
-                    y / 100f,
-                    0.025f,10);
-        }
-        for(FriendsObservationPoint position : RoboMasters.teamBlue.friendsObservationSimulator.getDangerousZone()){
-            int x = position.x;
-            int y = position.y;
-            switch (position.observationStatus){
+
+//        for(EnemiesObservationPoint position : RoboMasters.teamBlue.enemiesObservationSimulator.getDangerousZone()){
+//            int x = position.x;
+//            int y = position.y;
+//            switch (position.observationStatus){
 //                case 1 ->{
 //                    shapeRenderer3.setColor(0.45f,0.45f,0.45f,1.0f);
 //                }
 //                case 2 ->{
 //                    shapeRenderer3.setColor(0.6f,0.6f,0.6f,1.0f);
 //                }
-                case 3 ->{
-                    shapeRenderer3.setColor(0f,0.7f,0f,1.0f);
-                }
-            }
-            shapeRenderer3.circle(
-                    (x+5) / 100f,
-                    (y+5) / 100f,
-                    0.025f,10);
-        }
-        shapeRenderer3.end();
+//                case 3 ->{
+//                    shapeRenderer3.setColor(0.6f,0f,0f,1.0f);
+//                }
+//            }
+//            shapeRenderer3.circle(
+//                    x / 100f,
+//                    y / 100f,
+//                    0.025f,10);
+//        }
+//        for(FriendsObservationPoint position : RoboMasters.teamBlue.friendsObservationSimulator.getDangerousZone()){
+//            int x = position.x;
+//            int y = position.y;
+//            switch (position.observationStatus){
+//                case 3 ->{
+//                    shapeRenderer3.setColor(0f,0.7f,0f,1.0f);
+//                }
+//            }
+//            shapeRenderer3.circle(
+//                    (x+5) / 100f,
+//                    (y+5) / 100f,
+//                    0.025f,10);
+//        }
+//        shapeRenderer3.end();
 
         shapeRenderer.setProjectionMatrix(environment.view.getOrthographicCamera().combined);
         shapeRenderer.setAutoShapeType(true);

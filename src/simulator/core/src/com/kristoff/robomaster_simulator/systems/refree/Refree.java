@@ -28,7 +28,7 @@ public class Refree extends LoopThread {
             buffZones.add(new BuffZone(textureMapObject));
         }
         super.start();
-        //test();
+        test();
     }
 
     public void test(){
