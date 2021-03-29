@@ -22,7 +22,7 @@ public class CostMap extends LoopThread {
         this.roboMaster = (ShanghaiTechMasterIII) roboMaster;
         this.costmap = new int[849][489];
         isStep = true;
-        delta = 1/20f;
+        delta = 1/10f;
         minPositionCost = new PositionCost(0,0,0);
     }
 
@@ -49,7 +49,7 @@ public class CostMap extends LoopThread {
                         continue;
                     }
                     cost += costOfEnemyObservation(i, j);
-                    //cost += costOfBuff(i, j);
+                    cost += costOfBuff(i, j);
                     cost += costOfTheCorners(i, j);
                     cost += costToMyself(i, j);
                     cost += costOfFriendEntity(i, j);
@@ -189,13 +189,17 @@ public class CostMap extends LoopThread {
     public int costToMyself(int x, int y){
         Position master = this.roboMaster.getPointPosition();
         int peekVal = 64;
+//        float distanceToEnemy = Enemy.getLockedEnemy().getPointPosition().distanceTo(roboMaster.getPointPosition());
+//        if(distanceToEnemy < 952f / 2.5f){
+//            peekVal = 198;
+//        }
         float distance = master.distanceTo(x,y);
         float maxRange = 952f;
-        return (int)(distance / maxRange * 64);
+        return (int)(distance / maxRange * peekVal);
     }
 
     public int costOfBuff(int x, int y){
-        return BuffZone.costOfBuff(x, y);
+        return BuffZone.costOfBuff(x, y, roboMaster);
     }
 
     public int costOfBulletOrbit(int x, int y){

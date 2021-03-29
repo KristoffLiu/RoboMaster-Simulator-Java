@@ -23,8 +23,10 @@ public class RoboMasters{
 
     public static void init(){
         if(all.size() == 0){
-            teamBlue.add(new ShanghaiTechMasterIII(teamBlue,"Blue1"));
-            teamBlue.add(new ShanghaiTechMasterIII(teamBlue,"Blue2"));
+            Team.blue1 = new ShanghaiTechMasterIII(teamBlue,"Blue1");
+            Team.blue2 = new ShanghaiTechMasterIII(teamBlue,"Blue2");
+            teamBlue.add(Team.blue1);
+            teamBlue.add(Team.blue2);
             Enemy lockedEnemy = new Enemy(teamRed,"Red1");
             lockedEnemy.lock();
             teamRed.add(lockedEnemy);

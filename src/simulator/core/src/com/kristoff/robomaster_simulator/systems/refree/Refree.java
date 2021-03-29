@@ -1,9 +1,9 @@
 package com.kristoff.robomaster_simulator.systems.refree;
 
 import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.kristoff.robomaster_simulator.robomasters.judgement.BuffZones;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.buffs.BuffZone;
+import com.kristoff.robomaster_simulator.teams.Team;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
 import com.kristoff.robomaster_simulator.robomasters.judgement.BuffZoneList;
@@ -14,11 +14,13 @@ import java.util.List;
 import java.util.Random;
 
 public class Refree extends LoopThread {
+    public GameStatus gameStatus;
+    public int remainingTime;
     List<BuffZone> buffZones = new LinkedList<>();
 
     public Refree(){
         isStep = true;
-        delta = 1/30f;
+        delta = 1f;
         buffZones = new LinkedList<>();
     }
 
@@ -27,17 +29,32 @@ public class Refree extends LoopThread {
         for(TextureMapObject textureMapObject : Systems.map.getBuffZones()){
             buffZones.add(new BuffZone(textureMapObject));
         }
-        super.start();
         test();
+        super.start();
     }
 
     public void test(){
         BuffZone.updateBuffZone(0,1, false);
-        BuffZone.updateBuffZone(1,2, false);
-        BuffZone.updateBuffZone(2,3, false);
-        BuffZone.updateBuffZone(3,4, false);
-        BuffZone.updateBuffZone(4,5, false);
-        BuffZone.updateBuffZone(5,6, false);
+        BuffZone.updateBuffZone(1,5, false);
+        BuffZone.updateBuffZone(2,4, false);
+        BuffZone.updateBuffZone(3,2, false);
+        BuffZone.updateBuffZone(4,6, false);
+        BuffZone.updateBuffZone(5,3, false);
+    }
+
+    public void updateGameStatus(int gameStatus){
+        switch (gameStatus){
+            case 0 -> this.gameStatus = GameStatus.READY;
+            case 1 -> this.gameStatus = GameStatus.PREPARATION;
+            case 2 -> this.gameStatus = GameStatus.INITIALIZE;
+            case 3 -> this.gameStatus = GameStatus.FIVE_SEC_CD;
+            case 4 -> this.gameStatus = GameStatus.GAME;
+            case 5 -> this.gameStatus = GameStatus.END;
+        }
+    }
+
+    public void updateRemainTime(int remainingTime){
+        this.remainingTime = remainingTime;
     }
 
     public List<BuffZone> getBuffZones(){
@@ -47,39 +64,6 @@ public class Refree extends LoopThread {
     @Override
     public void step(){
 
-    }
-
-    public void initializeBuffZones(BuffZoneList oldZones){
-        List<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        Random random = new Random();
-        int n1 = random.nextInt(list.size());
-        for (com.kristoff.robomaster_simulator.robomasters.judgement.BuffZone.BuffZone zone : oldZones){
-            if (zone.getZoneID() == n1){
-                zone.setBuffCase("BleuAddBullet");
-            }else if (zone.getZoneID() == n1 + 3){
-                zone.setBuffCase("RedAddBullet");
-            }
-        }
-        list.remove(n1);
-
-        int n2 = random.nextInt(list.size());
-        list.remove(n2);
-        int n3 = list.get(0);
-        list.remove(n3);
-        oldZones.forEach(zone->{
-            if (zone.getZoneID() == n2){
-                zone.setBuffCase("BleuHeal");
-            }else if (zone.getZoneID() == n3){
-                zone.setBuffCase("ChassisLocked");
-            }else if (zone.getZoneID() == n2 + 3){
-                zone.setBuffCase("RedHeal");
-            }else if (zone.getZoneID() == n3 + 3){
-                zone.setBuffCase("NoShooting");
-            }
-        });
     }
 
     public boolean isRoboMasterAlive(RoboMaster Robomaster){

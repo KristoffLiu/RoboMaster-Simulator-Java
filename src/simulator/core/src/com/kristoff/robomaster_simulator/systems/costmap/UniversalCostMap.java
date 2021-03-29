@@ -158,7 +158,8 @@ public class UniversalCostMap extends LoopThread {
     }
 
     public int costOfBuff(int x, int y){
-        return BuffZone.costOfBuff(x, y);
+        //return BuffZone.costOfBuff(x, y);
+        return 0;
     }
 
     public int[][] getCostMap(){
