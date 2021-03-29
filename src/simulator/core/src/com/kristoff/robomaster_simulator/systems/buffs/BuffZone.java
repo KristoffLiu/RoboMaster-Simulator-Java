@@ -145,11 +145,14 @@ public class BuffZone {
                             cost = 0;
                         }
                     }
-                    case RedBulletSupply  -> cost = 999;
-                    case BlueHPRecovery   -> cost = -100;
-                    case BlueBulletSupply -> cost = -100;
-                    case DisableShooting  -> cost = 999;
-                    case DisableMovement  -> cost = 999;
+                    case RedBulletSupply  ->
+                            cost = buffZone.isActive ? 0 : 999;
+                    case BlueHPRecovery   ->
+                            cost = buffZone.isActive ? 0 : -100;
+                    case BlueBulletSupply ->
+                            cost = buffZone.isActive ? 0 : -100;
+                    case DisableShooting  -> cost = buffZone.isActive ? 0 : 999;
+                    case DisableMovement  -> cost = buffZone.isActive ? 0 : 999;
                 }
                 return cost;
             }
