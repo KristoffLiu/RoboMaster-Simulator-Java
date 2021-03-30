@@ -122,37 +122,28 @@ public class BuffZone {
         int cost = 0;
 
         for(BuffZone buffZone : Systems.refree.getBuffZones()){
-            if(buffZone.buff == Buff.BlueHPRecovery && !isHPRecoveryNeeded(roboMaster)){
+            if(buffZone.isActive) continue;
+            if(buffZone.buff == Buff.BlueHPRecovery && !isHPRecoveryNeeded(roboMaster))
                 continue;
-            }
-            else if(buffZone.buff == Buff.BlueBulletSupply && !isBulletSupplyNeeded(roboMaster)){
+            else if(buffZone.buff == Buff.BlueBulletSupply && !isBulletSupplyNeeded(roboMaster))
                 continue;
-            }
             if(buffZone.isInBuffZone(x, y)){
                 switch (buffZone.buff){
                     case NotActivated     -> cost = 0;
                     case RedHPRecovery    -> {
-                        if(!buffZone.isActive){
-                            if(roboMaster == Team.blue2 &&
-                                    Enemy.getLockedEnemy().getHealth() >= 1900 &&
-                                    Enemy.getUnlockedEnemy().getHealth() >= 1900)
-                                cost = -100;
-                            else{
-                                cost = 999;
-                            }
-                        }
-                        else {
-                            cost = 0;
+                        if(roboMaster == Team.blue2 &&
+                                (Enemy.getLockedEnemy().getHealth() >= 1900 || !Enemy.getLockedEnemy().isAlive) &&
+                                (Enemy.getUnlockedEnemy().getHealth() >= 1900 || !Enemy.getUnlockedEnemy().isAlive))
+                            cost = -197;
+                        else{
+                            cost = 999;
                         }
                     }
-                    case RedBulletSupply  ->
-                            cost = buffZone.isActive ? 0 : 999;
-                    case BlueHPRecovery   ->
-                            cost = buffZone.isActive ? 0 : -100;
-                    case BlueBulletSupply ->
-                            cost = buffZone.isActive ? 0 : -100;
-                    case DisableShooting  -> cost = buffZone.isActive ? 0 : 999;
-                    case DisableMovement  -> cost = buffZone.isActive ? 0 : 999;
+                    case RedBulletSupply  -> cost = 999;
+                    case BlueHPRecovery   -> cost = -150;
+                    case BlueBulletSupply -> cost = -150;
+                    case DisableShooting  -> cost = 999;
+                    case DisableMovement  -> cost = 999;
                 }
                 return cost;
             }
@@ -164,10 +155,17 @@ public class BuffZone {
                         case NotActivated     -> cost += 0;
                         case RedHPRecovery    -> cost += 0;
                         case RedBulletSupply  -> cost += 0;
-                        case BlueHPRecovery   -> cost += (maxDis - distance) / maxDis * -100;
-                        case BlueBulletSupply -> cost += (maxDis - distance) / maxDis * -100;
+                        case BlueHPRecovery   -> cost += (maxDis - distance) / maxDis * -127;
+                        case BlueBulletSupply -> cost += (maxDis - distance) / maxDis * -127;
                         case DisableShooting  -> cost += 0;
                         case DisableMovement  -> cost += 0;
+                    }
+                }
+
+                if(Systems.refree.buffRoundIndex == 0 && roboMaster == Team.blue2 && buffZone.buff == Buff.RedBulletSupply){
+                    float distance2 = new Position(x, y).distanceTo(500, 70);
+                    if(distance2 <= 10){
+                        cost += - 150;
                     }
                 }
             }
@@ -180,6 +178,7 @@ public class BuffZone {
     }
 
     public static boolean isHPRecoveryNeeded(ShanghaiTechMasterIII roboMaster){
+        if(isHPRecoveryNeeded == 0) return false;
         if(roboMaster == Team.blue1){
             return isHPRecoveryNeeded == 1;
         }
@@ -189,17 +188,29 @@ public class BuffZone {
     }
 
     public static void setHPRecoveryNeeded(){
-        float distanceToBlue1 = getBlueHPRecovery().centrePosition.distanceTo(Team.blue1.getPointPosition());
-        float distanceToBlue2 = getBlueHPRecovery().centrePosition.distanceTo(Team.blue2.getPointPosition());
-        if(distanceToBlue1 > distanceToBlue2){
-            isHPRecoveryNeeded = 1;
+        if(BlueHPRecovery == null){
+            isHPRecoveryNeeded = 0;
         }
-        else {
-            isHPRecoveryNeeded = 2;
+        if (Team.blue1.getHealth() > 1800 && Team.blue2.getHealth() > 1800) {
+            isHPRecoveryNeeded = 0;
+        }
+        else if(Team.blue1.getHealth() > 1000 && Team.blue2.getHealth() > 1000){
+            isHPRecoveryNeeded = 0;
+        }
+        else{
+            float distanceToBlue1 = BlueHPRecovery.centrePosition.distanceTo(Team.blue1.getPointPosition());
+            float distanceToBlue2 = BlueHPRecovery.centrePosition.distanceTo(Team.blue2.getPointPosition());
+            if(distanceToBlue1 > distanceToBlue2){
+                isHPRecoveryNeeded = 2;
+            }
+            else {
+                isHPRecoveryNeeded = 1;
+            }
         }
     }
 
     public static boolean isBulletSupplyNeeded(ShanghaiTechMasterIII roboMaster){
+        if(isBulletSupplyNeeded == 0) return false;
         if(roboMaster == Team.blue1){
             return isBulletSupplyNeeded == 1;
         }
@@ -209,13 +220,24 @@ public class BuffZone {
     }
 
     public static void setBulletSupplyNeeded(){
-        float distanceToBlue1 = getBlueBulletSupply().centrePosition.distanceTo(Team.blue1.getPointPosition());
-        float distanceToBlue2 = getBlueBulletSupply().centrePosition.distanceTo(Team.blue2.getPointPosition());
+        if(BlueBulletSupply == null){
+            return;
+        }
+//        if (Team.blue1.getHealth() < 1000 && Team.blue2.getHealth() < 1000) {
+//            isHPRecoveryNeeded = 0;
+//            return;
+//        }
+//        else if(Team.blue1.getHealth() < 1800 && Team.blue2.getHealth() < 1800){
+//            isHPRecoveryNeeded = 0;
+//            return;
+//        }
+        float distanceToBlue1 = BlueBulletSupply.centrePosition.distanceTo(Team.blue1.getPointPosition());
+        float distanceToBlue2 = BlueBulletSupply.centrePosition.distanceTo(Team.blue2.getPointPosition());
         if(distanceToBlue1 > distanceToBlue2){
-            isBulletSupplyNeeded = 1;
+            isBulletSupplyNeeded = 2;
         }
         else {
-            isBulletSupplyNeeded = 2;
+            isBulletSupplyNeeded = 1;
         }
     }
 
@@ -245,7 +267,7 @@ public class BuffZone {
                     }
                     case 4 -> {
                         buffZone.updateBuff(Buff.BlueBulletSupply);
-                        BlueHPRecovery = buffZone;
+                        BlueBulletSupply = buffZone;
                     }
                     case 5 -> {
                         buffZone.updateBuff(Buff.DisableShooting);

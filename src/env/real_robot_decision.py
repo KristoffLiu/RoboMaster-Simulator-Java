@@ -52,6 +52,7 @@ class Brain:
             return self.x - other.x, self.y - other.y
 
     def __init__(self, control_rate):
+        self.is_game_start = False
         self.cnt = 1
         self._control_rate = control_rate
         self.Red1 = entrypoint.getRoboMaster("Red1") 
@@ -124,6 +125,13 @@ class Brain:
     def gameState(self, data):
         print(data.game_status)
         print(data.remaining_time)
+
+        if (data.game_status == roborts_msgs.msg.GAME):
+            self.is_game_start = True
+        
+        entrypoint.updateRemainingTime(data.remaining_time)
+        entrypoint.updateGameStatus(data.game_status)
+        
         # uint8 READY = 0
         # uint8 PREPARATION = 1
         # uint8 INITIALIZE = 2
@@ -139,8 +147,6 @@ class Brain:
         # print("3, " + str(data.zone[3]))
         # print("4, " + str(data.zone[4]))
         # print("5, " + str(data.zone[5]))
-
-
 
         # for i, d in enumerate(data.zone):
         #     print(str(i) + " " + str(d.type) + " " + str(d.active))
@@ -274,8 +280,9 @@ if __name__ == '__main__':
         spin_thread = threading.Thread(target=call_rosspin).start()
 
         while not rospy.core.is_shutdown():
-            brain.get_next_position1()
-            brain.get_next_position2()
+            if (brain.is_game_start == True):
+                brain.get_next_position1()
+                brain.get_next_position2()
             rate.sleep()
 
     except rospy.ROSInterruptException:

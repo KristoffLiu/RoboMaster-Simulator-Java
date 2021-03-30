@@ -10,8 +10,8 @@ import com.kristoff.robomaster_simulator.utils.Position;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class StrategyAnalyzer_2V2AStar extends UniversalAnalyzer {
-    public StrategyAnalyzer_2V2AStar(StrategyMaker strategyMaker){
+public class StrategyAnalyzer_2V2Master extends UniversalAnalyzer {
+    public StrategyAnalyzer_2V2Master(StrategyMaker strategyMaker){
         super(strategyMaker);
     }
 

@@ -70,7 +70,9 @@ public class InfoAnalyzer extends LoopThread {
         switch (counterState){
             case OneVSOne, TwoVSOne -> {
                 for(RoboMaster roboMaster : this.enemyTeam){
-                    ((Enemy)roboMaster).lock();
+                    if(roboMaster.isAlive){
+                        ((Enemy)roboMaster).lock();
+                    }
                 }
             }
             case OneVSTwo -> {

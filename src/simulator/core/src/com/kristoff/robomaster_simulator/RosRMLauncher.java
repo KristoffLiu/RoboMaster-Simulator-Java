@@ -68,4 +68,12 @@ public class RosRMLauncher {
         return Enemy.getLockedEnemy();
     }
 
+    public void updateRemainingTime(int remainTime){
+        Systems.refree.remainingTime = remainTime;
+    }
+
+    public void updateGameStatus(int gameStatus){
+        Systems.refree.updateGameStatus(gameStatus);
+    }
+
 }

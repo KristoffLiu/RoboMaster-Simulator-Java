@@ -16,6 +16,7 @@ import java.util.Random;
 public class Refree extends LoopThread {
     public GameStatus gameStatus;
     public int remainingTime;
+    public int buffRoundIndex = 0;
     List<BuffZone> buffZones = new LinkedList<>();
 
     public Refree(){
@@ -55,6 +56,8 @@ public class Refree extends LoopThread {
 
     public void updateRemainTime(int remainingTime){
         this.remainingTime = remainingTime;
+        int timePassed = 300 - this.remainingTime;
+        buffRoundIndex = timePassed / 60;
     }
 
     public List<BuffZone> getBuffZones(){
@@ -63,7 +66,8 @@ public class Refree extends LoopThread {
 
     @Override
     public void step(){
-
+        BuffZone.setHPRecoveryNeeded();
+        BuffZone.setBulletSupplyNeeded();
     }
 
     public boolean isRoboMasterAlive(RoboMaster Robomaster){

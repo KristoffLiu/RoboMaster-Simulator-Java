@@ -63,25 +63,30 @@ public class CostMap extends LoopThread {
                 }
             }
             this.minPositionCost = minPositionCost;
-            System.out.println(this.minPositionCost.x + " " + this.minPositionCost.y + " " + this.minPositionCost.cost);
+            //System.out.println(this.minPositionCost.x + " " + this.minPositionCost.y + " " + this.minPositionCost.cost);
             long endTime = System.currentTimeMillis();    //获取结束时间
-            System.out.println("程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
+            //System.out.println("程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
         }
     }
 
     public int costOfEnemyObservation(int x, int y){
         int cost = 0;
 
-        if(EnemiesObservationSimulator.isInLockedEnemyViewOnly(x, y)) {
+        if(Enemy.getUnlockedEnemy().isAlive){
+            if(EnemiesObservationSimulator.isInLockedEnemyViewOnly(x, y)) {
+                cost = costOfLockedEnemyDistance(x, y);
+            }
+            else if(EnemiesObservationSimulator.isInUnlockedEnemyViewOnly(x, y)) {
+                cost = costOfUnlockedEnemyDistance(x, y);
+            }
+            else if(EnemiesObservationSimulator.isOutOfBothEnemiesView(x, y))
+                cost = 0;
+            else if(EnemiesObservationSimulator.isInBothEnemiesView(x, y)) {
+                cost = costOfBothEnemyDistance(x, y);
+            }
+        }
+        else {
             cost = costOfLockedEnemyDistance(x, y);
-        }
-        else if(EnemiesObservationSimulator.isInUnlockedEnemyViewOnly(x, y)) {
-            cost = costOfUnlockedEnemyDistance(x, y);
-        }
-        else if(EnemiesObservationSimulator.isOutOfBothEnemiesView(x, y))
-            cost = 0;
-        else if(EnemiesObservationSimulator.isInBothEnemiesView(x, y)) {
-            cost = costOfBothEnemyDistance(x, y);
         }
         return cost;
     }
@@ -161,6 +166,9 @@ public class CostMap extends LoopThread {
     }
 
     public int costOfBothEnemyDistance(int x, int y){
+        if(!Enemy.getUnlockedEnemy().isAlive){
+            return 0;
+        }
         int maxRange = EnemiesObservationSimulator.getRadius();
         int peekVal = 128;
         float distanceToEnemy = Enemy.getLockedEnemy().getPointPosition().distanceTo(x,y);
@@ -188,7 +196,7 @@ public class CostMap extends LoopThread {
 
     public int costToMyself(int x, int y){
         Position master = this.roboMaster.getPointPosition();
-        int peekVal = 64;
+        int peekVal = 88;
 //        float distanceToEnemy = Enemy.getLockedEnemy().getPointPosition().distanceTo(roboMaster.getPointPosition());
 //        if(distanceToEnemy < 952f / 2.5f){
 //            peekVal = 198;

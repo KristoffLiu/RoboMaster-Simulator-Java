@@ -14,7 +14,7 @@ public class ShanghaiTechMasterIII extends RoboMaster {
     }
 
     public boolean isRoamer(){
-        return isRoamer;
+        return isRoamer && Team.blue1.isAlive;
     }
     public void setAsRoamer(){
          isRoamer = true;

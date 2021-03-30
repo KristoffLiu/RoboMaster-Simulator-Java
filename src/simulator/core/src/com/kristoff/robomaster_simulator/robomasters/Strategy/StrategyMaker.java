@@ -6,7 +6,6 @@ import com.kristoff.robomaster_simulator.robomasters.modules.CostMap;
 import com.kristoff.robomaster_simulator.robomasters.types.Enemy;
 import com.kristoff.robomaster_simulator.robomasters.types.ShanghaiTechMasterIII;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.systems.costmap.UniversalCostMap;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointState;
 import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.teams.enemyobservations.EnemiesObservationSimulator;
@@ -32,7 +31,7 @@ public class StrategyMaker extends LoopThread {
     //int counterState = -1;
     Position decisionMade;
 
-    StrategyAnalyzer_2V2AStar strategyAnalyzer_2V2AStar;
+    StrategyAnalyzer_2V2Master strategyAnalyzer_2V2Master;
     StrategyAnalyzer_2V2Ranger strategyAnalyzer_2V2Ranger;
     StrategyAnalyzer_2V2MasterObsolete strategyAnalyzer_2V2MasterObsolete;
     StrategyAnalyzer_2V2RangerObsolete strategyAnalyzer_2V2RangerObsolete;
@@ -66,7 +65,7 @@ public class StrategyMaker extends LoopThread {
         resultNodes            = new CopyOnWriteArrayList<SearchNode>();
         pathNodes              = new CopyOnWriteArrayList<SearchNode>();
 
-        strategyAnalyzer_2V2AStar = new StrategyAnalyzer_2V2AStar(this);
+        strategyAnalyzer_2V2Master = new StrategyAnalyzer_2V2Master(this);
         strategyAnalyzer_2V2Ranger = new StrategyAnalyzer_2V2Ranger(this);
         strategyAnalyzer_2V2MasterObsolete = new StrategyAnalyzer_2V2MasterObsolete(this);
         strategyAnalyzer_2V2RangerObsolete = new StrategyAnalyzer_2V2RangerObsolete(this);
@@ -92,10 +91,10 @@ public class StrategyMaker extends LoopThread {
 
     public void switchAnalyzer(){
         switch (counterState){
-            case OneVSOne -> strategyAnalyzer = strategyAnalyzer_2V2MasterObsolete;
-            case OneVSTwo -> strategyAnalyzer = strategyAnalyzer_2V2MasterObsolete;
-            case TwoVSOne -> strategyAnalyzer = strategyAnalyzer_2V2MasterObsolete;
-            case TwoVSTwo -> strategyAnalyzer = this.roboMaster.isRoamer() ? strategyAnalyzer_2V2Ranger : strategyAnalyzer_2V2AStar;
+            case OneVSOne -> strategyAnalyzer = strategyAnalyzer_2V2Master;
+            case OneVSTwo -> strategyAnalyzer = strategyAnalyzer_2V2Master;
+            case TwoVSOne -> strategyAnalyzer = this.roboMaster.isRoamer() ? strategyAnalyzer_2V2Ranger : strategyAnalyzer_2V2Master;
+            case TwoVSTwo -> strategyAnalyzer = this.roboMaster.isRoamer() ? strategyAnalyzer_2V2Ranger : strategyAnalyzer_2V2Master;
         }
     }
 
