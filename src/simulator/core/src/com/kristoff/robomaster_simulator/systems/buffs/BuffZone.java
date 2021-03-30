@@ -162,12 +162,12 @@ public class BuffZone {
                     }
                 }
 
-                if(Systems.refree.buffRoundIndex == 0 && roboMaster == Team.blue2 && buffZone.buff == Buff.RedBulletSupply){
-                    float distance2 = new Position(x, y).distanceTo(500, 70);
-                    if(distance2 <= 10){
-                        cost += - 150;
-                    }
-                }
+//                if(Systems.refree.buffRoundIndex == 0 && roboMaster == Team.blue2 && buffZone.buff == Buff.RedBulletSupply){
+//                    float distance2 = new Position(x, y).distanceTo(500, 70);
+//                    if(distance2 <= 10){
+//                        cost += - 255;
+//                    }
+//                }
             }
         }
         return cost;

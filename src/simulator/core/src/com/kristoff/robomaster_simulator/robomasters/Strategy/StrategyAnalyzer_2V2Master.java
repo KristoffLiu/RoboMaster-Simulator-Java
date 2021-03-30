@@ -5,6 +5,7 @@ import com.kristoff.robomaster_simulator.robomasters.Strategy.gradientdescent.Gr
 import com.kristoff.robomaster_simulator.systems.costmap.PositionCost;
 import com.kristoff.robomaster_simulator.systems.costmap.UniversalCostMap;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointSimulator;
+import com.kristoff.robomaster_simulator.teams.Team;
 import com.kristoff.robomaster_simulator.utils.Position;
 
 import java.util.Queue;
@@ -13,6 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class StrategyAnalyzer_2V2Master extends UniversalAnalyzer {
     public StrategyAnalyzer_2V2Master(StrategyMaker strategyMaker){
         super(strategyMaker);
+        resultNode = new SearchNode();
     }
 
     @Override
@@ -36,26 +38,40 @@ public class StrategyAnalyzer_2V2Master extends UniversalAnalyzer {
         //boolean[][] tempVisitedGrid = new boolean[849][489];
         boolean[][] tempVisitedGrid = strategyMaker.visitedGrid;
 
-        this.rootNode = new SearchNode(
-                currentPosition.x,
-                currentPosition.y,
-                -1,
-                getCostMap().getCost(currentPosition.x, currentPosition.y),
-                null);
-        this.resultNode = rootNode;
         PositionCost target = getCostMap().minPositionCost;
+        int targetCost = target.cost;
+        resultNode = new SearchNode();
 
-        queue.offer(rootNode);
-        tempVisitedGrid[rootNode.position.x][rootNode.position.y] = true;
 
         boolean is_find = false;
-        while (!this.queue.isEmpty()){
-            resultNode = this.queue.poll();
-            if(isAvailable(resultNode.position, target)) {
-                is_find = true;
-                break;
+        while(!is_find){
+            queue.clear();
+            tempVisitedGrid = new boolean[849][489];
+
+            this.rootNode = new SearchNode(
+                    currentPosition.x,
+                    currentPosition.y,
+                    -1,
+                    getCostMap().getCost(currentPosition.x, currentPosition.y),
+                    null);
+            this.resultNode = rootNode;
+
+            queue.offer(rootNode);
+            tempVisitedGrid[rootNode.position.x][rootNode.position.y] = true;
+
+            while (!this.queue.isEmpty()){
+                resultNode = this.queue.poll();
+                if(isAvailable(resultNode.position, targetCost, target)) {
+                    break;
+                }
+                generateChildrenNodes(resultNode, tempVisitedGrid);
             }
-            generateChildrenNodes(resultNode, tempVisitedGrid);
+            if(Math.abs(targetCost - getCostMap().getCost(resultNode.position.getX(),resultNode.position.getY())) >= 30){
+                targetCost += 5;
+            }
+            else {
+                is_find = true;
+            }
         }
 
         SearchNode node = resultNode;
@@ -64,13 +80,15 @@ public class StrategyAnalyzer_2V2Master extends UniversalAnalyzer {
             pathNodes.add(node);
             node = node.parentNode;
         }
+//        if(roboMaster == Team.blue2) {
+//            System.out.println(resultNode.position.getX() + " " + resultNode.position.getY());
+//            System.out.println(targetCost);
+//        }
         this.strategyMaker.update(resultNode, tempVisitedGrid, resultNodes, pathNodes);
     }
 
-    public boolean isAvailable(Position centre, PositionCost target){
-//        return isTheCentreAvailable(centrePosition)
-//                && isTheSurroundingAreaAvailable(centrePosition);
-        return Math.abs(getCostMap().getCost(centre.getX(), centre.getY()) - target.cost) < 30 ||
+    public boolean isAvailable(Position centre, int targetCost, Position target){
+        return Math.abs(getCostMap().getCost(centre.getX(), centre.getY()) - targetCost) < 30 ||
                 centre.x == target.x && centre.y == target.y;
     }
 

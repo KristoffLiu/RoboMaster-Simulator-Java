@@ -19,6 +19,7 @@ public class SearchNode {
 
     public SearchNode(){
         this.position = new Position(0, 0);
+        cost = -999;
     }
 
     public SearchNode(int x, int y){

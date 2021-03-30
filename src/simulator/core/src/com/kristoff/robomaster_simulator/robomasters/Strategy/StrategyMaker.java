@@ -90,12 +90,13 @@ public class StrategyMaker extends LoopThread {
     }
 
     public void switchAnalyzer(){
-        switch (counterState){
-            case OneVSOne -> strategyAnalyzer = strategyAnalyzer_2V2Master;
-            case OneVSTwo -> strategyAnalyzer = strategyAnalyzer_2V2Master;
-            case TwoVSOne -> strategyAnalyzer = this.roboMaster.isRoamer() ? strategyAnalyzer_2V2Ranger : strategyAnalyzer_2V2Master;
-            case TwoVSTwo -> strategyAnalyzer = this.roboMaster.isRoamer() ? strategyAnalyzer_2V2Ranger : strategyAnalyzer_2V2Master;
-        }
+        strategyAnalyzer = strategyAnalyzer_2V2Master;
+//        switch (counterState){
+//            case OneVSOne -> strategyAnalyzer = strategyAnalyzer_2V2Master;
+//            case OneVSTwo -> strategyAnalyzer = strategyAnalyzer_2V2Master;
+//            case TwoVSOne -> strategyAnalyzer = this.roboMaster.isRoamer() ? strategyAnalyzer_2V2Ranger : strategyAnalyzer_2V2Master;
+//            case TwoVSTwo -> strategyAnalyzer = this.roboMaster.isRoamer() ? strategyAnalyzer_2V2Ranger : strategyAnalyzer_2V2Master;
+//        }
     }
 
     public void update(SearchNode resultNode,
