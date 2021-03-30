@@ -33,7 +33,6 @@ import matplotlib.pyplot as plt
 import time
 import numpy as np
 import _thread
-import tf2_ros
 
 
 class Brain:
@@ -128,9 +127,6 @@ class Brain:
 
         if (data.game_status == roborts_msgs.msg.GAME):
             self.is_game_start = True
-        
-        entrypoint.updateRemainingTime(data.remaining_time)
-        entrypoint.updateGameStatus(data.game_status)
         
         # uint8 READY = 0
         # uint8 PREPARATION = 1
