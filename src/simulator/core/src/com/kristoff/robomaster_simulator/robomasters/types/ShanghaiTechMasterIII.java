@@ -1,7 +1,6 @@
 package com.kristoff.robomaster_simulator.robomasters.types;
 
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.robomasters.modules.CostMap;
 import com.kristoff.robomaster_simulator.teams.Team;
 
 public class ShanghaiTechMasterIII extends RoboMaster {
@@ -14,7 +13,7 @@ public class ShanghaiTechMasterIII extends RoboMaster {
     }
 
     public boolean isRoamer(){
-        return isRoamer && Team.blue1.isAlive;
+        return isRoamer && Team.friend1.isAlive;
     }
     public void setAsRoamer(){
          isRoamer = true;

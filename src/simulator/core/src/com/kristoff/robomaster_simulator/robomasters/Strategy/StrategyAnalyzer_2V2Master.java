@@ -106,7 +106,7 @@ public class StrategyAnalyzer_2V2Master extends UniversalAnalyzer {
             double totalCost = node.cost + delta + stepCost;
             if(hasThisNodeNotBeenVisited(x, y, visitedGrid) ){
                 SearchNode childNode = new SearchNode(x,y,node.index + 1, totalCost,node);
-                if(nextCost < 400){
+                if(currentCost > 400 || nextCost < 400){
                     node.childrenNodes.add(childNode);
                     queue.offer(childNode);
                 }

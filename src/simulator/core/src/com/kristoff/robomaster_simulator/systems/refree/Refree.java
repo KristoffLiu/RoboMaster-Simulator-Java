@@ -3,15 +3,11 @@ package com.kristoff.robomaster_simulator.systems.refree;
 import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.kristoff.robomaster_simulator.systems.Systems;
 import com.kristoff.robomaster_simulator.systems.buffs.BuffZone;
-import com.kristoff.robomaster_simulator.teams.Team;
 import com.kristoff.robomaster_simulator.utils.LoopThread;
 import com.kristoff.robomaster_simulator.robomasters.RoboMaster;
-import com.kristoff.robomaster_simulator.robomasters.judgement.BuffZoneList;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 public class Refree extends LoopThread {
     public GameStatus gameStatus;
@@ -30,18 +26,10 @@ public class Refree extends LoopThread {
         for(TextureMapObject textureMapObject : Systems.map.getBuffZones()){
             buffZones.add(new BuffZone(textureMapObject));
         }
-        test();
         super.start();
     }
 
-    public void test(){
-        BuffZone.updateBuffZone(0,1, false);
-        BuffZone.updateBuffZone(1,5, false);
-        BuffZone.updateBuffZone(2,4, false);
-        BuffZone.updateBuffZone(3,2, false);
-        BuffZone.updateBuffZone(4,6, false);
-        BuffZone.updateBuffZone(5,3, false);
-    }
+
 
     public void updateGameStatus(int gameStatus){
         switch (gameStatus){
@@ -68,6 +56,7 @@ public class Refree extends LoopThread {
     public void step(){
         BuffZone.setHPRecoveryNeeded();
         BuffZone.setBulletSupplyNeeded();
+        BuffZone.setEnemyHPRecoveryNeeded();
     }
 
     public boolean isRoboMasterAlive(RoboMaster Robomaster){

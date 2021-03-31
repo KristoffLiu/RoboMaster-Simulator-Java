@@ -8,8 +8,9 @@ import com.kristoff.robomaster_simulator.teams.friendobservations.FriendsObserva
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Team extends CopyOnWriteArrayList<RoboMaster> {
-    public static ShanghaiTechMasterIII blue1;
-    public static ShanghaiTechMasterIII blue2;
+    public static boolean isOurTeamBlue = true;
+    public static ShanghaiTechMasterIII friend1;
+    public static ShanghaiTechMasterIII friend2;
 
     String name;
     public FriendsObservationSimulator friendsObservationSimulator; //敌军视野模拟

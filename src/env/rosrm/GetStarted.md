@@ -78,6 +78,3 @@ blue1 = entrypoint.getRoboMaster("Blue1")
   - parameter
     - position : Position -> the position of another point
   - return : float -> the distance from the point to another point.
-
-
-

@@ -25,6 +25,7 @@ public class BuffZone {
 
     public static int isHPRecoveryNeeded = 0;
     public static int isBulletSupplyNeeded = 0;
+    public static int isRedHPRecoveryNecessary = 0;
 
     static BuffZone NotActivated    ;
     static BuffZone RedHPRecovery   ;
@@ -57,27 +58,29 @@ public class BuffZone {
                 UIElement.HorizontalAlignment.LEFT_ALIGNMENT, UIElement.VerticalAlignment.BOTTOM_ALIGNMENT);
     }
 
-    public void updateBuff(Buff buff){
-        this.buff = buff;
-        String pathHeader = "Systems/BuffZones/";
-        switch (buff){
-            case NotActivated      -> pathHeader += "NotActivated.png";
-            case RedHPRecovery     -> pathHeader += "HealingRed.png";
-            case DisableShooting   -> pathHeader += "ShootingForbidden.png";
-            case BlueBulletSupply  -> pathHeader += "BulletSupplyBlue.png";
-            case BlueHPRecovery    -> pathHeader += "HealingBlue.png";
-            case DisableMovement   -> pathHeader += "MovementForbidden.png";
-            case RedBulletSupply   -> pathHeader += "BulletSupplyRed.png";
+    public static void setEnemyHPRecoveryNeeded() {
+        if(RedHPRecovery == null){
+            isRedHPRecoveryNecessary = 0;
         }
-        String finalPathHeader = pathHeader;
-        Gdx.app.postRunnable(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                buffImage.setTextureRegion(finalPathHeader);
+        else if(!RedHPRecovery.isActive){
+            if((Enemy.getLockedEnemy().getHealth() >= 1900 || !Enemy.getLockedEnemy().isAlive) &&
+                    (Enemy.getUnlockedEnemy().getHealth() >= 1900 || !Enemy.getUnlockedEnemy().isAlive)){
+                isRedHPRecoveryNecessary = 2;
             }
-        });
+        }
+        else {
+            isHPRecoveryNeeded = 0;
+        }
+    }
+
+    public static boolean isEnemyHPRecoveryNeeded(ShanghaiTechMasterIII roboMaster){
+        if(isRedHPRecoveryNecessary == 0) return false;
+        if(roboMaster.isRoamer()){
+            return isRedHPRecoveryNecessary == 2;
+        }
+        else {
+            return isRedHPRecoveryNecessary == 1;
+        }
     }
 
     public String getName(){
@@ -109,12 +112,14 @@ public class BuffZone {
         return false;
     }
 
-    public boolean isInBuffZone(int x, int y){
+    public boolean isInBuffZone(int x, int y, boolean isTarget){
         Rectangle bounds = this.getBuffZoneActor().getBounds();
-        bounds.x -= 0.25f;
-        bounds.y -= 0.25f;
-        bounds.width += 0.5f;
-        bounds.height += 0.5f;
+        if(!isTarget){
+            bounds.x -= 0.25f;
+            bounds.y -= 0.25f;
+            bounds.width += 0.5f;
+            bounds.height += 0.5f;
+        }
         return bounds.contains(x / 100f, y / 100f);
     }
 
@@ -127,48 +132,51 @@ public class BuffZone {
                 continue;
             else if(buffZone.buff == Buff.BlueBulletSupply && !isBulletSupplyNeeded(roboMaster))
                 continue;
-            if(buffZone.isInBuffZone(x, y)){
-                switch (buffZone.buff){
-                    case NotActivated     -> cost = 0;
-                    case RedHPRecovery    -> {
-                        if(roboMaster == Team.blue2 &&
-                                (Enemy.getLockedEnemy().getHealth() >= 1900 || !Enemy.getLockedEnemy().isAlive) &&
-                                (Enemy.getUnlockedEnemy().getHealth() >= 1900 || !Enemy.getUnlockedEnemy().isAlive))
-                            cost = -197;
-                        else{
-                            cost = 999;
-                        }
-                    }
-                    case RedBulletSupply  -> cost = 999;
-                    case BlueHPRecovery   -> cost = -150;
-                    case BlueBulletSupply -> cost = -150;
-                    case DisableShooting  -> cost = 999;
-                    case DisableMovement  -> cost = 999;
-                }
-                return cost;
-            }
-            else{
-                float distance = buffZone.centrePosition.distanceTo(x,y);
-                float maxDis = 150;
-                if(distance <= maxDis){
-                    switch (buffZone.buff){
-                        case NotActivated     -> cost += 0;
-                        case RedHPRecovery    -> cost += 0;
-                        case RedBulletSupply  -> cost += 0;
-                        case BlueHPRecovery   -> cost += (maxDis - distance) / maxDis * -127;
-                        case BlueBulletSupply -> cost += (maxDis - distance) / maxDis * -127;
-                        case DisableShooting  -> cost += 0;
-                        case DisableMovement  -> cost += 0;
-                    }
-                }
 
-//                if(Systems.refree.buffRoundIndex == 0 && roboMaster == Team.blue2 && buffZone.buff == Buff.RedBulletSupply){
-//                    float distance2 = new Position(x, y).distanceTo(500, 70);
-//                    if(distance2 <= 10){
-//                        cost += - 255;
-//                    }
-//                }
+            float distance = buffZone.centrePosition.distanceTo(x,y);
+            float maxDis = 150;
+
+            switch (buffZone.buff){
+                case NotActivated     -> cost = 0;
+                case RedHPRecovery    -> {
+                    if(isEnemyHPRecoveryNeeded(roboMaster)) {
+                        if(buffZone.isInBuffZone(x, y, true)) cost = -197;
+                    }
+                    else{
+                        if(buffZone.isInBuffZone(x, y, false)) cost = 999;
+                    }
+                }
+                case RedBulletSupply  -> {
+                    if (buffZone.isInBuffZone(x, y, false)) cost = 999;
+                }
+                case BlueHPRecovery   -> {
+                    if(buffZone.isInBuffZone(x, y, true)) cost = -150;
+                    else if(distance <= maxDis){
+                        cost += (maxDis - distance) / maxDis * -127;
+                    }
+                }
+                case BlueBulletSupply -> {
+                    if(buffZone.isInBuffZone(x, y, true)) cost = -150;
+                    else if(distance <= maxDis){
+                        cost += (maxDis - distance) / maxDis * -127;
+                    }
+                }
+                case DisableShooting  -> {
+                    if(buffZone.isInBuffZone(x, y, false)) cost = 999;
+                }
+                case DisableMovement  -> {
+                    if(buffZone.isInBuffZone(x, y, false)) cost = 999;
+                }
             }
+//            else{
+//
+////                if(Systems.refree.buffRoundIndex == 0 && roboMaster == Team.blue2 && buffZone.buff == Buff.RedBulletSupply){
+////                    float distance2 = new Position(x, y).distanceTo(500, 70);
+////                    if(distance2 <= 10){
+////                        cost += - 255;
+////                    }
+////                }
+//            }
         }
         return cost;
     }
@@ -179,7 +187,7 @@ public class BuffZone {
 
     public static boolean isHPRecoveryNeeded(ShanghaiTechMasterIII roboMaster){
         if(isHPRecoveryNeeded == 0) return false;
-        if(roboMaster == Team.blue1){
+        if(roboMaster == Team.friend1){
             return isHPRecoveryNeeded == 1;
         }
         else {
@@ -191,15 +199,15 @@ public class BuffZone {
         if(BlueHPRecovery == null){
             isHPRecoveryNeeded = 0;
         }
-        if (Team.blue1.getHealth() > 1800 && Team.blue2.getHealth() > 1800) {
+        if (Team.friend1.getHealth() > 1800 && Team.friend2.getHealth() > 1800) {
             isHPRecoveryNeeded = 0;
         }
-        else if(Team.blue1.getHealth() > 1000 && Team.blue2.getHealth() > 1000){
+        else if(Team.friend1.getHealth() > 1000 && Team.friend2.getHealth() > 1000){
             isHPRecoveryNeeded = 0;
         }
         else{
-            float distanceToBlue1 = BlueHPRecovery.centrePosition.distanceTo(Team.blue1.getPointPosition());
-            float distanceToBlue2 = BlueHPRecovery.centrePosition.distanceTo(Team.blue2.getPointPosition());
+            float distanceToBlue1 = BlueHPRecovery.centrePosition.distanceTo(Team.friend1.getPointPosition());
+            float distanceToBlue2 = BlueHPRecovery.centrePosition.distanceTo(Team.friend2.getPointPosition());
             if(distanceToBlue1 > distanceToBlue2){
                 isHPRecoveryNeeded = 2;
             }
@@ -211,7 +219,7 @@ public class BuffZone {
 
     public static boolean isBulletSupplyNeeded(ShanghaiTechMasterIII roboMaster){
         if(isBulletSupplyNeeded == 0) return false;
-        if(roboMaster == Team.blue1){
+        if(roboMaster == Team.friend1){
             return isBulletSupplyNeeded == 1;
         }
         else {
@@ -231,8 +239,8 @@ public class BuffZone {
 //            isHPRecoveryNeeded = 0;
 //            return;
 //        }
-        float distanceToBlue1 = BlueBulletSupply.centrePosition.distanceTo(Team.blue1.getPointPosition());
-        float distanceToBlue2 = BlueBulletSupply.centrePosition.distanceTo(Team.blue2.getPointPosition());
+        float distanceToBlue1 = BlueBulletSupply.centrePosition.distanceTo(Team.friend1.getPointPosition());
+        float distanceToBlue2 = BlueBulletSupply.centrePosition.distanceTo(Team.friend2.getPointPosition());
         if(distanceToBlue1 > distanceToBlue2){
             isBulletSupplyNeeded = 2;
         }
@@ -254,20 +262,44 @@ public class BuffZone {
                         NotActivated = buffZone;
                     }
                     case 1 -> {
-                        buffZone.updateBuff(Buff.RedHPRecovery);
-                        RedHPRecovery = buffZone;
+                        if(Team.isOurTeamBlue){
+                            buffZone.updateBuff(Buff.RedHPRecovery);
+                            RedHPRecovery = buffZone;
+                        }
+                        else {
+                            buffZone.updateBuff(Buff.BlueHPRecovery);
+                            BlueHPRecovery = buffZone;
+                        }
                     }
                     case 2 -> {
-                        buffZone.updateBuff(Buff.RedBulletSupply);
-                        RedBulletSupply = buffZone;
+                        if(Team.isOurTeamBlue) {
+                            buffZone.updateBuff(Buff.RedBulletSupply);
+                            RedBulletSupply = buffZone;
+                        }
+                        else {
+                            buffZone.updateBuff(Buff.BlueBulletSupply);
+                            BlueBulletSupply = buffZone;
+                        }
                     }
                     case 3 -> {
-                        buffZone.updateBuff(Buff.BlueHPRecovery);
-                        BlueHPRecovery = buffZone;
+                        if(Team.isOurTeamBlue) {
+                            buffZone.updateBuff(Buff.BlueHPRecovery);
+                            BlueHPRecovery = buffZone;
+                        }
+                        else {
+                            buffZone.updateBuff(Buff.RedHPRecovery);
+                            RedHPRecovery = buffZone;
+                        }
                     }
                     case 4 -> {
-                        buffZone.updateBuff(Buff.BlueBulletSupply);
-                        BlueBulletSupply = buffZone;
+                        if(Team.isOurTeamBlue) {
+                            buffZone.updateBuff(Buff.BlueBulletSupply);
+                            BlueBulletSupply = buffZone;
+                        }
+                        else {
+                            buffZone.updateBuff(Buff.RedBulletSupply);
+                            RedBulletSupply = buffZone;
+                        }
                     }
                     case 5 -> {
                         buffZone.updateBuff(Buff.DisableShooting);
@@ -284,25 +316,27 @@ public class BuffZone {
         }
     }
 
-    public static BuffZone getNotActivated(){
-        return NotActivated;
-    }
-    public static BuffZone getRedHPRecovery(){
-        return RedHPRecovery;
-    }
-    public static BuffZone getDisableShooting(){
-        return DisableShooting;
-    }
-    public static BuffZone getBlueBulletSupply(){
-        return BlueBulletSupply;
-    }
-    public static BuffZone getBlueHPRecovery(){
-        return BlueHPRecovery;
-    }
-    public static BuffZone getDisableMovement(){
-        return DisableMovement;
-    }
-    public static BuffZone getRedBulletSupply(){
-        return RedBulletSupply;
+
+    public void updateBuff(Buff buff){
+        this.buff = buff;
+        String pathHeader = "Systems/BuffZones/";
+        switch (buff){
+            case NotActivated      -> pathHeader += "NotActivated.png";
+            case RedHPRecovery     -> pathHeader += "HealingRed.png";
+            case DisableShooting   -> pathHeader += "ShootingForbidden.png";
+            case BlueBulletSupply  -> pathHeader += "BulletSupplyBlue.png";
+            case BlueHPRecovery    -> pathHeader += "HealingBlue.png";
+            case DisableMovement   -> pathHeader += "MovementForbidden.png";
+            case RedBulletSupply   -> pathHeader += "BulletSupplyRed.png";
+        }
+        String finalPathHeader = pathHeader;
+        Gdx.app.postRunnable(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                buffImage.setTextureRegion(finalPathHeader);
+            }
+        });
     }
 }

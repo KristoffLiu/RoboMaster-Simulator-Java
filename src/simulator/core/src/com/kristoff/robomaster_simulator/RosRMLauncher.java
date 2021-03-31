@@ -9,7 +9,7 @@ import com.kristoff.robomaster_simulator.systems.buffs.BuffZone;
 import com.kristoff.robomaster_simulator.systems.pointsimulator.PointState;
 import com.kristoff.robomaster_simulator.teams.RoboMasters;
 import com.kristoff.robomaster_simulator.systems.Systems;
-import com.kristoff.robomaster_simulator.utils.Position;
+import com.kristoff.robomaster_simulator.teams.Team;
 import py4j.GatewayServer;
 
 import java.util.ArrayList;
@@ -64,6 +64,28 @@ public class RosRMLauncher {
         return this.demo;
     }
 
+    public void buffZoneDemoTest(){
+        BuffZone.updateBuffZone(0,1, false);
+        BuffZone.updateBuffZone(1,5, false);
+        BuffZone.updateBuffZone(2,4, false);
+        BuffZone.updateBuffZone(3,2, false);
+        BuffZone.updateBuffZone(4,6, false);
+        BuffZone.updateBuffZone(5,3, false);
+    }
+
+    public void setAsRoamer(String roboName){
+        if(roboName.equals("blue1")){
+            Team.friend1.setAsRoamer();
+        }
+        else{
+            Team.friend2.setAsRoamer();
+        }
+    }
+
+    public void isOurTeamBlue(boolean bool){
+        Team.isOurTeamBlue = bool;
+    }
+
     public Enemy getLockedEnemy(){
         return Enemy.getLockedEnemy();
     }
@@ -75,5 +97,4 @@ public class RosRMLauncher {
     public void updateGameStatus(int gameStatus){
         Systems.refree.updateGameStatus(gameStatus);
     }
-
 }
