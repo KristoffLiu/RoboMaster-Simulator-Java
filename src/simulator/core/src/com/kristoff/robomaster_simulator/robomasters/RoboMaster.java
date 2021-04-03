@@ -185,5 +185,13 @@ public abstract class RoboMaster {
     public float getHealthPercent(){
         return (float)this.getHealth() / (float)this.property.health;
     }
+
+    public int[][] getCostMap(){
+        return costMap.getCostMap();
+    }
+    public int getCost(int x, int y){
+        return costMap.getCost(x, y);
+    }
+
 }
 

@@ -219,7 +219,10 @@ public class CostMap extends LoopThread {
     }
 
     public int getCost(int x, int y){
-        return costmap[x][y];
+        if(x >= 0 && x < 849 && y >= 0 && y < 489){
+            return costmap[x][y];
+        }
+        else return 999;
     }
 
     public PositionCost getMinPositionCost(){

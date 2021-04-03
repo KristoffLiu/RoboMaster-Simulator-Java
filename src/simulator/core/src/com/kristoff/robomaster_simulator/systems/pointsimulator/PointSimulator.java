@@ -94,10 +94,11 @@ public class PointSimulator extends Simulator {
     public boolean isPointNotEmpty(int x, int y, PointState self1, PointState self2, PointState enemyPoint) {
         if(!isPointInsideMap(x, y)) return false;
         if(this.pointMatrix[x][y] == PointState.Empty
-                || this.pointMatrix[x][y] == null
-                || this.pointMatrix[x][y] == self1
-                || this.pointMatrix[x][y] == self2
-                || this.pointMatrix[x][y] == enemyPoint){
+            || this.pointMatrix[x][y] == PointState.LowStaticObject
+            || this.pointMatrix[x][y] == null
+            || this.pointMatrix[x][y] == self1
+            || this.pointMatrix[x][y] == self2
+            || this.pointMatrix[x][y] == enemyPoint){
             return false;
         }
         else {
@@ -122,9 +123,16 @@ public class PointSimulator extends Simulator {
         return pointMatrix;
     }
 
-    public void setStaticObjectPoint(int x, int y) {
-        if(isPointOverTheMap(x, y))
-            staticObjectPointMatrix[x][y] = PointState.StaticObject;
+    public void setHighStaticObjectPoint(int x, int y) {
+        if(isPointOverTheMap(x, y)){
+            staticObjectPointMatrix[x][y] = PointState.HighStaticObject;
+        }
+    }
+
+    public void setLowStaticObjectPoint(int x, int y) {
+        if(isPointOverTheMap(x, y)){
+            staticObjectPointMatrix[x][y] = PointState.LowStaticObject;
+        }
     }
 
     public void setObstaclePoint(int x, int y) {
@@ -135,7 +143,7 @@ public class PointSimulator extends Simulator {
     public void updatePoint(int x, int y, PointState status) {
         try{
             if(!isPointInsideMap(x, y)) return;
-            if(getMatrix()[x][y] != PointState.StaticObject){
+            if(getMatrix()[x][y] != PointState.HighStaticObject){
                 getMatrix()[x][y] = status;
             }
         }
@@ -157,8 +165,9 @@ public class PointSimulator extends Simulator {
             float y = textureMapObject.getY() / 10;
             float width = textureMapObject.getTextureRegion().getRegionWidth() / 10;
             float height = textureMapObject.getTextureRegion().getRegionHeight() / 10;
+            String name = textureMapObject.getName();
 //            addRectangle( x,  y,  width, height);
-            addBlock( (int)x,  (int)y,  (int)width, (int)height, textureMapObject.getRotation());
+            addBlock( (int)x,  (int)y,  (int)width, (int)height, textureMapObject.getRotation(), name);
         }
     }
 
@@ -170,10 +179,10 @@ public class PointSimulator extends Simulator {
         for(int i=x;i<x+width;i++){
             for(int j=y;j<y+height;j++){
                 if((i == x || i == x+width-1) && ( j >= y && j <= y+height-1)){
-                    staticObjectPointMatrix[i][j] = PointState.StaticObject;
+                    staticObjectPointMatrix[i][j] = PointState.HighStaticObject;
                 }
                 else if((i > x && i < x+width-1) && ( j == y || j == y+height-1)){
-                    staticObjectPointMatrix[i][j] = PointState.StaticObject;
+                    staticObjectPointMatrix[i][j] = PointState.HighStaticObject;
                 }
                 else {
                     staticObjectPointMatrix[i][j] = PointState.Empty;
@@ -182,11 +191,18 @@ public class PointSimulator extends Simulator {
         }
     }
 
-    private void addBlock(int x, int y, int width, int height, float radian){
+    private void addBlock(int x, int y, int width, int height, float radian, String name){
         if(radian == 0){
             for(int i = x; i < x + width ; i ++){
                 for(int j = y ;j < y + height; j ++){
-                    setStaticObjectPoint(i, j);
+                    if(name.equals("B2") ||
+                            name.equals("B5") ||
+                            name.equals("B8")){
+                        setLowStaticObjectPoint(i, j);
+                    }
+                    else {
+                        setHighStaticObjectPoint(i, j);
+                    }
                 }
             }
         }
@@ -194,14 +210,14 @@ public class PointSimulator extends Simulator {
             for(int i = 0; i <= (25 * Math.sqrt(2)); i++){
                 if(i <= (25 / Math.sqrt(2))){
                     for(int j = 0; j <= i ; j++){
-                        setStaticObjectPoint(i + 407, 245 + j);
-                        setStaticObjectPoint(i + 407, 245 - j);
+                        setLowStaticObjectPoint(i + 407, 245 + j);
+                        setLowStaticObjectPoint(i + 407, 245 - j);
                     }
                 }
                 else{
                     for(int j = 0; j <= 25 * Math.sqrt(2) - i; j++){
-                        setStaticObjectPoint(i + 407, 245 + j);
-                        setStaticObjectPoint(i + 407, 245 - j);
+                        setLowStaticObjectPoint(i + 407, 245 + j);
+                        setLowStaticObjectPoint(i + 407, 245 - j);
                     }
                 }
             }
@@ -242,6 +258,19 @@ public class PointSimulator extends Simulator {
                         setObstaclePoint(i + 382, 245 - j);
                     }
                 }
+            }
+        }
+    }
+
+    private void addBlock(int x, int y, int width, int height, float radian){
+        for(int i = x; i < x + width ; i ++){
+            for(int j = y ;j < y + height; j ++){
+                setHighStaticObjectPoint(i, j);
+            }
+        }
+        for(int i = x - 25; i < x + width + 25 ; i ++){
+            for(int j = y - 25;j < y + height + 25; j ++){
+                setObstaclePoint(i, j);
             }
         }
     }

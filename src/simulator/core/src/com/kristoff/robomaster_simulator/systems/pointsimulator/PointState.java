@@ -2,7 +2,8 @@ package com.kristoff.robomaster_simulator.systems.pointsimulator;
 
 public enum PointState {
     Empty,
-    StaticObject,
+    HighStaticObject,
+    LowStaticObject,
     Blue1,
     Blue2,
     Red1,

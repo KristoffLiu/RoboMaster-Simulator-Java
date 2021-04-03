@@ -11,6 +11,7 @@ See Wikipedia article (https://en.wikipedia.org/wiki/Breadth-first_search)
 
 from py4j.java_gateway import JavaGateway
 from py4j.java_gateway import java_import
+import time
 
 gateway = JavaGateway() #启动py4j服务器
 entrypoint = gateway.entry_point #获取服务器桥的入口
@@ -54,10 +55,14 @@ class Brain:
         self.is_game_start = False
         self.cnt = 1
         self._control_rate = control_rate
+
+        entrypoint.setAsRoamer("blue1")
+        entrypoint.isOurTeamBlue(False)
+
         self.Red1 = entrypoint.getRoboMaster("Red1") 
         self.Red2 = entrypoint.getRoboMaster("Red2") 
-        self.Blue1 = entrypoint.getRoboMaster("Blue2") 
-        self.Blue2 = entrypoint.getRoboMaster("Blue1") 
+        self.Blue1 = entrypoint.getRoboMaster("Blue1") 
+        self.Blue2 = entrypoint.getRoboMaster("Blue2") 
 
         self.robots = [self.Robot(0.0, 0.0, 0.0), self.Robot(0.0, 0.0, 0.0)]
 
@@ -124,8 +129,10 @@ class Brain:
     def gameState(self, data):
         print(data.game_status)
         print(data.remaining_time)
+        entrypoint.updateRemainingTime(data.remaining_time)
 
-        if (data.game_status == roborts_msgs.msg.GAME):
+        # if (data.game_status == roborts_msgs.msg.GAME):
+        if (data.game_status == 4):
             self.is_game_start = True
         
         # uint8 READY = 0
@@ -144,9 +151,9 @@ class Brain:
         # print("4, " + str(data.zone[4]))
         # print("5, " + str(data.zone[5]))
 
-        # for i, d in enumerate(data.zone):
-        #     print(str(i) + " " + str(d.type) + " " + str(d.active))
-        #     entrypoint.updateBuffZone(i, d.type, d.active)
+        for i, d in enumerate(data.zone):
+            print(str(i) + " " + str(d.type) + " " + str(d.active))
+            entrypoint.updateBuffZone(i, d.type, d.active)
             
     def _createQuaternionFromYaw(self, yaw):
         # input: r p y
@@ -275,10 +282,17 @@ if __name__ == '__main__':
         print(brain)
         spin_thread = threading.Thread(target=call_rosspin).start()
 
+        count = 0
+        beginTime = time.time()
+
         while not rospy.core.is_shutdown():
-            if (brain.is_game_start == True):
+            if (brain.is_game_start == True or count > 30):
                 brain.get_next_position1()
                 brain.get_next_position2()
+            currenttime = time.time()
+            temp = currenttime - beginTime
+            beginTime = currenttime
+            count += temp
             rate.sleep()
 
     except rospy.ROSInterruptException:

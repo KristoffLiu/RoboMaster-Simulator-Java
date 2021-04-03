@@ -10,11 +10,13 @@ $ roslaunch fkie_master_discovery master_discovery.launch
 ## before connecting to the real machine
 
 ```bash
-$ source ~/robrts_ws/devel/setup.bash
-$ cd RoboMaster-Java-Simulator/src/env
+$ source ~/roborts_ws/devel/setup.bash
+$ cd RoboMaster-Simulator-Java/src/env/rosrm
 ```
 
 ## Run the code 
 ```
-$ python real_robot_decision.py
+$ python decision.py
+rosrun rviz rviz -d ~/Desktop/config.rviz
+
 ```

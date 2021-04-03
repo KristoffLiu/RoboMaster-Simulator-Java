@@ -57,6 +57,7 @@ public class Refree extends LoopThread {
         BuffZone.setHPRecoveryNeeded();
         BuffZone.setBulletSupplyNeeded();
         BuffZone.setEnemyHPRecoveryNeeded();
+        System.out.println(remainingTime);
     }
 
     public boolean isRoboMasterAlive(RoboMaster Robomaster){
